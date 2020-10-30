@@ -13,7 +13,7 @@
 </h1>
 
 <h3 align="center">
-  👉 Demos: <a href='https://codepen.io/vsync/pen/KKMwyRO target='_blank'>Codepen</a> 👈
+  👉 Demos: <a href='https://codepen.io/vsync/pen/KKMwyRO' target='_blank'>Codepen</a> 👈
 </h3>
 
 <p align="center">
