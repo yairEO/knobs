@@ -11,6 +11,7 @@
     return function(){}
   }
 
+  // https://github.com/yairEO/ui-range
   var rangeStyles = `
     /* override-styles */
     .knobs .range {
