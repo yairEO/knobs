@@ -13,7 +13,7 @@
 
   var rangeStyles = `
     /* override-styles */
-    .knobs .knobs__knob__range {
+    .knobs .range {
       --primaryColor: #0366D6;
       --value-active-color: white;
       --value-background: tomato;
@@ -513,10 +513,10 @@
                 <div class='knobs__label' ${data.cssVar && data.cssVar[1] ? `data-type='${data.cssVar[1]}'` : ''}>${data.label}</div>
                 <div>
                   ${ data.type == 'range' ? `
-                  <div class="knobs__knob__range" style="--step:${data.step||1}; --min:${data.min}; --max:${data.max}; --value:${data.value}; --text-value:'${data.value}'">
+                  <div class="range" style="--step:${data.step||1}; --min:${data.min}; --max:${data.max}; --value:${data.value}; --text-value:'${data.value}'">
                     <input type="range" ${this.knobAttrs(data)} oninput="this.parentNode.style.setProperty('--value',this.value); this.parentNode.style.setProperty('--text-value', JSON.stringify(this.value))">
                     <output></output>
-                    <div class='knobs__knob__range__progress'></div>
+                    <div class='range__progress'></div>
                   </div>`
                   :
                   `<input type='${data.type}' ${this.knobAttrs(data)}>`
