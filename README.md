@@ -151,7 +151,9 @@ display: var(--hide, block);
 npm i @yaireo/Knobs
 ```
 
-**Or include from CDN:** (not *yet* availble on CDN, too new)
+**Or include the JS file from a CDN source:**
+
+    unpkg.com/@yaireo/knobs
 
 
 ## Example:
