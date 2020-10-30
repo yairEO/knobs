@@ -17,13 +17,14 @@
     .knobs .range {
       --primaryColor: #0366D6;
       --value-active-color: white;
-      --value-background: tomato;
-      --progress-color: #EEE;
+      --value-background: transparent;
+      --progress-color: #555;
       --thumb-size: 20px;
-      --track-height: calc(var(--thumb-size)/2.5);
+      --track-height: calc(var(--thumb-size)/3);
       --thumb-shadow: 0 0 3px rgba(0,0,0,.2);
-      --ticks-thickness: 1px;
       --ticks-height: 0px;
+      --show-min-max: none;
+      color: transparent;
     }
 
     .range {
@@ -49,6 +50,7 @@
       --tickIntervalPerc: calc((100% - var(--thumb-size))/( (var(--max) - var(--min)) / var(--x-step) ) * var(--tickEvery, 1));
       --completed: calc((var(--value) - var(--min) ) / (var(--max) - var(--min)) * 100);
       --LTR: 1;
+
       display: inline-block;
       height: max(var(--track-height), var(--thumb-size));
       background: linear-gradient(to right, var(--ticks-color) var(--ticks-thickness), transparent 1px) repeat-x;
@@ -69,6 +71,7 @@
     .range::before, .range::after {
       --offset: calc(var(--thumb-size)/2);
       content: counter(x);
+      display: var(--show-min-max, block);
       font: 12px Arial;
       position: absolute;
       bottom: var(--flip-y, -2.5ch);
@@ -112,7 +115,7 @@
       display: block;
       margin-left: auto;
       margin-right: -1px;
-      width: calc((100% - var(--completed) * 1%) + (var(--completed)/100) * var(--thumb-size));
+      width: calc((100% - var(--completed) * 1%) + (var(--completed)/100) * var(--thumb-size)/2);
       height: 100%;
       background: var(--progress-color, #EEE);
       box-shadow: inherit;
