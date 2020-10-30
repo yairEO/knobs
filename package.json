@@ -1,0 +1,46 @@
+{
+    "name": "@yaireo/knobs",
+    "version": "0.9.0",
+    "homepage": "https://github.com/yairEO/knobs",
+    "description": "UI knobs controllers for JS/CSS live manipulation of various parameters",
+    "keywords": [
+        "knobs",
+        "controller",
+        "ui",
+        "component",
+        "visual",
+        "parameters"
+    ],
+    "license": "MIT",
+    "_npmUser": {
+        "name": "vsync",
+        "email": "vsync.design@gmail.com"
+    },
+    "browserslist": [
+        ">3% and ie 11",
+        "not dead",
+        "not ie < 11",
+        "not IE_Mob 11",
+        "not op_mini all"
+    ],
+    "scripts": {
+        "start": "terser --compress --output knobs.min.js -- knobs.js",
+        "push": "git push origin",
+        "push:tags": "git push origin --tags"
+    },
+    "author": {
+        "name": "Yair Even-Or",
+        "email": "vsync.design@gmail.com"
+    },
+    "main": "./knobs.min.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/yairEO/knobs.git"
+    },
+    "bugs": {
+        "url": "https://github.com/yaireo/knobs/issues"
+    },
+    "devDependencies": {
+        "terser": "^5.3.8"
+    }
+}
