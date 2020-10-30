@@ -34,7 +34,8 @@ to control on-the-fly. Change the visual looks or certain javascript parameters 
 
 CSS-variables (custom properties) are a great match for this script as they compute in real-time. Javascript is of course a benefitor because every knobs can be attached with a callback that recieves the current value, and additional data, as to what that value should be applied on.
 
-**Supported only in modern browsers**
+**⚠️ Supported only in modern browsers**
+
 
 ### Features
 
