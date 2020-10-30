@@ -77,6 +77,7 @@ new Knobs(settings)
 
 <details>
   <summary><strong>theme</strong> (defaults)</summary>
+
 ```js
 {
   styles: ``, // optioanlly add any CSS and it will be injected into the iframe
