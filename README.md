@@ -1,15 +1,15 @@
 <p align="center">
-  <a href='https://www.npmjs.com/package/@yaireo/Knobs'>
-      <img src="https://img.shields.io/npm/v/@yaireo/Knobs.svg" />
+  <a href='https://www.npmjs.com/package/@yaireo/knobs'>
+      <img src="https://img.shields.io/npm/v/@yaireo/knobs.svg" />
   </a>
   <a href='https://simple.wikipedia.org/wiki/MIT_License'>
       <img src="https://img.shields.io/badge/license-MIT-lightgrey" />
   </a>
-  <img src="https://img.shields.io/bundlephobia/minzip/@yaireo/Knobs" />
+  <img src="https://img.shields.io/bundlephobia/minzip/@yaireo/knobs" />
 </p>
 
 <h1 align="center">
-  <a href='https://yaireo.github.io/Knobs'>Knobs</a> - UI controllers for JS/CSS live manipulation
+  <a href='https://yaireo.github.io/knobs'>Knobs</a> - UI controllers for JS/CSS live manipulation
 </h1>
 
 <h3 align="center">
