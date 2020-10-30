@@ -379,7 +379,7 @@
       padding: var(--knobs-gap, 6px) 0;
     }
 
-    .knobs__labels .knobs__knob__range,
+    .knobs__labels .range,
     .knobs__labels input[type=text] {
       min-width: 200px;
     }
