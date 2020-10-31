@@ -12,194 +12,200 @@
   }
 
   // https://github.com/yairEO/ui-range
-  var rangeStyles = `
-    /* override-styles */
-    .knobs .range {
-      --primaryColor: #0366D6;
-      --value-active-color: white;
-      --value-background: transparent;
-      --progress-color: #555;
-      --thumb-size: 20px;
-      --track-height: calc(var(--thumb-size)/3);
-      --thumb-shadow: 0 0 3px rgba(0,0,0,.2);
-      --ticks-height: 0px;
-      --show-min-max: none;
-      color: transparent;
-    }
+  function rangeStyles(theme){
+    var { primaryColor } = theme;
 
-    .range {
-      --primaryColor: #0366D6;
-      --value-active-color: white;
-      --value-background: white;
-      --value-font: 700 12px/1 Arial;
-      --progress-color: #EEE;
-      --progress-shadow: 2px 2px 4px rgba(0,0,0, .1) inset;
-      --fill-color: var(--primaryColor);
-      --thumb-size: 16px;
-      --track-height: calc(var(--thumb-size)/2);
-      --thumb-shadow: 0 0 3px rgba(0,0,0,.2);
-      --ticks-thickness: 1px;
-      --ticks-height: 5px;
-      --ticks-color: silver;
-      --step: 1;
-      --ticks-count: (var(--max) - var(--min)) / var(--step);
-      --maxTicksAllowed: 30;
-      --too-many-ticks: Min(1, Max(var(--ticks-count) - var(--maxTicksAllowed), 0));
-      --x-step: Max( var(--step), var(--too-many-ticks) * (var(--max) - var(--min)) );
-      --tickInterval: 100/((var(--max) - var(--min)) / var(--step)) * var(--tickEvery, 1);
-      --tickIntervalPerc: calc((100% - var(--thumb-size))/( (var(--max) - var(--min)) / var(--x-step) ) * var(--tickEvery, 1));
-      --completed: calc((var(--value) - var(--min) ) / (var(--max) - var(--min)) * 100);
-      --LTR: 1;
+    return `
+      /* override-styles */
+      .knobs .range {
+        --primaryColor: ${primaryColor};
+        --value-active-color: white;
+        --value-background: transparent;
+        --progress-color: #444;
+        --thumb-size: 20px;
+        --track-height: calc(var(--thumb-size)/3);
+        --thumb-shadow: 0 0 3px rgba(0,0,0,.2);
+        --ticks-thickness: 1px;
+        --ticks-height: 0px;
+        --show-min-max: none;
 
-      display: inline-block;
-      height: max(var(--track-height), var(--thumb-size));
-      background: linear-gradient(to right, var(--ticks-color) var(--ticks-thickness), transparent 1px) repeat-x;
-      background-size: var(--tickIntervalPerc) var(--ticks-height);
-      background-position-x: calc(var(--thumb-size)/2);
-      background-position-y: var(--flip-y, bottom);
-      position: relative;
-      z-index: 1;
-      padding-bottom: var(--flip-y, var(--ticks-height));
-      padding-top: calc(var(--flip-y) * var(--ticks-height));
-    }
-    [dir=rtl] .range {
-      --LTR: -1;
-    }
-    .range[data-ticks-position=top] {
-      --flip-y: 1;
-    }
-    .range::before, .range::after {
-      --offset: calc(var(--thumb-size)/2);
-      content: counter(x);
-      display: var(--show-min-max, block);
-      font: 12px Arial;
-      position: absolute;
-      bottom: var(--flip-y, -2.5ch);
-      top: calc(-2.5ch * var(--flip-y));
-      opacity: var(--min-max-opacity, 0.5);
-      pointer-events: none;
-    }
-    .range::before {
-      counter-reset: x var(--min);
-      left: var(--offset);
-      transform: translateX(calc(-50% * var(--LTR)));
-    }
-    [dir=rtl] .range::before {
-      left: auto;
-      right: var(--offset);
-    }
-    .range::after {
-      counter-reset: x var(--max);
-      right: var(--offset);
-      transform: translateX(calc(50% * var(--LTR)));
-    }
-    [dir=rtl] .range::after {
-      right: auto;
-      left: var(--offset);
-    }
-    .range__progress {
-      position: absolute;
-      left: 0;
-      top: calc(50% - var(--ticks-height)/2);
-      transform: var(--flip-y, translateY(-50%) translateZ(0));
-      width: 100%;
-      height: calc(var(--track-height));
-      pointer-events: none;
-      z-index: -1;
-      box-shadow: var(--progress-shadow);
-      border-radius: 20px;
-      background: var(--fill-color, white);
-    }
-    .range__progress::after {
-      content: "";
-      display: block;
-      margin-left: auto;
-      margin-right: -1px;
-      width: calc((100% - var(--completed) * 1%) + (var(--completed)/100) * var(--thumb-size)/2);
-      height: 100%;
-      background: var(--progress-color, #EEE);
-      box-shadow: inherit;
-      border-radius: 0 20px 20px 0;
-    }
-    [dir=rtl] .range__progress::after {
-      margin-right: auto;
-      margin-left: -1px;
-      border-radius: 20px 0 0 20px;
-    }
-    .range > input {
-      -webkit-appearance: none;
-      width: 100%;
-      height: var(--thumb-size);
-      margin: 0;
-      cursor: -webkit-grab;
-      cursor: grab;
-      outline: none;
-      background: none;
-    }
-    .range > input::-webkit-slider-thumb {
-      appearance: none;
-      height: var(--thumb-size);
-      width: var(--thumb-size);
-      border-radius: 50%;
-      background: var(--thumb-color, white);
-      border: 1px solid silver;
-      box-shadow: var(--inner-shadow, 0 0), var(--thumb-shadow);
-    }
-    .range > input::-moz-slider-thumb {
-      appearance: none;
-      height: var(--thumb-size);
-      width: var(--thumb-size);
-      border-radius: 50%;
-      background: var(--thumb-color, white);
-      border: 1px solid silver;
-      box-shadow: var(--inner-shadow, 0 0), var(--thumb-shadow);
-    }
-    .range > input::-ms-thumb {
-      appearance: none;
-      height: var(--thumb-size);
-      width: var(--thumb-size);
-      border-radius: 50%;
-      background: var(--thumb-color, white);
-      border: 1px solid silver;
-      box-shadow: var(--inner-shadow, 0 0), var(--thumb-shadow);
-    }
-    .range > input:active {
-      cursor: grabbing;
-      --thumb-color: var(--fill-color);
-      --inner-shadow: 0 0 0 calc(var(--thumb-size)/4) inset white;
-    }
-    .range > input:active + output {
-      transition: 0s;
-    }
-    .range > input:hover + output {
-      --value-background: var(--primaryColor);
-      color: var(--value-active-color);
-      transform: translate(var(--x-offset), 0);
-      box-shadow: 0 0 0 3px var(--value-background);
-    }
-    .range > output {
-      --x-offset: calc(var(--completed) * -1% * var(--LTR));
-      --pos: calc(((var(--value) - var(--min))/(var(--max) - var(--min))) * 100%);
-      pointer-events: none;
-      position: absolute;
-      z-index: 5;
-      background: var(--value-background);
-      border-radius: 10px;
-      padding: 0 4px;
-      top: -3ch;
-      left: var(--pos);
-      transform: translate(var(--x-offset), 6px);
-      transition: all 0.12s ease-out, left 0s, top 0s;
-    }
-    [dir=rtl] .range > output {
-      left: auto;
-      right: var(--pos);
-    }
-    .range > output::after {
-      content: var(--text-value);
-      font: var(--value-font);
-    }
-  `
+        color: transparent;
+      }
+
+      .range {
+        --primaryColor: #0366D6;
+        --value-active-color: white;
+        --value-background: white;
+        --value-font: 700 12px/1 Arial;
+        --progress-color: #EEE;
+        --progress-shadow: 2px 2px 4px rgba(0,0,0, .1) inset;
+        --fill-color: var(--primaryColor);
+        --thumb-size: 16px;
+        --track-height: calc(var(--thumb-size)/2);
+        --thumb-shadow: 0 0 3px rgba(0,0,0,.2);
+        --ticks-thickness: 1px;
+        --ticks-height: 5px;
+        --ticks-color: silver;
+        --step: 1;
+        --ticks-count: (var(--max) - var(--min)) / var(--step);
+        --maxTicksAllowed: 30;
+        --too-many-ticks: Min(1, Max(var(--ticks-count) - var(--maxTicksAllowed), 0));
+        --x-step: Max( var(--step), var(--too-many-ticks) * (var(--max) - var(--min)) );
+        --tickInterval: 100/((var(--max) - var(--min)) / var(--step)) * var(--tickEvery, 1);
+        --tickIntervalPerc: calc((100% - var(--thumb-size))/( (var(--max) - var(--min)) / var(--x-step) ) * var(--tickEvery, 1));
+        --completed: calc((var(--value) - var(--min) ) / (var(--max) - var(--min)) * 100);
+        --LTR: 1;
+
+        display: inline-block;
+        height: max(var(--track-height), var(--thumb-size));
+        background: linear-gradient(to right, var(--ticks-color) var(--ticks-thickness), transparent 1px) repeat-x;
+        background-size: var(--tickIntervalPerc) var(--ticks-height);
+        background-position-x: calc(var(--thumb-size)/2);
+        background-position-y: var(--flip-y, bottom);
+        position: relative;
+        z-index: 1;
+        padding-bottom: var(--flip-y, var(--ticks-height));
+        padding-top: calc(var(--flip-y) * var(--ticks-height));
+      }
+      [dir=rtl] .range {
+        --LTR: -1;
+      }
+      .range[data-ticks-position=top] {
+        --flip-y: 1;
+      }
+      .range::before, .range::after {
+        --offset: calc(var(--thumb-size)/2);
+        content: counter(x);
+        display: var(--show-min-max, block);
+        font: 12px Arial;
+        position: absolute;
+        bottom: var(--flip-y, -2.5ch);
+        top: calc(-2.5ch * var(--flip-y));
+        opacity: var(--min-max-opacity, 0.5);
+        pointer-events: none;
+      }
+      .range::before {
+        counter-reset: x var(--min);
+        left: var(--offset);
+        transform: translateX(calc(-50% * var(--LTR)));
+      }
+      [dir=rtl] .range::before {
+        left: auto;
+        right: var(--offset);
+      }
+      .range::after {
+        counter-reset: x var(--max);
+        right: var(--offset);
+        transform: translateX(calc(50% * var(--LTR)));
+      }
+      [dir=rtl] .range::after {
+        right: auto;
+        left: var(--offset);
+      }
+      .range__progress {
+        position: absolute;
+        left: 0;
+        top: calc(50% - var(--ticks-height)/2);
+        transform: var(--flip-y, translateY(-50%) translateZ(0));
+        width: 100%;
+        height: calc(var(--track-height));
+        pointer-events: none;
+        z-index: -1;
+        box-shadow: var(--progress-shadow);
+        border-radius: 20px;
+        background: var(--fill-color, white);
+      }
+      .range__progress::after {
+        content: "";
+        display: block;
+        margin-left: auto;
+        margin-right: -1px;
+        width: calc((100% - var(--completed) * 1%) + (var(--completed)/100) * var(--thumb-size)/2);
+        height: 100%;
+        background: var(--progress-color, #EEE);
+        box-shadow: inherit;
+        border-radius: 0 20px 20px 0;
+      }
+      [dir=rtl] .range__progress::after {
+        margin-right: auto;
+        margin-left: -1px;
+        border-radius: 20px 0 0 20px;
+      }
+      .range > input {
+        -webkit-appearance: none;
+        width: 100%;
+        height: var(--thumb-size);
+        margin: 0;
+        cursor: -webkit-grab;
+        cursor: grab;
+        outline: none;
+        background: none;
+      }
+      .range > input::-webkit-slider-thumb {
+        appearance: none;
+        height: var(--thumb-size);
+        width: var(--thumb-size);
+        border-radius: 50%;
+        background: var(--thumb-color, white);
+        border: 1px solid silver;
+        box-shadow: var(--inner-shadow, 0 0), var(--thumb-shadow);
+      }
+      .range > input::-moz-slider-thumb {
+        appearance: none;
+        height: var(--thumb-size);
+        width: var(--thumb-size);
+        border-radius: 50%;
+        background: var(--thumb-color, white);
+        border: 1px solid silver;
+        box-shadow: var(--inner-shadow, 0 0), var(--thumb-shadow);
+      }
+      .range > input::-ms-thumb {
+        appearance: none;
+        height: var(--thumb-size);
+        width: var(--thumb-size);
+        border-radius: 50%;
+        background: var(--thumb-color, white);
+        border: 1px solid silver;
+        box-shadow: var(--inner-shadow, 0 0), var(--thumb-shadow);
+      }
+      .range > input:active {
+        cursor: grabbing;
+        --thumb-color: var(--fill-color);
+        --inner-shadow: 0 0 0 calc(var(--thumb-size)/4) inset white;
+      }
+      .range > input:active + output {
+        transition: 0s;
+      }
+      .range > input:hover + output {
+        --value-background: var(--primaryColor);
+        color: var(--value-active-color);
+        transform: translate(var(--x-offset), 0);
+        box-shadow: 0 0 0 3px var(--value-background);
+      }
+      .range > output {
+        --x-offset: calc(var(--completed) * -1% * var(--LTR));
+        --pos: calc(((var(--value) - var(--min))/(var(--max) - var(--min))) * 100%);
+        pointer-events: none;
+        position: absolute;
+        z-index: 5;
+        background: var(--value-background);
+        border-radius: 10px;
+        padding: 0 4px;
+        top: -3ch;
+        left: var(--pos);
+        transform: translate(var(--x-offset), 6px);
+        transition: all 0.12s ease-out, left 0s, top 0s;
+      }
+      [dir=rtl] .range > output {
+        left: auto;
+        right: var(--pos);
+      }
+      .range > output::after {
+        content: var(--text-value);
+        font: var(--value-font);
+      }
+    `
+  }
 
   function controlStyles( theme ){
     var { backgroud, textColor, ...th } = theme;
@@ -251,14 +257,31 @@
 
   // apply only inside the iframe
   function getMainStyles( theme ){
-    var { backgroud, textColor, border, ...th } = theme;
+    var { backgroud, textColor, border, primaryColor, flow, ...th } = theme;
 
     return `
-    label, button, input{ cursor:pointer; font-family:Arial, sans-serif; }
+    label, button, input{ cursor:pointer; font:12px Arial, sans-serif; }
 
     body, form{ padding:0; margin:0; }
 
     ${controlStyles(theme)}
+
+    /* spread the word... */
+    .poweredBy{
+      display: inline-block;
+      float: left;
+      text-decoration: none;
+      color: inherit;
+      padding: 3px;
+      font-size: 10px;
+      opacity: .5;
+      transition: .15s;
+    }
+
+    .poweredBy:hover{
+      color: ${primaryColor};
+      opacity: 1;
+    }
 
     #knobsToggle:checked ~ * {
       transform: none;
@@ -275,6 +298,7 @@
       --knobs-gap: 3px;
       --in-easing: cubic-bezier(.75,0,.35,1);
       --in-duration: .3;
+      --color-size: 22px;
       --LTR-Bool: 1;  /* -1 for RTL */
 
       font: 13px/1 'Fira Sans Condensed', sans-serif;
@@ -287,6 +311,10 @@
       ${ theme.RTL && `
         direction: rtl;
       `}
+    }
+
+    .knobs[data-flow='compact']{
+      --color-size: 16px;
     }
 
     ${getPositionsStyles()}
@@ -327,7 +355,7 @@
       display: flex;
       align-items: center;
       margin: 1.2em 0 .7em;
-      font-weight: 500;
+      font-weight: 700;
     }
 
     .knobs__seperator::before,
@@ -359,6 +387,8 @@
       cursor: pointer;
       opacity: 0;
       margin-left: -10px;
+      margin-bottom: var(--knobs-gap, 6px);
+      align-self: flex-end;
       transition: .1s;
       outline: none;
     }
@@ -375,7 +405,6 @@
     .knobs__labels label {
       flex: 1;
       display: flex;
-
     }
 
     .knobs__labels label > * {
@@ -402,9 +431,36 @@
     .knobs__labels label > :last-child {
       flex: 1;
       text-align: right;
-      ${ theme.RTL && `
+      ${ theme.RTL ? `
         text-align: left;
-      `}
+      ` : ''}
+    }
+
+
+    ${ (flow == 'compact') ? `
+      label[data-type="range"]{
+        flex-flow: column;
+      }
+
+      label[data-type="range"] .knobs__label{
+        margin: 0;
+        padding: 0;
+      }
+    ` : ''}
+
+
+    /* wrapper for "color" inputs */
+    label[data-type="color"] > .knobs__inputWrap > div{
+      display: inline-block;
+      border-radius: 50%;
+      overflow: hidden;
+      width: var(--color-size);
+      height: var(--color-size);
+      transition: .3s var(--in-easing);
+    }
+
+    label[data-type="color"]:hover > .knobs__inputWrap > div{
+      padding: 0 2em;
     }
 
     input[type="color"]{
@@ -413,13 +469,12 @@
       border: 0;
       padding: 0;
       border-radius: 50%;
-      width: 50px;
-      height: 20px;
+      transform: scale(100);
       background: none;
       cursor: pointer;
     }
 
-    ${rangeStyles}
+    ${rangeStyles(theme)}
     ${theme.styles}
   `
   }
@@ -459,9 +514,11 @@
       visible: 0,
       live: true,
       theme: {
+        flow: 'horizontal',
         styles: '',
         RTL: false,
         position: 'top right',
+        primaryColor: '#0366D6',
         backgroud: "rgba(0,0,0,1)",
         textColor: "white",
         border: 'none',
@@ -488,11 +545,11 @@
     },
 
     templates: {
-      scope: function(){
-        const {visible, knobs, live} = this.settings;
+      scope(){
+        const {visible, knobs, live, theme} = this.settings;
 
         return `
-          <aside class='knobs' data-position='${this.settings.theme.position}'>
+          <aside class='knobs' data-position='${theme.position}' data-flow='${theme.flow}'>
             <input hidden type='checkbox' ${visible ? 'checked' : ''} id='knobsToggle' />
             <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>⚙️</label>
             <form class='knobs__labels'>
@@ -501,7 +558,8 @@
               ${this.templates.knob.call(this)}
               </fieldset>
               <section class='knobs__controls'>
-                <input type="reset" value="Reset">
+                <a class='poweredBy' href='https://github.com/yairEO/knobs' target='_blank'>Powered by <em>Knobs</em></a>
+                <input type="reset" value="↩ Reset">
                 ${live ? '' : `<input type="submit" value="Apply">`}
               </section>
             </form>
@@ -509,13 +567,13 @@
         `
       },
 
-      knob: function(data){
+      knob(data){
         if( data && data.type )
           return `<div class='knobs__knob'>
               <button type='button' name='${data.__name}' class='knobs__knob__reset' title='reset'>↩</button>
-              <label>
+              <label data-type='${data.type}'>
                 <div class='knobs__label' ${data.cssVar && data.cssVar[1] ? `data-type='${data.cssVar[1]}'` : ''}>${data.label}</div>
-                <div>
+                <div class='knobs__inputWrap'>
                   ${ data.type == 'range' ? `
                   <div class="range" style="--step:${data.step||1}; --min:${data.min}; --max:${data.max}; --value:${data.value}; --text-value:'${data.value}'">
                     <input type="range" ${this.knobAttrs(data)} oninput="this.parentNode.style.setProperty('--value',this.value); this.parentNode.style.setProperty('--text-value', JSON.stringify(this.value))">
@@ -523,7 +581,7 @@
                     <div class='range__progress'></div>
                   </div>`
                   :
-                  `<input type='${data.type}' ${this.knobAttrs(data)}>`
+                  `<div><input type='${data.type}' ${this.knobAttrs(data)}></div>`
                   }
                 </div>
               </label>
@@ -586,16 +644,22 @@
     // if settings.CSSVarTarget exists or
     updateDOM({ cssVar, value, type, __name:name }){
       if( !cssVar || !cssVar.length ) return
+
       var [cssVarName, cssVarUnit, CSSVarTarget] = cssVar,
-          targetElm = CSSVarTarget || this.settings.CSSVarTarget,
+          targetElms = CSSVarTarget || this.settings.CSSVarTarget,
           knobInput = this.getInputByName(name),
           action = 'setProperty';
 
       if( type == 'checkbox' && !knobInput.checked )
         action = 'removeProperty';
 
-      if( targetElm && value !== undefined && cssVarName )
-        targetElm.style[action](`--${cssVarName}`, value + (cssVarUnit||''));
+      // if is a refference to a single-node, place in an array
+      if( targetElms instanceof HTMLElement )
+        targetElms = [targetElms]
+
+      if( targetElms && targetElms.length && value !== undefined && cssVarName )
+        for( let elm of targetElms )
+          elm.style[action](`--${cssVarName}`, value + (cssVarUnit||''));
     },
 
     resetAll(knobsData){
@@ -653,6 +717,12 @@
     toggle(state){
       if( state === undefined )
         state = !this.DOM.mainToggler.checked
+
+      // briefly set a big width/height for the iframe so it could be meassured correctly
+      if( state ){
+        this.DOM.iframe.style.setProperty(`--knobsWidth`, '1000px')
+        this.DOM.iframe.style.setProperty(`--knobsHeight`, '1000px')
+      }
 
       var action = (state ? 'set' : 'remove') + 'Property',
           { clientWidth, clientHeight } = this.DOM.scope;

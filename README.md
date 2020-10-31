@@ -19,7 +19,8 @@
 <p align="center">
 <br>
   <a href='https://codepen.io/vsync/pen/KKMwyRO'>
-    <img src="./screen.png?sanitize=true" style='max-width: 820px' />
+    <img src="./horizontal.png?sanitize=true" style='max-width: 820px' />
+    <img src="./compact.png?sanitize=true" style='max-width: 820px' />
   </a>
 <br>
 <p>
@@ -68,26 +69,28 @@ new Knobs(settings)
 
 ### Settings
 
-| Name         | Type        | Default                                                                                                                                                                                                                                                                                       | Info                                                                                                               |
-|--------------|-------------|---------|--------------------------------------------------------------------------------------------------------------------|
-| theme        | `Object`    |         | Knobs theme variables.  Since the Knobs are encapsulated within an iframe,  they cannot be be styled from outside. |
-| live         | `Boolean`   | `true`  | Should changes be immediately applied                                                                              |
-| visible      | `Number`    | `0`     | `0` - Starts as hidden<br> `1` - Starts as visible<br> `2` - Always visible                                        |
-| CSSVarTarget | `HTML NODE` |         | Global HTML element for which to apply the CSS custom properties.<br> Can also be configured per-knob.             |
-| knobs        | `Array`     |         | Array of Objects describing the knobs controllers on-screen
+| Name         | Type                  | Default                                                                                                                                                                                                                                                                                       | Info                                                                                                               |
+|--------------|-----------------------|---------|--------------------------------------------------------------------------------------------------------------------|
+| theme        | `Object`              |         | Knobs theme variables.  Since the Knobs are encapsulated within an iframe,  they cannot be be styled from outside. |
+| live         | `Boolean`             | `true`  | Should changes be immediately applied                                                                              |
+| visible      | `Number`              | `0`     | `0` - Starts as hidden<br> `1` - Starts as visible<br> `2` - Always visible                                        |
+| CSSVarTarget | `Element`/`NodeList ` |         | Global HTML element(s) for which to apply the CSS custom properties.<br> Can also be configured per-knob.             |
+| knobs        | `Array`               |         | Array of Objects describing the knobs controllers on-screen
 
 <details>
   <summary><strong>theme</strong> (defaults)</summary>
 
 ```js
 {
-  styles: ``, // optioanlly add any CSS and it will be injected into the iframe
-  position: 'top right',
-  backgroud: "rgba(0,0,0,1)",
-  textColor: "white",
-  border: 'none',
+  styles      : ``,                // optioanlly add any CSS and it will be injected into the iframe
+  flow        : 'horizontal',      // use 'compact' to keep things tight
+  position    : 'top right',
+  primaryColor: '#0366D6',         // mainly for links / range sliders
+  backgroud   : "rgba(0,0,0,1)",
+  textColor   : "#CCC",
+  border      : 'none',
   light: {
-    color1: "rgba(255,255,255,.1)",
+    color1   : "rgba(255,255,255,.1)",
     textColor: "white"
   }
 }
