@@ -452,7 +452,7 @@
     /* wrapper for "color" inputs */
     label[data-type="color"] > .knobs__inputWrap > div{
       display: inline-block;
-      border-radius: 50%;
+      border-radius: 50px;
       overflow: hidden;
       width: var(--color-size);
       height: var(--color-size);
@@ -460,7 +460,7 @@
     }
 
     label[data-type="color"]:hover > .knobs__inputWrap > div{
-      padding: 0 2em;
+      padding: 0 1.3em;
     }
 
     input[type="color"]{
@@ -468,7 +468,6 @@
       appearance: none;
       border: 0;
       padding: 0;
-      border-radius: 50%;
       transform: scale(100);
       background: none;
       cursor: pointer;
