@@ -88,11 +88,7 @@ new Knobs(settings)
   primaryColor: '#0366D6',         // mainly for links / range sliders
   backgroud   : "rgba(0,0,0,1)",
   textColor   : "#CCC",
-  border      : 'none',
-  light: {
-    color1   : "rgba(255,255,255,.1)",
-    textColor: "white"
-  }
+  border      : 'none'
 }
 ```
 </details>

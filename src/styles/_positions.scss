@@ -1,0 +1,28 @@
+.knobs{
+  &[data-position~='bottom']{
+    > label{ top: 0; }
+
+    &[data-position~='right'] .knobs__controls{
+      padding-right: 40px;
+    }
+
+    #knobsToggle:checked + label{
+      top: auto;
+      bottom: 10px;
+    }
+  }
+
+  &[data-position~='left']{
+    --LTR-Bool: -1;
+
+    > label{ right: 3px; }
+
+    #knobsToggle:checked + label{
+      left:10px; right:auto;
+    }
+
+    .knobs__controls > :first-child:not(:only-child){
+      margin-left: 40px;
+    }
+  }
+}

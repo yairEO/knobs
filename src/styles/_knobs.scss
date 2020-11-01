@@ -1,0 +1,188 @@
+.poweredBy{
+  float: left;
+  text-decoration: none;
+  color: inherit;
+  padding: 3px;
+  font-size: 10px;
+  opacity: .5;
+  transition: .15s;
+}
+
+.poweredBy:hover{
+  color: var(--primaryColor);
+  opacity: 1;
+}
+
+#knobsToggle:checked ~ * {
+  transform: none;
+  transition: calc(var(--in-duration) * 1s) var(--in-easing);
+}
+
+#knobsToggle:checked ~ * fieldset {
+  transform: none;
+  opacity: 1;
+  transition: calc(var(--in-duration) * 1s) calc(var(--in-duration) * .5s) ease-out;
+}
+
+.knobs {
+  --knobs-gap: 3px;
+  --in-easing: cubic-bezier(.75,0,.35,1);
+  --in-duration: .3;
+  --color-size: 22px;
+  --LTR-Bool: 1;  /* -1 for RTL */
+
+  font: 12px/1 'Fira Sans Condensed', sans-serif;
+  color: var(--textColor);
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  right: 0;
+}
+
+.knobs[data-flow='compact']{
+  --color-size: 16px;
+
+  label[data-type='range']{
+    flex-flow: column;
+
+    .knobs__label{
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.knobs label {
+  user-select: none;
+  cursor: pointer;
+}
+
+/* show/hide icon */
+.knobs > label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  line-height: 1;
+  z-index: 999;
+}
+
+/* the <form> element which is the actual knobs wrapper */
+.knobs__labels {
+  background: var(--backgroud);
+  border: var(--border);
+  transform: translateX(calc(100% * var(--LTR-Bool)));
+}
+
+.knobs__labels fieldset {
+  display: table;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  padding: 30px 12px 12px;
+  opacity: 0;
+  transform: translateX(calc(15% * var(--LTR-Bool)));
+}
+
+.knobs__seperator{
+  display: flex;
+  align-items: center;
+  margin: 1.2em 0 .7em;
+  font-weight: 700;
+}
+
+.knobs__seperator::before,
+.knobs__seperator::after{
+  content: '';
+  height: 1px;
+  background: var(--textColor);
+  flex: 1;
+  opacity: .25;
+}
+
+.knobs__labels hr{
+  border: 0;
+  border-top: 1px solid var(--textColor);
+  opacity: .25;
+}
+
+.knobs__knob{
+  display: flex;
+  position: relative;
+}
+
+.knobs__knob__reset{
+  margin-right: 5px;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0;
+  margin-left: -10px;
+  margin-bottom: var(--knobs-gap, 6px);
+  align-self: flex-end;
+  transition: .1s;
+  outline: none;
+}
+
+.knobs__label::after{
+  content: attr(data-type);
+  opacity: .5;
+  margin-left: 1ch;
+}
+
+.knobs__knob:hover .knobs__knob__reset{ opacity: .4; }
+.knobs__knob:hover .knobs__knob__reset:hover{ opacity:1; }
+
+.knobs__labels label {
+  flex: 1;
+  display: flex;
+}
+
+.knobs__labels label > * {
+  padding: var(--knobs-gap, 6px) 0;
+}
+
+.knobs__labels .range,
+.knobs__labels input[type=text] {
+  min-width: 200px;
+}
+
+/* label's test only */
+.knobs__label {
+  margin-right: 2ch;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.knobs__labels label > :last-child {
+  flex: 1;
+  text-align: right;
+}
+
+
+/* wrapper for "color" inputs */
+label[data-type="color"] > .knobs__inputWrap > div{
+  display: inline-block;
+  border-radius: 50px;
+  overflow: hidden;
+  width: var(--color-size);
+  height: var(--color-size);
+  transition: .3s var(--in-easing);
+}
+
+label[data-type="color"]:hover > .knobs__inputWrap > div{
+  padding: 0 1.3em;
+}
+
+input[type="color"]{
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  transform: scale(100);
+  background: none;
+  cursor: pointer;
+}

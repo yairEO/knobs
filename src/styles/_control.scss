@@ -1,0 +1,10 @@
+/* bottom controls (apply/reset) */
+.knobs__controls {
+  text-align: right;
+  padding: 0 12px 12px;
+
+  > input {
+    color: black;
+    margin-left: 1em;
+  }
+}
