@@ -1,5 +1,8 @@
 @import './reset';
 @import './knobs';
 @import './positions';
-@import './range';
+@import './range'; // overrides
+@import '@yaireo/ui-range/ui-range.scss';
+@import './switch'; // overrides
+@import '@yaireo/ui-switch/src/switch.scss';
 @import './control';

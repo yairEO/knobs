@@ -15,7 +15,7 @@ export default {
     babel({ babelHelpers: 'bundled' }),
     scss({
       output: false,
-      outputStyle: 'compressed'
+      outputStyle: 'compressed',
     }),
     cleanup()
   ]

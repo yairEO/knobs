@@ -1,6 +1,7 @@
 import mainStyles from './src/styles/styles.scss'
 import mergeDeep from './src/utils/mergeDeep'
 import isModrenBrowser from './src/utils/isModrenBrowser'
+import { scope as scopeTemplate, knob as knobTemplate } from './src/templates'
 
 var raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60))
 
@@ -36,7 +37,7 @@ Knobs.prototype = {
     var output = '', p;
 
     for( p in vars )
-      output += `--${p}:${vars[p]};`
+      output += `--${p}:${vars[p]}; `
 
     console.log(output)
     return output
@@ -49,54 +50,8 @@ Knobs.prototype = {
   },
 
   templates: {
-    scope(){
-      const {visible, knobs, live, theme} = this.settings;
-
-      return `
-        <aside class='knobs' data-position='${theme.position}' data-flow='${theme.flow}'>
-          <input hidden type='checkbox' ${visible ? 'checked' : ''} id='knobsToggle' />
-          <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>⚙️</label>
-          <form class='knobs__labels'>
-            <fieldset>
-            ${ knobs.map(this.templates.knob.bind(this)).join("") }
-            ${this.templates.knob.call(this)}
-            </fieldset>
-            <section class='knobs__controls'>
-              <a class='poweredBy' href='https://github.com/yairEO/knobs' target='_blank'>Powered by <em>Knobs</em></a>
-              <input type="reset" value="↩ Reset">
-              ${live ? '' : `<input type="submit" value="Apply">`}
-            </section>
-          </form>
-        </aside>
-      `
-    },
-
-    knob(data){
-      if( data && data.type )
-        return `<div class='knobs__knob'>
-            <button type='button' name='${data.__name}' class='knobs__knob__reset' title='reset'>↩</button>
-            <label data-type='${data.type}'>
-              <div class='knobs__label' ${data.cssVar && data.cssVar[1] ? `data-type='${data.cssVar[1]}'` : ''}>${data.label}</div>
-              <div class='knobs__inputWrap'>
-                ${ data.type == 'range' ? `
-                <div class="range" style="--step:${data.step||1}; --min:${data.min}; --max:${data.max}; --value:${data.value}; --text-value:'${data.value}'">
-                  <input type="range" ${this.knobAttrs(data)} oninput="this.parentNode.style.setProperty('--value',this.value); this.parentNode.style.setProperty('--text-value', JSON.stringify(this.value))">
-                  <output></output>
-                  <div class='range__progress'></div>
-                </div>`
-                :
-                `<div><input type='${data.type}' ${this.knobAttrs(data)}></div>`
-                }
-              </div>
-            </label>
-          </div>
-        `
-
-      if( data && typeof data == 'string' )
-        return `<div class='knobs__seperator'>&nbsp;&nbsp;${data}&nbsp;&nbsp;</div>`
-
-      return '<hr/>'
-    },
+    scope: scopeTemplate,
+    knob: knobTemplate
   },
 
   /**
@@ -282,7 +237,7 @@ Knobs.prototype = {
     // dump all the HTML & styles into the iframe
     iframeDoc.write(this.templates.scope.call(this))
 
-    cssText = this.getCSSVariables(theme)
+    cssText = `.knobs{ ${this.getCSSVariables(theme)} }`
     cssText += mainStyles + theme.styles
 
     iframeDoc.head.insertAdjacentHTML("beforeend", `<style>${cssText}</style>`)
