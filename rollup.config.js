@@ -1,23 +1,44 @@
 import scss from 'rollup-plugin-scss'
 import babel from '@rollup/plugin-babel'
-import { terser } from "rollup-plugin-terser"
-import cleanup from 'rollup-plugin-cleanup';
+import { terser } from 'rollup-plugin-terser'
+import cleanup from 'rollup-plugin-cleanup'
+import serve from 'rollup-plugin-serve'
+import livereload from 'rollup-plugin-livereload'
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 
-export default ['min', ''].map((name, index) => ({
-  input: 'src/knobs.js',
-  output: {
-    file: name == 'min' ? 'knobs.min.js' : 'knobs.js',
-    format: 'umd',
-    name: 'Knobs'
+export default [
+  {
+    input: 'src/knobs.js',
+    output: {
+      file: 'knobs.min.js',
+      format: 'umd',
+      name: 'Knobs',
+    },
+    plugins: [
+      terser(),
+      babel({ babelHelpers: 'bundled' }),
+      scss({ output: false, outputStyle: 'compressed', watch: 'src/styles', }),
+      cleanup(),
+      nodeResolve(),
+      commonjs()
+    ]
   },
-  plugins: [
-    (name == 'min' && terser()),
-    (name == 'min' && babel({ babelHelpers: 'bundled' })),
-    scss({
-      output: false,
-      outputStyle: 'compressed',
-    }),
-    cleanup()
-  ]
-}))
+  {
+    input: 'src/knobs.js',
+    output: {
+      file: 'knobs.js',
+      format: 'umd',
+      name: 'Knobs',
+    },
+    plugins: [
+      serve(), // index.html should be in root of project
+      livereload({ watch:'src', delay:500, exts: [ 'html', 'js', 'scss', 'css' ] }),
+      scss({ output: false, outputStyle: 'compressed' }),
+      cleanup(),
+      nodeResolve(),
+      commonjs()
+    ]
+  },
+]
 

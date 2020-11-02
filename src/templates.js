@@ -1,5 +1,5 @@
 export function scope(){
-  const {visible, knobs, live, theme} = this.settings;
+  const {visible, live, theme} = this.settings;
 
   return `
     <aside class='knobs' data-position='${theme.position}' data-flow='${theme.flow}'>
@@ -7,7 +7,7 @@ export function scope(){
       <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>⚙️</label>
       <form class='knobs__labels'>
         <fieldset>
-        ${ knobs.map(this.templates.knob.bind(this)).join("") }
+        ${ this.knobs.map(this.templates.knob.bind(this)).join("") }
         ${this.templates.knob.call(this)}
         </fieldset>
         <section class='knobs__controls'>

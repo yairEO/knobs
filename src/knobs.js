@@ -1,5 +1,5 @@
 import mainStyles from './styles/styles.scss'
-import mergeDeep from './utils/mergeDeep'
+import { mergeDeep } from './utils/mergeDeep'
 import isModrenBrowser from './utils/isModrenBrowser'
 import { scope as scopeTemplate, knob as knobTemplate } from './templates'
 
@@ -10,7 +10,17 @@ function Knobs(settings){
   if ( !settings || !isModrenBrowser())
     return this
 
-  this.settings = mergeDeep({}, this._defaults, {appendTo: document.body}, settings)
+  const { knobs, ...restOfSettings } = settings
+
+  // manual deep-clone the "knobs" setting, because for hours I couldn't find a single piece of code
+  // on the internet which was able to correctly clone it
+  this.knobs = knobs.map(knob => (
+    knob.cssVar ? {...knob, cssVar:[...knob.cssVar]} : {...knob}
+  ))
+
+  // for the rest, deep cloining appear to work fine
+  this.settings = mergeDeep({...this._defaults, appendTo:document.body}, restOfSettings)
+
   this.DOM = {}
   this.build()
 }
@@ -39,7 +49,6 @@ Knobs.prototype = {
     for( p in vars )
       output += `--${p}:${vars[p]}; `
 
-    console.log(output)
     return output
   },
 
@@ -72,7 +81,7 @@ Knobs.prototype = {
   },
 
   getKnobDataByName(name){
-    return this.settings.knobs.filter(Boolean).find(d => d.__name == name)
+    return this.knobs.filter(Boolean).find(d => d.__name == name)
   },
 
   getInputByName(name){
@@ -122,7 +131,7 @@ Knobs.prototype = {
   },
 
   resetAll(knobsData){
-    (knobsData || this.settings.knobs).forEach(d => {
+    (knobsData || this.knobs).forEach(d => {
       if( !d || !d.type ) return
 
       var isCheckbox = d.type == 'checkbox',
@@ -147,7 +156,7 @@ Knobs.prototype = {
   },
 
   generateIds(){
-    this.settings.knobs.forEach(knobData => {
+    this.knobs.forEach(knobData => {
       if( knobData && knobData.type )
         knobData.__name = knobData.label.replace('/ /g','-') + Math.random().toString(36).slice(-6)
     })
@@ -188,11 +197,11 @@ Knobs.prototype = {
 
     this.DOM.iframe.style[action](`--knobsWidth`, clientWidth + 'px')
     this.DOM.iframe.style[action](`--knobsHeight`, clientHeight + 'px')
-    this.DOM.mainToggler.checkd = state;
+    this.DOM.mainToggler.checked = state;
   },
 
   build(){
-    if( !this.settings.knobs || !this.settings.knobs.length )
+    if( !this.knobs || !this.knobs.length )
       return
 
     this.generateIds()

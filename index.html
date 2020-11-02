@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>Knobs</title>
-  <script src="knobs.min.js"></script>
+  <script src="knobs.js"></script>
   <style>
     body{
       height: 100vh;
@@ -37,10 +37,10 @@
       },
       // live: false, // should update immediately (default true)
       visible: 0, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
-      CSSVarTarget: document.querySelector('.testSubject'),
+      CSSVarTarget: document.querySelectorAll('div'),
       knobs: [
         {
-          cssVar: ['width', 'px'],
+          cssVar: ['width', 'px', document.body],
           label: 'Width',
           type: 'range',
           value: 200,
@@ -93,9 +93,10 @@
       ]
     }
 
-    new Knobs(settings)
+    var knobs1 = new Knobs(settings)
+    var knobs2 = new Knobs({ ...settings, knobs:[...settings.knobs], theme:{position: 'bottom left', background:'blue'}, live:false })
 
-    new Knobs({ ...settings, theme:{position: 'bottom left'}, live:false })
+    console.log(knobs2)
   </script>
 </body>
 </html>
