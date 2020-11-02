@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Knobs</title>
+  <script src="knobs.min.js"></script>
+  <style>
+    body{
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      cursor: crosshair;
+      background: var(--main-bg);
+    }
+
+    div{
+      display: var(--hide, grid);
+      background: var(--bg, red);
+      border-radius: var(--radius, 0);
+      width: var(--width, 200px);
+      height: var(--height, 200px);
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div></div>
+  <div></div>
+  <script>
+    var settings = {
+      theme: {
+        // flow: 'compact',
+        // position: 'bottom left', // default
+        // RTL: true
+        // mode: 'light'
+      },
+      // live: false, // should update immediately (default true)
+      visible: 0, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
+      CSSVarTarget: document.querySelector('.testSubject'),
+      knobs: [
+        {
+          cssVar: ['width', 'px'],
+          label: 'Width',
+          type: 'range',
+          value: 200,
+          min: 0,
+          max: 500,
+          step: 50,
+          onChange: console.log
+        },
+        {
+          cssVar: ['height', 'vh'],
+          label: 'Height',
+          type: 'range',
+          value: 20,
+          min: 0,
+          max: 100,
+          onChange: console.log
+        },
+        "Label example",
+        {
+          cssVar: ['radius', '%'],
+          label: 'Radius of the big square here',
+          type: 'range',
+          value: 0,
+          min: 0,
+          max: 50,
+          onChange: console.log
+        },
+        {
+          cssVar: ['bg'], // alias for the CSS variable
+          label: 'Color',
+          type: 'color',
+          value: '#45FDA9',
+          onChange: console.log
+        },
+        {
+          cssVar: ['main-bg', null, document.body], // [alias for the CSS variable, units, applies on element]
+          label: 'Background',
+          type: 'color',
+          value: '#FFFFFF',
+          onChange: console.log
+        },
+        {
+          cssVar: ['hide'], // alias for the CSS variable
+          label: 'Show',
+          type: 'checkbox',
+          // checked: true,
+          value: 'none',
+          onChange: console.log
+        },
+      ]
+    }
+
+    new Knobs(settings)
+
+    new Knobs({ ...settings, theme:{position: 'bottom left'}, live:false })
+  </script>
+</body>
+</html>

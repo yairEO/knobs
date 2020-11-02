@@ -1,7 +1,7 @@
-import mainStyles from './src/styles/styles.scss'
-import mergeDeep from './src/utils/mergeDeep'
-import isModrenBrowser from './src/utils/isModrenBrowser'
-import { scope as scopeTemplate, knob as knobTemplate } from './src/templates'
+import mainStyles from './styles/styles.scss'
+import mergeDeep from './utils/mergeDeep'
+import isModrenBrowser from './utils/isModrenBrowser'
+import { scope as scopeTemplate, knob as knobTemplate } from './templates'
 
 var raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60))
 

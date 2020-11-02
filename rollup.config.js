@@ -3,20 +3,21 @@ import babel from '@rollup/plugin-babel'
 import { terser } from "rollup-plugin-terser"
 import cleanup from 'rollup-plugin-cleanup';
 
-export default {
-  input: 'knobs.js',
+export default ['min', ''].map((name, index) => ({
+  input: 'src/knobs.js',
   output: {
-    file: 'knobs.min.js',
+    file: name == 'min' ? 'knobs.min.js' : 'knobs.js',
     format: 'umd',
     name: 'Knobs'
   },
   plugins: [
-    terser(),
-    babel({ babelHelpers: 'bundled' }),
+    (name == 'min' && terser()),
+    (name == 'min' && babel({ babelHelpers: 'bundled' })),
     scss({
       output: false,
       outputStyle: 'compressed',
     }),
     cleanup()
   ]
-}
+}))
+

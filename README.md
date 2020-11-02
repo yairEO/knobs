@@ -19,16 +19,16 @@
 <p align="center">
 <br>
   <a href='https://codepen.io/vsync/pen/KKMwyRO'>
-    <img src="./horizontal.png?sanitize=true" style='max-width: 820px' />
-    <img src="./compact.png?sanitize=true" style='max-width: 820px' />
+      <img src="./horizontal.png?sanitize=true" alt="Knobs - Horizontal"/>
+      <img src="./compact.png?sanitize=true" alt="Knobs - Compact"/>
   </a>
 <br>
 <p>
 
 ## What is this:
 
-Started as something I needed for my many Codepens - A way to give the viewes or myself a set
-of controllers, on the page, that by manipulating them, the manipulated DOM will react instantaneous.
+Started as something I needed for my many Codepens - A way to provide viewers, and myself, a set
+of controllers, for manipulating the DOM instantaneously.
 
 Imagine certain aspects of a web page, or a specific *component*, which you would like to add the ability
 to control on-the-fly. Change the visual looks or certain javascript parameters with a move or a slider.
