@@ -1,4 +1,4 @@
-const isObject = obj => (obj+"") === "[object Object]"
+export const isObject = obj => (obj+"") === "[object Object]"
 
 export function mergeDeep(target, ...sources) {
   if (!sources.length) return target;

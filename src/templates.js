@@ -7,8 +7,7 @@ export function scope(){
       <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>⚙️</label>
       <form class='knobs__labels'>
         <fieldset>
-        ${ this.knobs.map(this.templates.knob.bind(this)).join("") }
-        ${this.templates.knob.call(this)}
+        ${ this.knobs.concat(['']).map(this.templates.knob.bind(this)).join("") }
         </fieldset>
         <section class='knobs__controls'>
           <a class='poweredBy' href='https://github.com/yairEO/knobs' target='_blank'>Get <em>Knobs</em></a>

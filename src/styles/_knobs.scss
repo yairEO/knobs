@@ -107,6 +107,10 @@
   border: 0;
   border-top: 1px solid var(--textColor);
   opacity: .25;
+
+  &:last-of-type{
+    margin-bottom: 0;
+  }
 }
 
 .knobs__knob{

@@ -1,5 +1,5 @@
 import mainStyles from './styles/styles.scss'
-import { mergeDeep } from './utils/mergeDeep'
+import { mergeDeep, isObject } from './utils/mergeDeep'
 import isModrenBrowser from './utils/isModrenBrowser'
 import { scope as scopeTemplate, knob as knobTemplate } from './templates'
 
@@ -15,7 +15,11 @@ function Knobs(settings){
   // manual deep-clone the "knobs" setting, because for hours I couldn't find a single piece of code
   // on the internet which was able to correctly clone it
   this.knobs = knobs.map(knob => (
-    knob.cssVar ? {...knob, cssVar:[...knob.cssVar]} : {...knob}
+    knob.cssVar
+      ? {...knob, cssVar:[...knob.cssVar]}
+      : isObject(knob)
+        ? {...knob}
+        : knob
   ))
 
   // for the rest, deep cloining appear to work fine
