@@ -98,6 +98,15 @@ new Knobs(settings)
 
 An array of Objects, where the properties describe a *knob*.
 
+It is ***possible*** to define/change the `knobs` Array **after** instance initialization, like so:
+
+```js
+var myKnobs = new Knobs({ CSSVarTarget:document.body }) // only if working with CSS variables
+
+myKnobs.knobs = [{...}, ...] // see example further down
+myKnobs.render()
+```
+
 All defined *knob* properties, beside a special few, are attributes that
 are applied on the HTML *input* element that controls the knob, so it is up
 to the developer who set up the knobs to use the appropriate attributes, for

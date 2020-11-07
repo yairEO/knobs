@@ -7,20 +7,22 @@ var raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60
 
 function Knobs(settings){
   // since Knobs relies on CSS variables, no need to proceed if browser support is inadequate
-  if ( !settings || !isModrenBrowser())
+  if ( !isModrenBrowser())
     return this
 
-  const { knobs, ...restOfSettings } = settings
+  const { knobs, ...restOfSettings } = settings || {}
 
   // manual deep-clone the "knobs" setting, because for hours I couldn't find a single piece of code
   // on the internet which was able to correctly clone it
-  this.knobs = knobs.map(knob => (
-    knob.cssVar
-      ? {...knob, cssVar:[...knob.cssVar]}
-      : isObject(knob)
-        ? {...knob}
-        : knob
-  ))
+  this.knobs = knobs
+    ? knobs.map(knob => (
+      knob.cssVar
+        ? {...knob, cssVar:[...knob.cssVar]}
+        : isObject(knob)
+          ? {...knob}
+          : knob
+    ))
+    : []
 
   // for the rest, deep cloining appear to work fine
   this.settings = mergeDeep({...this._defaults, appendTo:document.body}, restOfSettings)
@@ -207,12 +209,8 @@ Knobs.prototype = {
   },
 
   build(){
-    if( !this.knobs || !this.knobs.length )
-      return
-
     this.createIframe()
     this.bindEvents()
-    this.resetAll()
   },
 
   /**
@@ -274,6 +272,8 @@ Knobs.prototype = {
 
     // calculate iframe size
     this.toggle(this.DOM.mainToggler.checked)
+
+    this.resetAll()
   },
 
   bindEvents(){

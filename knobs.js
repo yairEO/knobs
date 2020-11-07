@@ -80,16 +80,18 @@
 
   var raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60));
   function Knobs(settings){
-    if ( !settings || !isModrenBrowser())
+    if ( !isModrenBrowser())
       return this
-    const { knobs, ...restOfSettings } = settings;
-    this.knobs = knobs.map(knob => (
-      knob.cssVar
-        ? {...knob, cssVar:[...knob.cssVar]}
-        : isObject(knob)
-          ? {...knob}
-          : knob
-    ));
+    const { knobs, ...restOfSettings } = settings || {};
+    this.knobs = knobs
+      ? knobs.map(knob => (
+        knob.cssVar
+          ? {...knob, cssVar:[...knob.cssVar]}
+          : isObject(knob)
+            ? {...knob}
+            : knob
+      ))
+      : [];
     this.settings = mergeDeep({...this._defaults, appendTo:document.body}, restOfSettings);
     this.DOM = {};
     this.state = {};
@@ -225,11 +227,8 @@
       this.DOM.mainToggler.checked = state;
     },
     build(){
-      if( !this.knobs || !this.knobs.length )
-        return
       this.createIframe();
       this.bindEvents();
-      this.resetAll();
     },
     createIframe(){
       var iframeDoc,
@@ -262,6 +261,7 @@
       this.generateIds();
       this.DOM.form.firstElementChild.innerHTML = this.knobs.concat(['']).map(this.templates.knob.bind(this)).join("");
       this.toggle(this.DOM.mainToggler.checked);
+      this.resetAll();
     },
     bindEvents(){
       this.eventsRefs = {
