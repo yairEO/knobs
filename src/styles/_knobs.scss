@@ -169,28 +169,3 @@
 }
 
 
-/* wrapper for "color" inputs */
-label[data-type="color"]{
-  > .knobs__inputWrap > div{
-    display: inline-block;
-    border-radius: 50px;
-    overflow: hidden;
-    width: var(--color-size);
-    height: var(--color-size);
-    transition: .3s var(--in-easing);
-  }
-
-  &:hover > .knobs__inputWrap > div{
-    padding: 0 1.3em;
-  }
-}
-
-input[type="color"]{
-  -webkit-appearance: none;
-  appearance: none;
-  border: 0;
-  padding: 0;
-  transform: scale(100);
-  background: none;
-  cursor: pointer;
-}
