@@ -6,9 +6,7 @@ export function scope(){
       <input hidden type='checkbox' ${visible ? 'checked' : ''} id='knobsToggle' />
       <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>⚙️</label>
       <form class='knobs__labels'>
-        <fieldset>
-        ${ this.knobs.concat(['']).map(this.templates.knob.bind(this)).join("") }
-        </fieldset>
+        <fieldset></fieldset>
         <section class='knobs__controls'>
           <a class='poweredBy' href='https://github.com/yairEO/knobs' target='_blank'>Get <em>Knobs</em></a>
           <input type="reset" value="↩ Reset">

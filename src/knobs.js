@@ -26,6 +26,7 @@ function Knobs(settings){
   this.settings = mergeDeep({...this._defaults, appendTo:document.body}, restOfSettings)
 
   this.DOM = {}
+  this.state = {}
   this.build()
 }
 
@@ -40,7 +41,7 @@ Knobs.prototype = {
       RTL: false,
       position: 'top right',
       primaryColor: '#0366D6',
-      backgroud: "rgba(0,0,0,1)",
+      background: "rgba(0,0,0,1)",
       textColor: "white",
       border: 'none',
     }
@@ -189,6 +190,7 @@ Knobs.prototype = {
   toggle(state){
     if( state === undefined )
       state = !this.DOM.mainToggler.checked
+      this.state.visible = state;
 
     // briefly set a big width/height for the iframe so it could be meassured correctly
     if( state ){
@@ -208,10 +210,8 @@ Knobs.prototype = {
     if( !this.knobs || !this.knobs.length )
       return
 
-    this.generateIds()
     this.createIframe()
     this.bindEvents()
-    this.toggle(this.DOM.mainToggler.checked)
     this.resetAll()
   },
 
@@ -262,6 +262,18 @@ Knobs.prototype = {
     this.DOM.scope = iframeDoc.body.firstElementChild
     this.DOM.form = this.DOM.scope.querySelector('form')
     this.DOM.mainToggler = iframeDoc.getElementById('knobsToggle')
+
+    this.render()
+  },
+
+  render(){
+    this.generateIds()
+
+    // inject knobs into the <fieldset> element
+    this.DOM.form.firstElementChild.innerHTML = this.knobs.concat(['']).map(this.templates.knob.bind(this)).join("")
+
+    // calculate iframe size
+    this.toggle(this.DOM.mainToggler.checked)
   },
 
   bindEvents(){

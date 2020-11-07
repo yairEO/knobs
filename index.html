@@ -94,9 +94,14 @@
     }
 
     var knobs1 = new Knobs(settings)
-    var knobs2 = new Knobs({ ...settings, knobs:[...settings.knobs], theme:{position: 'bottom left', background:'blue'}, live:false })
+    var knobs2 = new Knobs({ ...settings, knobs:[...settings.knobs.slice(0,2)], theme:{position: 'bottom left', background:'blue'}, live:false })
 
-    console.log(knobs2)
+  setTimeout(()=>{
+    knobs2.knobs = [...settings.knobs]
+    knobs2.render()
+
+  }, 3000)
+    // console.log(knobs2)
   </script>
 </body>
 </html>

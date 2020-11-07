@@ -72,7 +72,7 @@
 
 /* the <form> element which is the actual knobs wrapper */
 .knobs__labels {
-  background: var(--backgroud);
+  background: var(--background);
   border: var(--border);
   transform: translateX(calc(100% * var(--LTR-Bool)));
 
