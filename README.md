@@ -9,7 +9,7 @@
 </p>
 
 <h1 align="center">
-  <a href='https://yaireo.github.io/knobs'>Knobs</a> - UI controllers for JS/CSS live manipulation
+  <a href='https://codepen.io/vsync/pen/KKMwyRO'>Knobs</a> - UI controllers for JS/CSS live manipulation
 </h1>
 
 <h3 align="center">
