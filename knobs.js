@@ -164,9 +164,9 @@
           targetElms = CSSVarTarget || this.settings.CSSVarTarget,
           knobInput = this.getInputByName(name),
           action = 'setProperty';
-      if( type == 'checkbox' && !knobInput.checked )
+      if( type == 'checkbox' && knobInput && !knobInput.checked )
         action = 'removeProperty';
-      if( targetElms instanceof HTMLElement )
+      if( (targetElms+"") == "[object HTMLElement]" )
         targetElms = [targetElms];
       if( targetElms && targetElms.length && value !== undefined && cssVarName )
         for( let elm of targetElms )
@@ -215,7 +215,7 @@
     toggle(state){
       if( state === undefined )
         state = !this.DOM.mainToggler.checked;
-        this.state.visible = state;
+      this.state.visible = state;
       if( state ){
         this.DOM.iframe.style.setProperty(`--knobsWidth`, '1000px');
         this.DOM.iframe.style.setProperty(`--knobsHeight`, '1000px');

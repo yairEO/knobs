@@ -125,11 +125,13 @@ Knobs.prototype = {
         knobInput = this.getInputByName(name),
         action = 'setProperty';
 
-    if( type == 'checkbox' && !knobInput.checked )
+    if( type == 'checkbox' && knobInput && !knobInput.checked )
       action = 'removeProperty';
 
-    // if is a refference to a single-node, place in an array
-    if( targetElms instanceof HTMLElement )
+    // if is a refference to a single-node, place in an array.
+    // cannot use instanceof to check if is an element because some elements might be in iframes:
+    // https://stackoverflow.com/a/14391528/104380
+    if( (targetElms+"") == "[object HTMLElement]" )
       targetElms = [targetElms]
 
     if( targetElms && targetElms.length && value !== undefined && cssVarName )
@@ -192,7 +194,8 @@ Knobs.prototype = {
   toggle(state){
     if( state === undefined )
       state = !this.DOM.mainToggler.checked
-      this.state.visible = state;
+
+    this.state.visible = state;
 
     // briefly set a big width/height for the iframe so it could be meassured correctly
     if( state ){
