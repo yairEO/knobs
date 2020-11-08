@@ -166,13 +166,13 @@
           action = 'setProperty';
       if( type == 'checkbox' && knobInput && !knobInput.checked )
         action = 'removeProperty';
-      if( (targetElms+"") == "[object HTMLElement]" )
+      if( (targetElms+"").includes("Element") )
         targetElms = [targetElms];
       if( targetElms && targetElms.length && value !== undefined && cssVarName )
         for( let elm of targetElms )
           elm.style[action](`--${cssVarName}`, value + (cssVarUnit||''));
     },
-    resetAll(knobsData){
+    resetAll( knobsData ){
       (knobsData || this.knobs).forEach(d => {
         if( !d || !d.type ) return
         var isCheckbox = d.type == 'checkbox',

@@ -131,7 +131,7 @@ Knobs.prototype = {
     // if is a refference to a single-node, place in an array.
     // cannot use instanceof to check if is an element because some elements might be in iframes:
     // https://stackoverflow.com/a/14391528/104380
-    if( (targetElms+"") == "[object HTMLElement]" )
+    if( (targetElms+"").includes("Element") )
       targetElms = [targetElms]
 
     if( targetElms && targetElms.length && value !== undefined && cssVarName )
@@ -139,7 +139,7 @@ Knobs.prototype = {
         elm.style[action](`--${cssVarName}`, value + (cssVarUnit||''));
   },
 
-  resetAll(knobsData){
+  resetAll( knobsData ){
     (knobsData || this.knobs).forEach(d => {
       if( !d || !d.type ) return
 
@@ -274,6 +274,7 @@ Knobs.prototype = {
     this.DOM.form.firstElementChild.innerHTML = this.knobs.concat(['']).map(this.templates.knob.bind(this)).join("")
 
     // calculate iframe size
+
     this.toggle(this.DOM.mainToggler.checked)
 
     this.resetAll()

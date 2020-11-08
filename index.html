@@ -105,7 +105,7 @@
           onChange: e => {
             if(knobs1){
               knobs1.DOM.scope[`${(e.target.checked ? "set" : "remove")}Attribute`]("data-flow", "compact")
-              setTimeout(()=> knobs1.toggle(true), 300)
+              setTimeout(()=> knobs1.toggle(knobs1.state.visible), 300)
             }
           }
         },
@@ -120,7 +120,7 @@
           onChange: e => {
             if(knobs1){
               knobs1.DOM.scope.style.setProperty(`--knobs-gap`, `${e.target.value}px`)
-              knobs1.toggle(true)
+              knobs1.toggle(knobs1.state.visible)
             }
           }
         },
