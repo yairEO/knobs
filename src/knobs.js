@@ -131,7 +131,7 @@ Knobs.prototype = {
     // if is a refference to a single-node, place in an array.
     // cannot use instanceof to check if is an element because some elements might be in iframes:
     // https://stackoverflow.com/a/14391528/104380
-    if( (targetElms+"").includes("Element") )
+    if( Object.prototype.toString.call(targetElms).includes("Element") )
       targetElms = [targetElms]
 
     if( targetElms && targetElms.length && value !== undefined && cssVarName )

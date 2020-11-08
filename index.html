@@ -14,7 +14,7 @@
       background: var(--main-bg);
     }
 
-    div{
+    div, a{
       display: var(--hide, grid);
       background: var(--bg, red);
       border-radius: var(--radius, 0);
@@ -25,7 +25,7 @@
   </style>
 </head>
 <body>
-  <div></div>
+  <a class='testSubject'></a>
   <div></div>
   <script>
     var settings = {
@@ -37,7 +37,7 @@
       },
       // live: false, // should update immediately (default true)
       visible: 0, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
-      CSSVarTarget: document.querySelectorAll('div'),
+      CSSVarTarget: document.body.children,
       knobs: [
         {
           cssVar: ['width', 'px', document.body],

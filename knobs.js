@@ -166,7 +166,7 @@
           action = 'setProperty';
       if( type == 'checkbox' && knobInput && !knobInput.checked )
         action = 'removeProperty';
-      if( (targetElms+"").includes("Element") )
+      if( Object.prototype.toString.call(targetElms).includes("Element") )
         targetElms = [targetElms];
       if( targetElms && targetElms.length && value !== undefined && cssVarName )
         for( let elm of targetElms )
