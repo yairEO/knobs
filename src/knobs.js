@@ -145,8 +145,8 @@ Knobs.prototype = {
 
       var isCheckbox = d.type == 'checkbox',
           isRange = d.type == 'range',
-          e = { target:{ value:d.value, name:d.__name } },
-          inputElm = this.getInputByName(d.__name);
+          inputElm = this.getInputByName(d.__name),
+          e = { target:inputElm };
 
       if( isCheckbox )
         inputElm.checked = !!d.checked
