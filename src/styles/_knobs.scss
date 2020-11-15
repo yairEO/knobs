@@ -28,9 +28,10 @@
 
 .knobs {
   --knobs-gap: 3px;
+  --side-pad: 12px;
   --in-easing: cubic-bezier(.75,0,.35,1);
   --in-duration: .3;
-  --color-size: 22px;
+  --color-size: 20px;
   --LTR-Bool: 1;  /* -1 for RTL */
 
   font: 12px/1 'Fira Sans Condensed', sans-serif;
@@ -46,6 +47,11 @@
 
     label[data-type='range']{
       flex-flow: column;
+
+      & ~ .knobs__knob__reset{
+    //  /   margin-bottom: calc(var(--knobs-gap, 6px) * 2);
+        align-self: flex-start;
+      }
 
       .knobs__label{
         margin: 0;
@@ -68,108 +74,173 @@
     line-height: 1;
     z-index: 1; // enough to make sure slider's output value is over the icon and not under
   }
-}
 
-/* the <form> element which is the actual knobs wrapper */
-.knobs__labels {
-  background: var(--background);
-  border: var(--border);
-  transform: translateX(calc(100% * var(--LTR-Bool)));
 
-  fieldset {
-    display: table;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    padding: 30px 12px 12px;
-    opacity: 0;
-    transform: translateX(calc(15% * var(--LTR-Bool)));
+  /* the <form> element which is the actual knobs wrapper */
+  &__labels {
+    background: var(--background);
+    border: var(--border);
+    transform: translateX(calc(100% * var(--LTR-Bool)));
+    overflow: hidden;
+
+    fieldset {
+      display: table;
+      border: 0;
+      padding: 0;
+      margin: var(--side-pad);
+      opacity: 0;
+      transform: translateX(calc(22% * var(--LTR-Bool)));
+      overflow: hidden;
+
+      &:first-child{
+        padding-top: 30px;
+      }
+    }
+
+    .fieldset__group{
+      transition: .33s cubic-bezier(.45, 0, .2, 1);
+    }
+
+    hr{
+      border: 0;
+      border-top: 1px solid var(--textColor);
+      opacity: .25;
+
+      &:last-of-type{
+        margin-bottom: 0;
+      }
+    }
+
+    label {
+      order: 5;
+      flex: 1;
+      display: flex;
+      position: relative;
+      z-index: 1;
+      background: var(--background);
+
+      > * {
+        padding: var(--knobs-gap, 6px) 0;
+      }
+    }
+
+    & .range,
+    & input[type=text] {
+      min-width: 200px;
+    }
+
+    & label > :last-child {
+      flex: 1;
+      text-align: right;
+    }
   }
-}
 
-.knobs__seperator{
-  display: flex;
-  align-items: center;
-  margin: 1.2em 0 .7em;
-  font-weight: 700;
+  &__legend{
+    $lineGap: 2ch;
 
-  &::before,
-  &::after{
-    content: '';
-    height: 1px;
-    background: var(--textColor);
-    flex: 1;
-    opacity: .25;
-  }
-}
-
-.knobs__labels hr{
-  border: 0;
-  border-top: 1px solid var(--textColor);
-  opacity: .25;
-
-  &:last-of-type{
-    margin-bottom: 0;
-  }
-}
-
-.knobs__knob{
-  display: flex;
-  position: relative;
-
-  &__reset{
-    margin-right: 5px;
-    color: inherit;
-    background: none;
-    border: 0;
-    padding: 0;
+    display: flex;
+    align-items: center;
+    margin: 0 0 var(--side-pad);
+    font-weight: 700;
+    opacity: .66;
     cursor: pointer;
-    opacity: 0;
-    margin-left: -10px;
-    margin-bottom: var(--knobs-gap, 6px);
-    align-self: flex-end;
-    transition: .1s;
-    outline: none;
+    transition: .2s cubic-bezier(.45, 0, .2, 1);
 
-    &:hover{ opacity:1; }
+    &::before,
+    &::after{
+      content: '';
+      height: 1px;
+      background: var(--textColor);
+      flex: 1;
+      opacity: .5;
+      transition: inherit;
+    }
+
+    &::before{ margin-right: $lineGap; }
+    &::after{ margin-left: $lineGap; }
+
+    &:hover{
+      opacity: .85;
+      &::before{ margin-right: $lineGap * 3;  }
+      &::after{ margin-left: $lineGap * 3;  }
+    }
   }
 
-  &:hover{
-    .knobs__knob__reset{ opacity: .4; }
+  &__knob{
+    $self: &;
+    display: flex;
+    position: relative;
+
+    &:hover{
+      #{$self}__reset{
+        // transform: none;
+      }
+
+      #{$self}__label{
+        opacity: 1;
+      }
+    }
+
+    // only show the "rest" button if knob has changed.
+    // this allows the user to know which one was changed, where many knobs exist
+    &[data-changed]{
+      #{$self}__reset{
+        opacity: .33;
+        user-select: auto;
+
+        &:hover{
+          opacity: 1;
+          background: var(--textColor);
+          color: var(--background);
+          transition: 0s;
+        }
+      }
+    }
+
+    &__reset{
+      order: 0;
+      user-select: none;
+      margin-right: .5em;
+      padding: 0;
+      align-self: center;
+      color: inherit;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      opacity: 0;
+      outline: none;
+      border-radius: 50%;
+      width: 2ch;
+      height: 2ch;
+      transition: .15s ease-out;
+    }
+
+    &__label {
+      margin-right: 2ch;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      opacity: .8;
+      transition: 80ms;
+
+      // variable units (if exists)
+      &::after{
+        content: attr(data-type);
+        opacity: .5;
+        margin-left: 1ch;
+      }
+    }
+  }
+
+
+
+  .toggleSection{
+    &:not(:checked){
+      ~ .fieldset__group{
+        opacity: 0;
+        margin-top: calc(-1em + var(--height) * -1px);
+        text-shadow: 0px 3px 2px;
+      }
+    }
   }
 }
-
-.knobs__label::after{
-  content: attr(data-type);
-  opacity: .5;
-  margin-left: 1ch;
-}
-
-.knobs__labels label {
-  flex: 1;
-  display: flex;
-
-  > * {
-    padding: var(--knobs-gap, 6px) 0;
-  }
-}
-
-.knobs__labels .range,
-.knobs__labels input[type=text] {
-  min-width: 200px;
-}
-
-/* label's test only */
-.knobs__label {
-  margin-right: 2ch;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-}
-
-.knobs__labels label > :last-child {
-  flex: 1;
-  text-align: right;
-}
-
-

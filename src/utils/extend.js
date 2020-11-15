@@ -1,7 +1,4 @@
-export function isObject(obj) {
-    return (obj+"") === "[object Object]"
-}
-
+import isObject from './isObject'
 
 export function extend( o, o1, o2) {
     if( !(o instanceof Object) ) o = {};

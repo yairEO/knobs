@@ -37,6 +37,7 @@ CSS-variables (custom properties) are a great match for this script as they comp
 
 **⚠️ Supported only in modern browsers**
 
+It's so easy & quick to use Knobs, about 1 minute!
 
 ### Features
 
@@ -45,6 +46,8 @@ CSS-variables (custom properties) are a great match for this script as they comp
 * `Checkbox` input
 * Resset all (to defaults)
 * Reset individual
+* Labels - allows grouping of every knob defined after a label
+* Expanding/collapsing knobs' groups
 * Apply change live, on-the-fly, or with an <kbd>Apply</kbd> button
 * Knobs are completely **isolated** within an *iframe* (unaffected by page styles)
 * Allows 3 states of visibility:
@@ -58,7 +61,7 @@ CSS-variables (custom properties) are a great match for this script as they comp
   * `bottom left`
 * Allows theme customization (*currently very limited*)
 
-## How To Configure:
+## Configuration:
 
 All is needed is to include the knobs script on the page, and set it up.
 
@@ -202,7 +205,6 @@ var settings = {
       max: 100,
       onChange: console.log
     },
-    "Label example",
     {
       cssVar: ['radius', '%'],
       label: 'Radius of the big square here',
@@ -212,6 +214,7 @@ var settings = {
       max: 50,
       onChange: console.log
     },
+    "Label example",
     {
       cssVar: ['bg'], // alias for the CSS variable
       label: 'Color',
@@ -226,6 +229,7 @@ var settings = {
       value: '#FFFFFF',
       onChange: console.log
     },
+    ["Label example", false] // group is collapsed by default
     {
       cssVar: ['hide'], // alias for the CSS variable
       label: 'Show',

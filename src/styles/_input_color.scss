@@ -1,16 +1,18 @@
 /* wrapper for "color" inputs */
 label[data-type="color"]{
-  > .knobs__inputWrap > div{
-    display: inline-block;
-    border-radius: 50px;
-    overflow: hidden;
-    width: var(--color-size);
-    height: var(--color-size);
-    transition: .3s var(--in-easing);
-    box-shadow: 0px 0px 7px -2px currentColor; // needed in case a color is same as knobs background
+  > .knobs__knob__inputWrap{
+    & > div{
+      display: inline-block;
+      border-radius: 50px;
+      overflow: hidden;
+      width: var(--color-size);
+      height: var(--color-size);
+      transition: .3s var(--in-easing);
+      box-shadow: 0px 0px 7px -2px currentColor; // needed in case a color is same as knobs background
+    }
   }
 
-  &:hover > .knobs__inputWrap > div{
+  &:hover > .knobs__knob__inputWrap > div{
     padding: 0 1.3em;
   }
 }

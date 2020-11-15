@@ -1,13 +1,14 @@
 import mainStyles from './styles/styles.scss'
-import { mergeDeep, isObject } from './utils/mergeDeep'
-import isModrenBrowser from './utils/isModrenBrowser'
-import { scope as scopeTemplate, knob as knobTemplate } from './templates'
+import isObject from './utils/isObject'
+import { mergeDeep } from './utils/mergeDeep'
+import isModernBrowser from './utils/isModernBrowser'
+import * as templates from './templates'
 
 var raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60))
 
 function Knobs(settings){
   // since Knobs relies on CSS variables, no need to proceed if browser support is inadequate
-  if ( !isModrenBrowser())
+  if ( !isModernBrowser())
     return this
 
   const { knobs, ...restOfSettings } = settings || {}
@@ -43,6 +44,7 @@ Knobs.prototype = {
       RTL: false,
       position: 'top right',
       primaryColor: '#0366D6',
+      "range-value-background": '#0366D6',
       background: "rgba(0,0,0,1)",
       textColor: "white",
       border: 'none',
@@ -66,8 +68,9 @@ Knobs.prototype = {
   },
 
   templates: {
-    scope: scopeTemplate,
-    knob: knobTemplate
+    scope: templates.scope,
+    knob: templates.knob,
+    fieldset: templates.fieldset
   },
 
   /**
@@ -77,7 +80,7 @@ Knobs.prototype = {
    */
   knobAttrs(data){
     var attributes = `name="${data.__name}"`,
-        blacklist = ['label', 'type', 'onchange', 'cssvar']
+        blacklist = ['label', 'type', 'onchange', 'cssvar', '__name']
 
     for( var attr in data ){
       if( !blacklist.includes(attr.toLowerCase()) )
@@ -87,33 +90,16 @@ Knobs.prototype = {
     return attributes
   },
 
-  getKnobDataByName(name){
+  getKnobDataByName( name ){
     return this.knobs.filter(Boolean).find(d => d.__name == name)
   },
 
-  getInputByName(name){
+  getInputByName( name ){
     return this.DOM.scope.querySelector(`input[name="${name}"`)
   },
 
-  onChange(e){
-    var knobData = this.getKnobDataByName(e.target.name),
-        runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
-        isCheckbox = knobData && knobData.type == 'checkbox',
-        updatedData;
-
-    if( !knobData )
-      return
-
-    if( !isCheckbox && !this.settings.live )
-      return
-
-    if( e.type == 'input' && runOnInput )
-      return
-
-    updatedData = { ...knobData, value:e.target.value }
-
-    raf(() => this.updateDOM(updatedData))
-    typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData)
+  getKnobElm( name ){
+    return this.getInputByName(name).closest('.knobs__knob')
   },
 
   // if settings.CSSVarTarget exists or
@@ -146,21 +132,34 @@ Knobs.prototype = {
       var isCheckbox = d.type == 'checkbox',
           isRange = d.type == 'range',
           inputElm = this.getInputByName(d.__name),
-          e = { target:inputElm };
+          e = { target:inputElm },
+          resetTitle;
 
       if( isCheckbox )
-        inputElm.checked = !!d.checked
+        resetTitle = inputElm.checked = !!d.checked
       else
-        inputElm.value = d.value
+      resetTitle = inputElm.value = d.value
+
+      this.setResetKnobTitle(d.__name, resetTitle)
 
       if( isRange )
         inputElm.parentNode.style.setProperty('--value', d.value)
 
+      this.onInput(e)
       this.onChange(e)
     })
   },
 
+  setResetKnobTitle( name, title ){
+    try{
+      title = "Reset to " + title
+      this.getKnobElm(name).querySelector('.knobs__knob__reset').title = title
+    }
+    catch(err){}
+  },
+
   resetKnobByName(name){
+    this.setKnobChangedFlag(this.getKnobElm(name), false)
     this.resetAll([this.getKnobDataByName(name)])
   },
 
@@ -171,10 +170,13 @@ Knobs.prototype = {
     })
   },
 
+  /**
+   * Applys changes manually if `settings.live` is `false`
+   */
   onSubmit(e){
     e.preventDefault()
 
-    var elements = [...e.target.elements]
+    var elements = e.target.querySelectorAll('input')
     this.settings.live = true
     elements.forEach(elm => this.onChange({ target:{value:elm.value, name:elm.name} }))
     this.settings.live = false
@@ -190,24 +192,41 @@ Knobs.prototype = {
     }
   },
 
-  // show/hide content
+  calculateGroupsHeights(){
+    var groupElms = this.DOM.form.querySelectorAll('.fieldset__group')
+
+    groupElms.forEach(groupElm => {
+      groupElm.style.setProperty('--height', groupElm.clientHeight)
+    })
+  },
+
+  setIframeHeight( set ){
+    var action = (set || set === undefined) ? 'setProperty' : 'removeProperty',
+        style = this.DOM.iframe.style;
+
+    if( action == 'setProperty' ){
+      style.setProperty(`--knobsWidth`, '1000px')
+      style.setProperty(`--knobsHeight`, '1000px')
+    }
+
+    var { clientWidth, clientHeight } = this.DOM.scope
+
+    style[action || 'setProperty'](`--knobsWidth`, clientWidth + 'px')
+    style[action || 'setProperty'](`--knobsHeight`, clientHeight + 'px')
+  },
+
+  // show/hide Knobs (as a whole)
   toggle(state){
     if( state === undefined )
       state = !this.DOM.mainToggler.checked
 
+    var action = (state ? 'set' : 'remove') + 'Property';
+
     this.state.visible = state;
 
     // briefly set a big width/height for the iframe so it could be meassured correctly
-    if( state ){
-      this.DOM.iframe.style.setProperty(`--knobsWidth`, '1000px')
-      this.DOM.iframe.style.setProperty(`--knobsHeight`, '1000px')
-    }
+    this.setIframeHeight(action)
 
-    var action = (state ? 'set' : 'remove') + 'Property',
-        { clientWidth, clientHeight } = this.DOM.scope;
-
-    this.DOM.iframe.style[action](`--knobsWidth`, clientWidth + 'px')
-    this.DOM.iframe.style[action](`--knobsHeight`, clientHeight + 'px')
     this.DOM.mainToggler.checked = state;
   },
 
@@ -270,8 +289,25 @@ Knobs.prototype = {
   render(){
     this.generateIds()
 
+    // maps a flat knobs array into multiple groups, after each label (if label exists)
+    // this step is needed so each group (after item in the knobs array after a "label" item) could be
+    // expanded/collapsed individually.
+    var knobsGroups = this.knobs.reduce((acc, knobData) => {
+        if( knobData && !isObject(knobData) ) acc.push([])
+        acc[acc.length - 1].push(knobData)
+        return acc
+      }, [[]])
+
+    // cleanup previous knobs fieldsets wrappers
+    this.DOM.form.querySelectorAll('fieldset').forEach(elm => elm.remove())
+
+    //create an HTML-string from the template
+    var HTML = knobsGroups.map(this.templates.fieldset.bind(this)).join("")
+
     // inject knobs into the <fieldset> element
-    this.DOM.form.firstElementChild.innerHTML = this.knobs.concat(['']).map(this.templates.knob.bind(this)).join("")
+    this.DOM.form.insertAdjacentHTML('afterbegin', HTML)
+
+    this.calculateGroupsHeights()
 
     // calculate iframe size
 
@@ -280,22 +316,78 @@ Knobs.prototype = {
     this.resetAll()
   },
 
+  onChange(e){
+    var knobData = this.getKnobDataByName(e.target.name),
+        runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
+        isCheckbox = knobData && knobData.type == 'checkbox',
+        updatedData;
+
+    if( !knobData )
+      return
+
+    if( !isCheckbox && !this.settings.live )
+      return
+
+    if( e.type == 'input' && runOnInput )
+      return
+
+    updatedData = { ...knobData, value:e.target.value }
+
+    raf(() => this.updateDOM(updatedData))
+    typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData)
+  },
+
+  onInput(e){
+    var inputelm = e.target;
+
+    inputelm.parentNode.style.setProperty('--value',inputelm.value);
+    inputelm.parentNode.style.setProperty('--text-value', JSON.stringify(inputelm.value))
+  },
+
+  setKnobChangedFlag( knobElm, action ){
+    knobElm && knobElm[(action == false ? 'remove' : 'set') + 'Attribute']('data-changed', true)
+  },
+
   bindEvents(){
-    this.eventsRefs = {
-      onChange: this.onChange.bind(this),
+    this.eventsRefs = this.eventsRefs || {
+      onChange: e => {
+        this.setKnobChangedFlag( this.getKnobElm(e.target.name) )
+        this.onChange(e)
+      },
+      onInput: e => {
+        var isSectionToggler = e.target.classList.contains('toggleSection')
+
+        if( isSectionToggler ){
+          return
+        }
+
+        this.onInput(e)
+        this.onChange(e)
+      },
+      onTransitionEnd: e => {
+        if( e.target.classList.contains('fieldset__group') )
+          this.setIframeHeight()
+      },
       onReset : this.resetAll.bind(this, null),
       onSubmit: this.onSubmit.bind(this),
       onClick : this.onClick.bind(this)
     }
 
-    var { onChange, onReset, onSubmit, onClick } = this.eventsRefs
+    const resizeObserver = new ResizeObserver(entries =>
+      this.setIframeHeight()
+    )
+
+    var { onChange, onInput, onReset, onSubmit, onClick, onTransitionEnd } = this.eventsRefs
 
     this.DOM.form.addEventListener('change', onChange)
-    this.DOM.form.addEventListener('input', onChange)
+    this.DOM.form.addEventListener('input', onInput)
     this.DOM.form.addEventListener('reset', onReset)
     this.DOM.form.addEventListener('submit', onSubmit)
     this.DOM.scope.addEventListener('click', onClick)
     this.DOM.mainToggler.addEventListener('change', e => this.toggle(e.target.checked))
+    resizeObserver.observe(this.DOM.form)
+
+    this.DOM.form.addEventListener('transitionend', onTransitionEnd)
   }
 }
 

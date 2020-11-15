@@ -33,8 +33,8 @@ export default [
     },
     plugins: [
       serve(), // index.html should be in root of project
-      livereload({ watch:'src', delay:500, exts: [ 'html', 'js', 'scss', 'css' ] }),
-      scss({ output: false, outputStyle: 'compressed' }),
+      livereload({ watch:'src', delay:1000, exts: [ 'html', 'js', 'scss', 'css' ] }),
+      scss({ output: false, outputStyle: 'compressed', watch: 'src/styles', }),
       cleanup(),
       nodeResolve(),
       commonjs()

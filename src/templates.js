@@ -1,3 +1,5 @@
+import isObject from './utils/isObject'
+
 export function scope(){
   const {visible, live, theme} = this.settings;
 
@@ -6,7 +8,7 @@ export function scope(){
       <input hidden type='checkbox' ${visible ? 'checked' : ''} id='knobsToggle' />
       <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>⚙️</label>
       <form class='knobs__labels'>
-        <fieldset></fieldset>
+        <!-- Knobs goes here -->
         <section class='knobs__controls'>
           <a class='poweredBy' href='https://github.com/yairEO/knobs' target='_blank'>Get <em>Knobs</em></a>
           <input type="reset" value="↩ Reset">
@@ -17,30 +19,52 @@ export function scope(){
   `
 }
 
+// group of knobs which is described by a label or a separator
+export function fieldset(knobsGroups){
+  var legend, knobs;
+
+  if( isObject(knobsGroups[0]) ){
+    knobs = knobsGroups
+  }
+  else{
+    [legend, ...knobs] = knobsGroups
+    legend = getLegend(legend instanceof Array ? { label:legend[0], checked:!!legend[1] } : { label:legend, checked:true })
+  }
+
+  return `<fieldset>
+    ${legend ? legend : ''}
+    <div class="fieldset__group">
+      ${knobs.map(knob.bind(this)).join("")}
+    </div>
+  </fieldset>`
+}
+
 export function knob(data){
   if( data && data.type )
     return `<div class='knobs__knob'>
-        <button type='button' name='${data.__name}' class='knobs__knob__reset' title='reset'>↩</button>
         <label data-type='${data.type}'>
-          <div class='knobs__label' ${data.cssVar && data.cssVar[1] ? `data-type='${data.cssVar[1]}'` : ''}>${data.label}</div>
-          <div class='knobs__inputWrap'>
+          <div class='knobs__knob__label' ${data.cssVar && data.cssVar[1] ? `data-type='${data.cssVar[1]}'` : ''}>${data.label}</div>
+          <div class='knobs__knob__inputWrap'>
             ${getInput.call(this, data)}
           </div>
         </label>
+        <button type='button' name='${data.__name}' class='knobs__knob__reset' title='Reset'>↩</button>
       </div>
     `
+}
 
-  if( data && typeof data == 'string' )
-    return `<div class='knobs__seperator'>&nbsp;&nbsp;${data}&nbsp;&nbsp;</div>`
+function getLegend({ label, checked }){
+  var id = label.replace(/ /g, '-') + Math.random().toString(36).slice(-6);
 
-  return '<hr/>'
+  return `<input hidden id="${id}" type="checkbox" ${checked ? "checked" : ""} class="toggleSection">
+          <label class='knobs__legend' for="${id}" title="Expand/Collapse">${label}</label>`
 }
 
 function getInput(data){
   if( data.type == 'range' )
     return `
       <div class="range" style="--step:${data.step||1}; --min:${data.min}; --max:${data.max}; --value:${data.value}; --text-value:'${data.value}'">
-        <input type="range" ${this.knobAttrs(data)} oninput="this.parentNode.style.setProperty('--value',this.value); this.parentNode.style.setProperty('--text-value', JSON.stringify(this.value))">
+        <input type="range" ${this.knobAttrs(data)}>
         <output></output>
         <div class='range__progress'></div>
       </div>`

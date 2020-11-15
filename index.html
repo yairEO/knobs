@@ -26,7 +26,7 @@
 </head>
 <body>
   <a class='testSubject'></a>
-  <div></div>
+  <div class='testSubject'></div>
   <script>
     var settings = {
       theme: {
@@ -37,7 +37,7 @@
       },
       // live: false, // should update immediately (default true)
       visible: 0, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
-      CSSVarTarget: document.body.children,
+      CSSVarTarget: document.querySelectorAll('.testSubject'),
       knobs: [
         {
           cssVar: ['width', 'px', document.body],
@@ -47,7 +47,7 @@
           min: 0,
           max: 500,
           step: 50,
-          onChange: console.log
+        //  onChange: console.log
         },
         {
           cssVar: ['height', 'vh'],
@@ -56,7 +56,7 @@
           value: 20,
           min: 0,
           max: 100,
-          onChange: console.log
+        //  onChange: console.log
         },
         "Label example",
         {
@@ -66,21 +66,21 @@
           value: 0,
           min: 0,
           max: 50,
-          onChange: console.log
+        //  onChange: console.log
         },
         {
           cssVar: ['bg'], // alias for the CSS variable
           label: 'Box color',
           type: 'color',
           value: '#45FDA9',
-          onChange: console.log
+        //  onChange: console.log
         },
         {
           cssVar: ['main-bg', null, document.body], // [alias for the CSS variable, units, applies on element]
           label: 'Page background',
           type: 'color',
           value: '#FFFFFF',
-          onChange: console.log
+        //  onChange: console.log
         },
         {
           cssVar: ['hide'], // alias for the CSS variable
@@ -88,71 +88,78 @@
           type: 'checkbox',
           // checked: true,
           value: 'none',
-          onChange: console.log
+        //  onChange: console.log
         },
       ]
     }
 
     var knobs1 = new Knobs(settings)
-    var knobs2 = new Knobs({ ...settings, knobs:[...settings.knobs.slice(0,2)], theme:{position: 'bottom left', background:'blue'}, live:false })
+    var knobs2 = new Knobs({ ...settings, CSSVarTarget:[...settings.CSSVarTarget].slice(0,1), knobs:[...settings.knobs.slice(0,2)], theme:{position: 'bottom left', background:'blue'}, live:false })
+
 
     knobs1.knobs = [...knobs1.knobs, ...[
-      "Knobs Self Parameters",
-        {
-          label: 'Compact View',
-          type: 'checkbox',
-          value: 'none',
-          onChange: e => {
-            if(knobs1){
-              knobs1.DOM.scope[`${(e.target.checked ? "set" : "remove")}Attribute`]("data-flow", "compact")
-              setTimeout(()=> knobs1.toggle(knobs1.state.visible), 300)
-            }
-          }
-        },
-        {
-          cssVar: ['knobs-gap', 'px'],
-          label: 'Space between knobs',
-          type: 'range',
-          value: 3,
-          min: 0,
-          max: 10,
-          step: 1,
-          onChange: e => {
-            if(knobs1){
-              knobs1.DOM.scope.style.setProperty(`--knobs-gap`, `${e.target.value}px`)
+      ["Knobs Self Parameters", 0],
+      {
+        label: 'Compact View',
+        type: 'checkbox',
+        value: 'none',
+        onChange: e => {
+          if(knobs1){
+            knobs1.DOM.scope[`${(e.target.checked ? "set" : "remove")}Attribute`]("data-flow", "compact")
+            setTimeout(()=> {
+              knobs1.calculateGroupsHeights()
               knobs1.toggle(knobs1.state.visible)
-            }
+            }, 300)
           }
-        },
-        {
-          cssVar: ['background', null, knobs1.DOM.scope],
-          label: 'Knobs Background',
-          type: 'color',
-          value: '#000000'
-        },
-        {
-          cssVar: ['primaryColor', null, knobs1.DOM.scope],
-          label: 'Slider Color',
-          type: 'color',
-          value: '#0366D6'
-        },
-        {
-          cssVar: ['textColor', null, knobs1.DOM.scope],
-          label: 'Text Color',
-          type: 'color',
-          value: '#FFFFFF'
-
         }
+      },
+      {
+        cssVar: ['knobs-gap', 'px'],
+        label: 'Space between knobs',
+        type: 'range',
+        value: 3,
+        min: 0,
+        max: 10,
+        step: 1,
+        onChange: e => {
+          if(knobs1){
+            knobs1.DOM.scope.style.setProperty(`--knobs-gap`, `${e.target.value}px`)
+            knobs1.calculateGroupsHeights()
+            knobs1.toggle(knobs1.state.visible)
+          }
+        }
+      },
+      {
+        cssVar: ['background', null, knobs1.DOM.scope],
+        label: 'Knobs Background',
+        type: 'color',
+        value: '#000000'
+      },
+      {
+        cssVar: ['primaryColor', null, knobs1.DOM.scope],
+        label: 'Slider Color',
+        type: 'color',
+        value: '#0366D6'
+      },
+      {
+        cssVar: ['textColor', null, knobs1.DOM.scope],
+        label: 'Text Color',
+        type: 'color',
+        value: '#FFFFFF'
+
+      }
     ]]
 
     knobs1.render()
 
-
+  /*
   setTimeout(()=>{
     knobs2.knobs = [...settings.knobs]
     knobs2.render()
   }, 3000)
     // console.log(knobs2)
+
+    */
   </script>
 </body>
 </html>
