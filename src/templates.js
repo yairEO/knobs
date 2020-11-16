@@ -1,18 +1,25 @@
 import isObject from './utils/isObject'
 
+var settingsIcon = `<div class='leversIcon'>
+  <div><b></b></div>
+  <div><b></b></div>
+  <div><b></b></div>
+</div>
+`
+
 export function scope(){
   const {visible, live, theme} = this.settings;
 
   return `
     <aside class='knobs' data-position='${theme.position}' data-flow='${theme.flow}'>
       <input hidden type='checkbox' ${visible ? 'checked' : ''} id='knobsToggle' />
-      <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>⚙️</label>
+      <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>${settingsIcon}</label>
       <form class='knobs__labels'>
         <!-- Knobs goes here -->
         <section class='knobs__controls'>
-          <a class='poweredBy' href='https://github.com/yairEO/knobs' target='_blank'>Get <em>Knobs</em></a>
-          <input type="reset" value="↩ Reset">
           ${live ? '' : `<input type="submit" value="Apply">`}
+          <input type="reset" value="↩ Reset">
+          <a class='poweredBy' href='https://github.com/yairEO/knobs' target='_blank'>Get <em>Knobs</em></a>
         </section>
       </form>
     </aside>

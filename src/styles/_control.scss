@@ -1,7 +1,8 @@
 /* bottom controls (apply/reset) */
 .knobs__controls {
+  display: flex;
   opacity: 0;
-  text-align: right;
+  flex-direction: row-reverse;
   // border-top: 1px solid var(--textColor);
   margin: var(--side-pad);
 
@@ -9,4 +10,19 @@
     color: black;
     margin-left: 1em;
   }
+}
+
+.poweredBy{
+  margin-right: auto;
+  text-decoration: none;
+  color: inherit;
+  padding: 3px;
+  font-size: 10px;
+  opacity: .5;
+  transition: .15s;
+}
+
+.poweredBy:hover{
+  color: var(--primaryColor);
+  opacity: 1;
 }

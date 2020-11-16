@@ -1,0 +1,109 @@
+.leversIcon{
+  $size: 5px;
+
+  width: 65px;
+  color: var(--background);
+  transform: scale(0.4);
+  transform-origin: 0 0;
+
+  > div{
+    display: flex;
+    align-items: center;
+    transition: transform .2s ease;
+
+    &:nth-child(1){
+      &::before{ flex: .33; transition-delay: .3s; }
+    }
+
+    &:nth-child(2){
+      margin: 1px 0;
+      &::after{ flex: .33;  }
+    }
+
+    &:nth-child(3){
+      &::before{ flex: .8; transition-delay: .1s; }
+    }
+
+    > b{
+      display: inline-block;
+      width: $size*1.5;
+      height: $size*1.5;
+      border-radius: 50%;
+      border: #{$size - 1px} solid currentColor;
+      margin: 0 $size;
+    }
+
+    &::before,
+    &::after{
+      content: '';
+      height: $size;
+      background: currentColor;
+      border-radius: $size;
+      flex: 1;
+      transition: flex .25s ease;
+    }
+
+    &::after{
+      opacity: .33;
+    }
+  }
+
+  &:hover{
+    > div{
+      &:nth-child(1){
+        &::before{ flex: 3; }
+      }
+
+      &:nth-child(2){
+        margin: 1px 0;
+        &::after{ flex: 3; }
+      }
+
+      &:nth-child(3){
+        &::before{ flex: 4; }
+      }
+    }
+  }
+}
+
+
+#knobsToggle:checked + label .leversIcon{
+  color: var(--textColor);
+  transition: color .2s;
+  transform: scale(.3) translate(30px, 6px);
+  opacity: .7;
+
+  &:hover{
+    opacity: 1;
+  }
+
+  b{
+    transform: scale(0);
+    margin: 0;
+    width: 0;
+  }
+
+  > div{
+    &::after{
+      flex: 0;
+    }
+    &::before{
+      flex: 3;
+      height: 8px;
+    }
+
+    &:nth-child(1){
+      transform: rotate(45deg);
+      transform-origin: 20% 50%;
+    }
+
+    &:nth-child(2){
+      opacity: 0;
+    }
+
+    &:nth-child(3){
+      transform: rotate(-45deg);
+      transform-origin: 0 0;
+    }
+  }
+}

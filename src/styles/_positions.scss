@@ -1,28 +1,47 @@
 .knobs{
-  &[data-position~='bottom']{
-    > label{ top: 0; }
+  $self: &;
 
-    &[data-position~='right'] .knobs__controls{
-      padding-right: 40px;
-    }
-
-    #knobsToggle:checked + label{
-      top: auto;
-      bottom: 10px;
+  &[data-position~='top']{
+    #{$self}__labels fieldset:first-child {
+      padding-top: 15px;
     }
   }
+
+  //////////////////////////////////////////
+
+  &[data-position~='bottom']{
+    #knobsToggle{
+      + label{ top: 0; }
+
+      &:checked + label{
+        top: auto;
+        bottom: 10px;
+      }
+    }
+
+
+    &[data-position~='right'] #{$self}__controls{
+      margin-right: 3em;
+    }
+  }
+
+  //////////////////////////////////////////
 
   &[data-position~='left']{
     --LTR-Bool: -1;
 
-    > label{ right: 3px; }
+    #knobsToggle{
+      + label{ right: 0; }
 
-    #knobsToggle:checked + label{
-      left:10px; right:auto;
+      &:checked + label{
+        left:0; right:auto;
+      }
     }
 
-    .knobs__controls > :first-child:not(:only-child){
-      margin-left: 26px;
+    &[data-position~='bottom']{
+      .poweredBy{
+        margin-left: 2em;
+      }
     }
   }
 }

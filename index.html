@@ -94,8 +94,15 @@
     }
 
     var knobs1 = new Knobs(settings)
-    var knobs2 = new Knobs({ ...settings, CSSVarTarget:[...settings.CSSVarTarget].slice(0,1), knobs:[...settings.knobs.slice(0,2)], theme:{position: 'bottom left', background:'blue'}, live:false })
-
+    var knobs2 = new Knobs({
+      ...settings,
+      live: false,
+      CSSVarTarget:[...settings.CSSVarTarget].slice(0,1),
+      knobs:[...settings.knobs.slice(0,2)],
+      theme:{
+        position: 'bottom right', background:'midnightblue'
+      }
+    })
 
     knobs1.knobs = [...knobs1.knobs, ...[
       ["Knobs Self Parameters", 0],
@@ -150,6 +157,7 @@
       }
     ]]
 
+
     knobs1.render()
 
   /*
@@ -157,7 +165,6 @@
     knobs2.knobs = [...settings.knobs]
     knobs2.render()
   }, 3000)
-    // console.log(knobs2)
 
     */
   </script>

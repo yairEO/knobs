@@ -150,6 +150,12 @@ Knobs.prototype = {
     })
   },
 
+  /**
+   *
+   * Sets the "title" attribute of the knob's "reset" button
+   * @param {String} name [Knob name]
+   * @param {String} title [text title, which is actually the default value of that knob]
+   */
   setResetKnobTitle( name, title ){
     try{
       title = "Reset to " + title
@@ -158,7 +164,7 @@ Knobs.prototype = {
     catch(err){}
   },
 
-  resetKnobByName(name){
+  resetKnobByName( name ){
     this.setKnobChangedFlag(this.getKnobElm(name), false)
     this.resetAll([this.getKnobDataByName(name)])
   },
@@ -200,9 +206,10 @@ Knobs.prototype = {
     })
   },
 
-  setIframeHeight( set ){
-    var action = (set || set === undefined) ? 'setProperty' : 'removeProperty',
-        style = this.DOM.iframe.style;
+  setIframeProps( opts ){
+    var action = (this.state.visible == false ? 'remove' : 'set') + 'Property',
+        style = this.DOM.iframe.style,
+        { heightOffset = 0 } = opts || {};
 
     if( action == 'setProperty' ){
       style.setProperty(`--knobsWidth`, '1000px')
@@ -211,28 +218,26 @@ Knobs.prototype = {
 
     var { clientWidth, clientHeight } = this.DOM.scope
 
-    style[action || 'setProperty'](`--knobsWidth`, clientWidth + 'px')
-    style[action || 'setProperty'](`--knobsHeight`, clientHeight + 'px')
+    style[action](`--knobsWidth`, clientWidth + 'px')
+    style[action](`--knobsHeight`, clientHeight + heightOffset + 'px')
   },
 
   // show/hide Knobs (as a whole)
-  toggle(state){
+  toggle( state ){
     if( state === undefined )
       state = !this.DOM.mainToggler.checked
-
-    var action = (state ? 'set' : 'remove') + 'Property';
 
     this.state.visible = state;
 
     // briefly set a big width/height for the iframe so it could be meassured correctly
-    this.setIframeHeight(action)
+    this.setIframeProps()
 
     this.DOM.mainToggler.checked = state;
   },
 
   build(){
     this.createIframe()
-    this.bindEvents()
+    setTimeout(this.bindEvents.bind(this))
   },
 
   /**
@@ -254,7 +259,7 @@ Knobs.prototype = {
         position: fixed;
         z-index: 999999;
         ${(theme.position+" ").split(" ").join(":0;")}
-        width: var(--knobsWidth, 35px);
+        width: var(--knobsWidth, 36px);
         height: var(--knobsHeight, 30px);
     `
 
@@ -351,31 +356,42 @@ Knobs.prototype = {
   bindEvents(){
     this.eventsRefs = this.eventsRefs || {
       onChange: e => {
+        // only knobs' inputs have a "name" attribute
+        if( !e.target.name ) return
+
         this.setKnobChangedFlag( this.getKnobElm(e.target.name) )
         this.onChange(e)
       },
       onInput: e => {
-        var isSectionToggler = e.target.classList.contains('toggleSection')
+        try{
+          let isSectionToggler = e.target.classList.contains('toggleSection'),
+              groupElm,
+              sectionHeight;
 
-        if( isSectionToggler ){
-          return
+          // previously used "resizeObserver", but in Firefox the resize callback is called only after and not during every frame of the resize,
+          // so this hacky-approach beflow is needed to adjust the offset of the iframe *before* the knobs group section is expanded
+          if( isSectionToggler && e.target.checked ){
+            groupElm = e.target.parentNode.querySelector('.fieldset__group')
+            sectionHeight = groupElm.style.getPropertyValue('--height');
+            this.setIframeProps({ heightOffset:sectionHeight })
+          }
         }
+        catch(err){}
+
+        if( !e.target.name ) return
 
         this.onInput(e)
         this.onChange(e)
       },
       onTransitionEnd: e => {
-        if( e.target.classList.contains('fieldset__group') )
-          this.setIframeHeight()
+        if( e.target.classList.contains('fieldset__group') ){
+          this.setIframeProps()
+        }
       },
       onReset : this.resetAll.bind(this, null),
       onSubmit: this.onSubmit.bind(this),
       onClick : this.onClick.bind(this)
     }
-
-    const resizeObserver = new ResizeObserver(entries =>
-      this.setIframeHeight()
-    )
 
     var { onChange, onInput, onReset, onSubmit, onClick, onTransitionEnd } = this.eventsRefs
 
@@ -385,7 +401,6 @@ Knobs.prototype = {
     this.DOM.form.addEventListener('submit', onSubmit)
     this.DOM.scope.addEventListener('click', onClick)
     this.DOM.mainToggler.addEventListener('change', e => this.toggle(e.target.checked))
-    resizeObserver.observe(this.DOM.form)
 
     this.DOM.form.addEventListener('transitionend', onTransitionEnd)
   }
