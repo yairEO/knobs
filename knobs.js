@@ -206,6 +206,7 @@
           inputElm.parentNode.style.setProperty('--value', d.value);
         this.onInput(e);
         this.onChange(e);
+        this.setKnobChangedFlag(this.getKnobElm(d.__name), false);
       });
     },
     setResetKnobTitle( name, title ){
