@@ -19,8 +19,7 @@
 <p align="center">
 <br>
   <a href='https://codepen.io/vsync/pen/KKMwyRO'>
-      <img src="./horizontal.png?sanitize=true" alt="Knobs - Horizontal"/>
-      <img src="./compact.png?sanitize=true" alt="Knobs - Compact"/>
+      <img src="./demo.gif?sanitize=true" alt="Knobs"/>
   </a>
 <br>
 <p>
