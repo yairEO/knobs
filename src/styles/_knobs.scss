@@ -46,9 +46,15 @@
     label[data-type='range']{
       flex-flow: column;
 
+      .range{
+        --thumb-size: 12px;
+        --track-height: calc(var(--thumb-size)/2);
+      }
+
       & ~ .knobs__knob__reset{
     //  /   margin-bottom: calc(var(--knobs-gap, 6px) * 2);
         align-self: flex-start;
+        margin-top: .5ch;
       }
 
       .knobs__label{

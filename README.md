@@ -39,7 +39,7 @@ CSS-variables (custom properties) are a great match for this script as they comp
 
 It's so easy & quick to use Knobs, about 1 minute!
 
-### Features
+### Features:
 
 * `Range` input
 * `Color` input
@@ -47,7 +47,7 @@ It's so easy & quick to use Knobs, about 1 minute!
 * Resset all (to defaults)
 * Reset individual
 * Labels - allows grouping of every knob defined after a label
-* Expanding/collapsing knobs' groups
+* **Expand/Collapse** knobs groups
 * Apply change live, on-the-fly, or with an <kbd>Apply</kbd> button
 * Knobs are completely **isolated** within an *iframe* (unaffected by page styles)
 * Allows 3 states of visibility:
