@@ -1,9 +1,9 @@
 // https://github.com/yairEO/ui-range
 // overrides:
 .knobs .range {
-  --fill-color: var(--primaryColor);
+  --fill-color: var(--range-track-color);
   --primaryColor: var(--range-value-background);
-  --value-active-color: #FFF;
+  --value-active-color: var(--range-track-color);
   --value-background: transparent;
   --progress-color: #444;
   --thumb-size: 20px;

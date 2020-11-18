@@ -3,7 +3,7 @@
 
   &[data-position~='top']{
     #{$self}__labels fieldset:first-child {
-      padding-top: 15px;
+      margin-top: calc(var(--side-pad) * 2);
     }
   }
 

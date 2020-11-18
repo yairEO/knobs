@@ -34,11 +34,11 @@ export function fieldset(knobsGroups){
     knobs = knobsGroups
   }
   else{
-    [legend, ...knobs] = knobsGroups
+    [legend, ...knobs] = knobsGroups;
     legend = getLegend(legend instanceof Array ? { label:legend[0], checked:!!legend[1] } : { label:legend, checked:true })
   }
 
-  return `<fieldset>
+  return `<fieldset ${legend ? 'data-has-legend' : ''}>
     ${legend ? legend : ''}
     <div class="fieldset__group">
       ${knobs.map(knob.bind(this)).join("")}

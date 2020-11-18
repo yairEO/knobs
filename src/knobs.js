@@ -44,7 +44,7 @@ Knobs.prototype = {
       RTL: false,
       position: 'top right',
       primaryColor: '#0366D6',
-      "range-value-background": '#0366D6',
+      "range-value-background": '#FFF',
       background: "rgba(0,0,0,1)",
       textColor: "white",
       border: 'none',
@@ -299,7 +299,7 @@ Knobs.prototype = {
     // this step is needed so each group (after item in the knobs array after a "label" item) could be
     // expanded/collapsed individually.
     var knobsGroups = this.knobs.reduce((acc, knobData) => {
-        if( knobData && !isObject(knobData) ) acc.push([])
+        if( knobData && !isObject(knobData) && acc[acc.length - 1].length ) acc.push([])
         acc[acc.length - 1].push(knobData)
         return acc
       }, [[]])
