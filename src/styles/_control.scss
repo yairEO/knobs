@@ -1,10 +1,13 @@
 /* bottom controls (apply/reset) */
 .knobs__controls {
   display: flex;
+  align-items: center;
   opacity: 0;
   flex-direction: row-reverse;
   // border-top: 1px solid var(--textColor);
   margin: var(--side-pad);
+  position: relative;
+  z-index: 1;
 
   > input {
     color: black;

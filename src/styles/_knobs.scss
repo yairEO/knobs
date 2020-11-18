@@ -1,17 +1,46 @@
 #knobsToggle{
   // main toggle button
   + label{
+    --size: 21px;
+    --offset: calc(var(--toggleOffset)); // takes the circular background (next element) into account
     position: absolute;
-    width: 26px;
-    height: 20px;
-    top: 6px;
-    right: 6px;
+    width: var(--size);
+    height: var(--size);
+    top: var(--offset);
+    right: var(--offset);
+    padding: calc((var(--toggleSize) - var(--size))/2);
     font-size: 20px;
     line-height: 1;
-    z-index: 1; // enough to make sure slider's output value is over the icon and not under
+    z-index: 5; // enough to make sure slider's output value is over the icon and not under
+    color: var(--textColor);
+  }
+
+  &:not(:checked){
+    + label{
+      &:hover{
+        + .knobs__bg{
+          opacity: 1;
+          transform: scale(1.15);
+        }
+      }
+    }
   }
 
   &:checked{
+    & + label{
+      padding: 0;
+    }
+
+    ~ .knobs__bg{
+      --corner-radius: 6px;
+      border-radius: 0;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+      transition: .3s cubic-bezier(.45, 0, .2, 1), margin .15s, border-radius .2s;
+    }
+
     & ~ .knobs__labels {
       transform: none;
       transition: calc(var(--in-duration) * 1s) var(--in-easing);
@@ -25,10 +54,23 @@
   }
 }
 
+html, body{
+  overflow: hidden;
+}
+
+// a temporary class in order to meassure the content's width & height EXACTLY
+body.meassure{
+  > .knobs{
+    position: fixed;
+  }
+}
+
 .knobs {
   --range-track-color: var(--primaryColor);
   --knobs-gap: 3px;
   --side-pad: 12px;
+  --toggleSize: 40px;
+  --toggleOffset: 6px;
   --in-easing: cubic-bezier(.75,0,.35,1);
   --in-duration: .3;
   --color-size: 20px;
@@ -36,10 +78,11 @@
 
   font: 12px/1 'Fira Sans Condensed', sans-serif;
   color: var(--textColor);
-  position: fixed;
-  z-index: 999999;
-  top: 0;
-  right: 0;
+  // position: fixed;
+  // z-index: 999999;
+  // top: 0;
+  // right: 0;
+  overflow: hidden;
 
   &[data-flow='compact']{
     --color-size: 16px;
@@ -70,9 +113,22 @@
     cursor: pointer;
   }
 
+  &__bg{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: var(--toggleOffset);
+    width: var(--toggleSize);
+    height: var(--toggleSize);
+    border-radius: 50%;
+    background: var(--background);
+    opacity: .8;
+    transition:  120ms;
+  }
+
   /* the <form> element which is the actual knobs wrapper */
   &__labels {
-    background: var(--background);
+  //  background: var(--background);
     border: var(--border);
     transform: translateX(calc(100.1% * var(--LTR-Bool)));
     overflow: hidden;
@@ -86,10 +142,20 @@
       transform: translateX(calc(22% * var(--LTR-Bool)));
       overflow: hidden;
 
-      // this allows the output of a range slider to be seen
-      // on the first fieldset if it has no legend
-      &:first-child:not([data-has-legend]){
-        overflow: visible;
+      // if only a single fieldset and it has a legend: disallow collapsing
+      &:only-of-type{
+        > label{
+          pointer-events: none;
+        }
+      }
+
+      &:first-child {
+        // this allows the output of a range slider to be seen
+        // on the first fieldset if it has no legend
+        &:not([data-has-legend]){
+          overflow: visible;
+          margin-top: calc(var(--side-pad) * 2.5);
+        }
       }
     }
 

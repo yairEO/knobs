@@ -181,9 +181,15 @@ var settings = {
   theme: {
     position: 'bottom right', // default is 'top left'
   },
-  live: false, // should update immediately (default true)
-  visible: 0, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
+
+  // should update immediately (default true)
+  live: false,
+
+  // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
+  visible: 0,
+
   CSSVarTarget: document.querySelector('.testSubject'),
+
   knobs: [
     {
       cssVar: ['width', 'px'],
@@ -193,7 +199,7 @@ var settings = {
       min: 0,
       max: 500,
       step: 50,
-      onChange: console.log
+      onChange: console.log  // javascript callback on every "input" event
     },
     {
       cssVar: ['height', 'vh'],

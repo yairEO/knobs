@@ -209,15 +209,20 @@ Knobs.prototype = {
 
   setIframeProps( opts ){
     var action = (this.state.visible == false ? 'remove' : 'set') + 'Property',
+        iframeBodyElm = this.DOM.iframe.contentWindow.document.body,
         style = this.DOM.iframe.style,
         { heightOffset = 0 } = opts || {};
 
     if( action == 'setProperty' ){
-      style.setProperty(`--knobsWidth`, '1000px')
-      style.setProperty(`--knobsHeight`, '1000px')
+      iframeBodyElm.classList.add('meassure')
+
+      style.setProperty(`--knobsWidth`, '2000px')
+      style.setProperty(`--knobsHeight`, '2000px')
     }
 
     var { clientWidth, clientHeight } = this.DOM.scope
+
+    iframeBodyElm.classList.remove('meassure')
 
     style[action](`--knobsWidth`, clientWidth + 'px')
     style[action](`--knobsHeight`, clientHeight + heightOffset + 'px')
@@ -260,8 +265,8 @@ Knobs.prototype = {
         position: fixed;
         z-index: 999999;
         ${(theme.position+" ").split(" ").join(":0;")}
-        width: var(--knobsWidth, 36px);
-        height: var(--knobsHeight, 30px);
+        width: var(--knobsWidth, 56px);
+        height: var(--knobsHeight, 56px);
     `
 
     // first append the iframe to the DOM

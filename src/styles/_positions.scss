@@ -1,27 +1,45 @@
 .knobs{
   $self: &;
 
-  &[data-position~='top']{
-    #{$self}__labels fieldset:first-child {
-      margin-top: calc(var(--side-pad) * 2);
+  @mixin bg-corner-radius($posX, $posY, $radX, $radY){
+    &[data-position~='#{$posX}']{
+      &[data-position~='#{$posY}']{
+        #knobsToggle:checked{
+          ~ #{$self}__bg{
+            border-#{$radY}-#{$radX}-radius: var(--corner-radius);
+          }
+        }
+      }
     }
   }
 
   //////////////////////////////////////////
+  @include bg-corner-radius(right, top, left, bottom);
+  @include bg-corner-radius(left, top, right, bottom);
+  @include bg-corner-radius(right, bottom, left, top);
+  @include bg-corner-radius(left, bottom, right, top);
+
 
   &[data-position~='bottom']{
     #knobsToggle{
-      + label{ top: 0; }
+      + label{
+        top: auto;
+        bottom: var(--offset);
+      }
 
       &:checked + label{
         top: auto;
-        bottom: 10px;
       }
+    }
+
+    #{$self}__bg{
+      top: auto;
+      bottom: 0;
     }
 
 
     &[data-position~='right'] #{$self}__controls{
-      margin-right: 3em;
+      margin-right: 3.5em;
     }
   }
 
@@ -31,16 +49,41 @@
     --LTR-Bool: -1;
 
     #knobsToggle{
-      + label{ right: 0; }
+      + label{
+        right: auto;
+        left: var(--offset);
+      }
 
       &:checked + label{
-        left:0; right:auto;
+        left: var(--offset);
+        right: auto;
       }
+    }
+
+    #{$self}__bg{
+      right: auto;
+      left: 0;
     }
 
     &[data-position~='bottom']{
       .poweredBy{
-        margin-left: 2em;
+        margin-left: 3em;
+      }
+
+      #{$self}__bg{
+        top: auto;
+        right: auto;
+        bottom: 0;
+        left: 0;
+      }
+
+      #knobsToggle{
+        + label{
+          top: auto;
+          right: auto;
+          left: var(--offset);
+          bottom: var(--offset);
+        }
       }
     }
   }

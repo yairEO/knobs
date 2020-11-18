@@ -1,9 +1,8 @@
 .leversIcon{
   $size: 5px;
 
-  width: 65px;
-  color: var(--background);
-  transform: scale(0.4);
+  width: 56px;
+  transform: scale(.4);
   transform-origin: 0 0;
 
   > div{
@@ -16,7 +15,7 @@
     }
 
     &:nth-child(2){
-      margin: 1px 0;
+      margin: 2px 0;
       &::after{ flex: .33;  }
     }
 
@@ -40,70 +39,84 @@
       background: currentColor;
       border-radius: $size;
       flex: 1;
-      transition: flex .25s ease;
+      transition: flex .1s ease;
     }
 
     &::after{
+      flex: auto;
       opacity: .33;
     }
   }
+}
 
+@keyframes leversIcon{
+  30%{ flex: .2; }
+  80%{ flex: 5; }
+}
+
+#knobsToggle:not(:checked) + label{
   &:hover{
-    > div{
+    .leversIcon > div{
       &:nth-child(1){
-        &::before{ flex: 3; }
+        &::before{ animation: 1s leversIcon ease infinite; }
       }
 
       &:nth-child(2){
         margin: 1px 0;
-        &::after{ flex: 3; }
+        &::after{ animation: 1s .1s leversIcon ease reverse infinite; }
       }
 
       &:nth-child(3){
-        &::before{ flex: 4; }
+        &::before{ animation: 1.2s .15s leversIcon ease alternate infinite; }
       }
     }
   }
 }
 
 
-#knobsToggle:checked + label .leversIcon{
-  color: var(--textColor);
-  transition: color .2s;
-  transform: scale(.3) translate(30px, 6px);
-  opacity: .7;
+#knobsToggle:checked + label{
+  --size: 18px;
+  --offset: calc(var(--toggleOffset) + var(--size)/3);
 
-  &:hover{
-    opacity: 1;
-  }
+  .leversIcon{
+    width: 65px;
+    color: var(--textColor);
+    transition: color .2s;
+    transform: scale(.3) translate(0, 6px);
+    opacity: .7;
 
-  b{
-    transform: scale(0);
-    margin: 0;
-    width: 0;
-  }
-
-  > div{
-    &::after{
-      flex: 0;
-    }
-    &::before{
-      flex: 3;
-      height: 8px;
+    &:hover{
+      opacity: 1;
     }
 
-    &:nth-child(1){
-      transform: rotate(45deg);
-      transform-origin: 20% 50%;
+    b{
+      transform: scale(0);
+      margin: 0;
+      width: 0;
     }
 
-    &:nth-child(2){
-      opacity: 0;
-    }
+    > div{
+      &::after{
+        flex: 0;
+      }
+      &::before{
+        flex: 3;
+        height: 8px;
+      }
 
-    &:nth-child(3){
-      transform: rotate(-45deg);
-      transform-origin: 0 0;
+      &:nth-child(1){
+        transform: rotate(45deg);
+        transform-origin: 20% 50%;
+      }
+
+      &:nth-child(2){
+        opacity: 0;
+      }
+
+      &:nth-child(3){
+        transform: rotate(-45deg);
+        transform-origin: 0 0;
+      }
     }
   }
 }
