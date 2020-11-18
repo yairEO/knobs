@@ -36,7 +36,7 @@
         // mode: 'light'
       },
       // live: false, // should update immediately (default true)
-      visible: 1, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
+      visible: 0, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
       CSSVarTarget: document.querySelectorAll('.testSubject'),
       knobs: [
         {
@@ -94,6 +94,10 @@
     }
 
     var knobs1 = new Knobs(settings)
+
+    setTimeout(knobs1.toggle.bind(knobs1), 1000)
+
+
     var knobs2 = new Knobs({
       ...settings,
       live: false,

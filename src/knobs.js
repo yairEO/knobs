@@ -231,11 +231,10 @@ Knobs.prototype = {
       state = !this.DOM.mainToggler.checked
 
     this.state.visible = state;
+    this.DOM.mainToggler.checked = state;
 
     // briefly set a big width/height for the iframe so it could be meassured correctly
     this.setIframeProps()
-
-    this.DOM.mainToggler.checked = state;
   },
 
   build(){

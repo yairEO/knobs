@@ -265,8 +265,8 @@
       if( state === undefined )
         state = !this.DOM.mainToggler.checked;
       this.state.visible = state;
-      this.setIframeProps();
       this.DOM.mainToggler.checked = state;
+      this.setIframeProps();
     },
     build(){
       this.createIframe();
