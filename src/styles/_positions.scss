@@ -1,90 +1,52 @@
-.knobs{
-  $self: &;
-
-  @mixin bg-corner-radius($posX, $posY, $radX, $radY){
-    &[data-position~='#{$posX}']{
-      &[data-position~='#{$posY}']{
-        #knobsToggle:checked{
-          ~ #{$self}__bg{
-            border-#{$radY}-#{$radX}-radius: var(--corner-radius);
-          }
-        }
-      }
+#knobsToggle:checked + .knobs{
+  &[data-position~='top']{
+    .knobs__bg{
+      bottom: auto;
     }
   }
 
-  //////////////////////////////////////////
-  @include bg-corner-radius(right, top, left, bottom);
-  @include bg-corner-radius(left, top, right, bottom);
-  @include bg-corner-radius(right, bottom, left, top);
-  @include bg-corner-radius(left, bottom, right, top);
+  &[data-position~='right']{
+    .knobs__bg{
+      left: auto;
+    }
+  }
+
 
 
   &[data-position~='bottom']{
-    #knobsToggle{
-      + label{
-        top: auto;
-        bottom: var(--offset);
-      }
-
-      &:checked + label{
-        top: auto;
-      }
-    }
-
-    #{$self}__bg{
+    > label{
       top: auto;
-      bottom: 0;
+      bottom: var(--offset);
+    }
+
+    .knobs__bg{
+      top: auto;
     }
 
 
-    &[data-position~='right'] #{$self}__controls{
-      margin-right: 3.5em;
+    &[data-position~='right']{
+      --control-right-pad: var(--toggleSize);
     }
   }
 
-  //////////////////////////////////////////
+
 
   &[data-position~='left']{
-    --LTR-Bool: -1;
-
-    #knobsToggle{
-      + label{
-        right: auto;
-        left: var(--offset);
-      }
-
-      &:checked + label{
-        left: var(--offset);
-        right: auto;
-      }
+    > label{
+      right: auto;
+      left: var(--offset);
     }
 
-    #{$self}__bg{
+    .knobs__bg{
       right: auto;
-      left: 0;
     }
 
     &[data-position~='bottom']{
-      .poweredBy{
-        margin-left: 3em;
-      }
-
-      #{$self}__bg{
-        top: auto;
-        right: auto;
-        bottom: 0;
-        left: 0;
-      }
-
-      #knobsToggle{
-        + label{
-          top: auto;
-          right: auto;
-          left: var(--offset);
-          bottom: var(--offset);
-        }
-      }
+      --control-left-pad: var(--toggleSize);
     }
   }
+}
+
+.knobs[data-position~='left']{
+  --LTR-Bool: -1;
 }

@@ -54,7 +54,7 @@
   80%{ flex: 5; }
 }
 
-#knobsToggle:not(:checked) + label{
+#knobsToggle:not(:checked) + .knobs > label{
   &:hover{
     .leversIcon > div{
       &:nth-child(1){
@@ -74,7 +74,7 @@
 }
 
 
-#knobsToggle:checked + label{
+#knobsToggle:checked + .knobs > label{
   --size: 18px;
   --offset: calc(var(--toggleOffset) + var(--size)/3);
 

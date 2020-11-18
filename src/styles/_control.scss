@@ -5,7 +5,7 @@
   opacity: 0;
   flex-direction: row-reverse;
   // border-top: 1px solid var(--textColor);
-  margin: var(--side-pad);
+  margin: var(--side-pad) var(--control-right-pad, var(--side-pad)) var(--side-pad) var(--control-left-pad, var(--side-pad));
   position: relative;
   z-index: 1;
 

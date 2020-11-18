@@ -213,19 +213,16 @@ Knobs.prototype = {
         style = this.DOM.iframe.style,
         { heightOffset = 0 } = opts || {};
 
-    if( action == 'setProperty' ){
-      iframeBodyElm.classList.add('meassure')
 
+    if( action == 'setProperty' ){
       style.setProperty(`--knobsWidth`, '2000px')
-      style.setProperty(`--knobsHeight`, '2000px')
+      style.setProperty(`--knobsHeight`, '1000px')
     }
 
     var { clientWidth, clientHeight } = this.DOM.scope
 
-    iframeBodyElm.classList.remove('meassure')
-
     style[action](`--knobsWidth`, clientWidth + 'px')
-    style[action](`--knobsHeight`, clientHeight + heightOffset + 'px')
+    style[action](`--knobsHeight`, (+clientHeight + +heightOffset) + 'px')
   },
 
   // show/hide Knobs (as a whole)
@@ -290,7 +287,7 @@ Knobs.prototype = {
     iframeDoc.close()
 
     // save references to HTML elements within the iframe, for future access
-    this.DOM.scope = iframeDoc.body.firstElementChild
+    this.DOM.scope = iframeDoc.body.querySelector('.knobs')
     this.DOM.form = this.DOM.scope.querySelector('form')
     this.DOM.mainToggler = iframeDoc.getElementById('knobsToggle')
 

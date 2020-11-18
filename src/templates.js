@@ -11,8 +11,8 @@ export function scope(){
   const {visible, live, theme} = this.settings;
 
   return `
+    <input hidden type='checkbox' ${visible ? 'checked' : ''} id='knobsToggle' />
     <aside class='knobs' data-position='${theme.position}' data-flow='${theme.flow}'>
-      <input hidden type='checkbox' ${visible ? 'checked' : ''} id='knobsToggle' />
       <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>${settingsIcon}</label>
       <div class='knobs__bg'></div>
       <form class='knobs__labels'>

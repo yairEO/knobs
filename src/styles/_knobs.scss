@@ -1,7 +1,7 @@
 #knobsToggle{
   // main toggle button
-  + label{
-    --size: 21px;
+  + .knobs > label{
+    --size: calc(var(--toggleSize)/2);
     --offset: calc(var(--toggleOffset)); // takes the circular background (next element) into account
     position: absolute;
     width: var(--size);
@@ -11,12 +11,12 @@
     padding: calc((var(--toggleSize) - var(--size))/2);
     font-size: 20px;
     line-height: 1;
-    z-index: 5; // enough to make sure slider's output value is over the icon and not under
+    z-index: 1; // enough to make sure slider's output value is over the icon and not under
     color: var(--textColor);
   }
 
   &:not(:checked){
-    + label{
+    + .knobs > label{
       &:hover{
         + .knobs__bg{
           opacity: 1;
@@ -27,28 +27,41 @@
   }
 
   &:checked{
-    & + label{
-      padding: 0;
-    }
+    + .knobs{
+      // This is super-important.
+      // "inline-block" is used so the content will only fill the minimum poissible size inside the body of the iframe,
+      // but if the knobs are hidden, then this hinders the position of the toggler button.
+      display: inline-block;
 
-    ~ .knobs__bg{
-      --corner-radius: 6px;
-      border-radius: 0;
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 1;
-      transition: .3s cubic-bezier(.45, 0, .2, 1), margin .15s, border-radius .2s;
-    }
+      > label{
+        padding: 0;
+      }
 
-    & ~ .knobs__labels {
-      transform: none;
-      transition: calc(var(--in-duration) * 1s) var(--in-easing);
+      .knobs__bg{
+        --corner-radius: 8px;
+        --offset: calc(var(--corner-radius) * -1);
+        top: var(--offset);
+        right: var(--offset);
+        bottom: var(--offset);
+        left: var(--offset);
 
-      fieldset, .knobs__controls {
-        transform: none;
+        border-radius: var(--corner-radius);
+        margin: 0;
+        width: calc(100% + var(--corner-radius));
+        height: calc(100% + var(--corner-radius));
         opacity: 1;
-        transition: calc(var(--in-duration) * 1s) calc(var(--in-duration) * .5s) ease-out;
+        transition: .3s cubic-bezier(.45, 0, .2, 1), margin .2s, border-radius .2s;
+      }
+
+      .knobs__labels {
+        transform: none;
+        transition: calc(var(--in-duration) * 1s) var(--in-easing);
+
+        fieldset, .knobs__controls {
+          transform: none;
+          opacity: 1;
+          transition: calc(var(--in-duration) * 1s) calc(var(--in-duration) * .5s) ease-out;
+        }
       }
     }
   }
@@ -56,13 +69,6 @@
 
 html, body{
   overflow: hidden;
-}
-
-// a temporary class in order to meassure the content's width & height EXACTLY
-body.meassure{
-  > .knobs{
-    position: fixed;
-  }
 }
 
 .knobs {
@@ -74,15 +80,15 @@ body.meassure{
   --in-easing: cubic-bezier(.75,0,.35,1);
   --in-duration: .3;
   --color-size: 20px;
+  --knobs-group-transition: .33s cubic-bezier(.45, 0, .2, 1);
   --LTR-Bool: 1;  /* -1 for RTL */
 
   font: 12px/1 'Fira Sans Condensed', sans-serif;
   color: var(--textColor);
-  // position: fixed;
-  // z-index: 999999;
-  // top: 0;
-  // right: 0;
+  position: relative;
+ // position: fixed;
   overflow: hidden;
+
 
   &[data-flow='compact']{
     --color-size: 16px;
@@ -150,17 +156,17 @@ body.meassure{
       }
 
       &:first-child {
+        margin-top: calc(var(--side-pad) * 2.5);
         // this allows the output of a range slider to be seen
         // on the first fieldset if it has no legend
         &:not([data-has-legend]){
           overflow: visible;
-          margin-top: calc(var(--side-pad) * 2.5);
         }
       }
     }
 
     .fieldset__group{
-      transition: .33s cubic-bezier(.45, 0, .2, 1);
+      transition: var(--knobs-group-transition);
     }
 
     hr{
