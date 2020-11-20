@@ -14,4 +14,9 @@
   --show-min-max: none;
 
   color: transparent;
+
+  >input:hover + output {
+    box-shadow: 0 0 0 3px var(--value-background),
+                0 0 6px 4px var(--background);
+  }
 }
