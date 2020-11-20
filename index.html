@@ -115,6 +115,7 @@
         label: 'Compact View',
         type: 'checkbox',
         value: 'none',
+        checked: knobs1.settings.theme.flow == 'compact',
         onChange: e => {
           if(knobs1){
             knobs1.DOM.scope[`${(e.target.checked ? "set" : "remove")}Attribute`]("data-flow", "compact")
