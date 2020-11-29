@@ -15,6 +15,9 @@
     }
 
     div, a{
+      --width: 300px;
+      --height: 10vh;
+      --bg: #45FDA9;
       display: var(--hide, grid);
       background: var(--bg, red);
       border-radius: var(--radius, 0);
@@ -40,10 +43,10 @@
       CSSVarTarget: document.querySelectorAll('.testSubject'),
       knobs: [
         {
-          cssVar: ['width', 'px', document.body],
+          cssVar: ['width', 'px'],
           label: 'Width',
           type: 'range',
-          value: 200,
+        //  value: 200,
           min: 0,
           max: 500,
           step: 50,
@@ -53,7 +56,7 @@
           cssVar: ['height', 'vh'],
           label: 'Height',
           type: 'range',
-          value: 20,
+        //  value: 20,
           min: 0,
           max: 100,
         //  onChange: console.log
@@ -72,7 +75,7 @@
           cssVar: ['bg'], // alias for the CSS variable
           label: 'Box color',
           type: 'color',
-          value: '#45FDA9',
+        //  value: '#45FDA9',
         //  onChange: console.log
         },
         {

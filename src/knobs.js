@@ -80,7 +80,29 @@ Knobs.prototype = {
    */
   knobAttrs(data){
     var attributes = `name="${data.__name}"`,
-        blacklist = ['label', 'type', 'onchange', 'cssvar', '__name']
+        blacklist = ['label', 'type', 'onchange', 'cssvar', '__name'],
+        CSSVarTarget
+
+    // when/if "value" property is unspecified in the knob's data, assume
+    // there's a CSS variable already set, so try to get the value from it:
+    if( !("value" in data) && data.cssVar && data.cssVar.length ){
+      CSSVarTarget = data.cssVar[2] || this.settings.CSSVarTarget
+
+      if( CSSVarTarget.length )
+        CSSVarTarget = CSSVarTarget[0]
+
+      data.value = getComputedStyle(CSSVarTarget).getPropertyValue(`--${data.cssVar[0]}`).trim()
+
+      // if type "range" - parse value as unitless
+      if( data.type == 'range' )
+        data.value = parseInt(data.value)
+
+
+      // if type "color" - parse value as color
+
+      // if type "checkbox" - if variable exists it means the value should be "true"
+
+    }
 
     for( var attr in data ){
       if( !blacklist.includes(attr.toLowerCase()) )
@@ -138,7 +160,7 @@ Knobs.prototype = {
       if( isCheckbox )
         resetTitle = inputElm.checked = !!d.checked
       else
-      resetTitle = inputElm.value = d.value
+        resetTitle = inputElm.value = d.value
 
       this.setResetKnobTitle(d.__name, resetTitle)
 
