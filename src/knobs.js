@@ -136,6 +136,10 @@ Knobs.prototype = {
     if( type == 'checkbox' && knobInput && !knobInput.checked )
       action = 'removeProperty';
 
+    // units which are prefixed with '-' should not be used, and for presentational purposes only
+    if( cssVarUnit && cssVarUnit[0] == '-' )
+      cssVarUnit = '';
+
     // if is a refference to a single-node, place in an array.
     // cannot use instanceof to check if is an element because some elements might be in iframes:
     // https://stackoverflow.com/a/14391528/104380

@@ -15,13 +15,13 @@
     }
 
     div, a{
-      --width: 300px;
+      --width: 300;
       --height: 10vh;
       --bg: #45FDA9;
       display: var(--hide, grid);
       background: var(--bg, red);
       border-radius: var(--radius, 0);
-      width: var(--width, 200px);
+      width: calc(var(--width) * 1px);
       height: var(--height, 200px);
       overflow: hidden;
     }
@@ -43,7 +43,7 @@
       CSSVarTarget: document.querySelectorAll('.testSubject'),
       knobs: [
         {
-          cssVar: ['width', 'px'],
+          cssVar: ['width', '-px'],
           label: 'Width',
           type: 'range',
         //  value: 200,

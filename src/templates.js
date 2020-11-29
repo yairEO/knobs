@@ -51,7 +51,7 @@ export function knob(data){
   if( data && data.type )
     return `<div class='knobs__knob'>
         <label data-type='${data.type}'>
-          <div class='knobs__knob__label' ${data.cssVar && data.cssVar[1] ? `data-type='${data.cssVar[1]}'` : ''}>${data.label}</div>
+          <div class='knobs__knob__label' ${data.cssVar && data.cssVar[1] ? `data-units='${data.cssVar[1].replace('-','')}'` : ''}>${data.label}</div>
           <div class='knobs__knob__inputWrap'>
             ${getInput.call(this, data)}
           </div>
