@@ -3,8 +3,9 @@ import isObject from './utils/isObject'
 import { mergeDeep } from './utils/mergeDeep'
 import isModernBrowser from './utils/isModernBrowser'
 import * as templates from './templates'
+import * as events from './events'
+import DEFAULTS from './defaults'
 
-var raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60))
 
 function Knobs(settings){
   // since Knobs relies on CSS variables, no need to proceed if browser support is inadequate
@@ -26,7 +27,7 @@ function Knobs(settings){
     : []
 
   // for the rest, deep cloining appear to work fine
-  this.settings = mergeDeep({...this._defaults, appendTo:document.body}, restOfSettings)
+  this.settings = mergeDeep({...DEFAULTS, appendTo:document.body}, restOfSettings)
 
   this.DOM = {}
   this.state = {}
@@ -35,21 +36,8 @@ function Knobs(settings){
 
 Knobs.prototype = {
   _types: ['range', 'color', 'checkbox', 'text'],
-  _defaults: {
-    visible: 0,
-    live: true,
-    theme: {
-      flow: 'horizontal',
-      styles: '',
-      RTL: false,
-      position: 'top right',
-      primaryColor: '#0366D6',
-      "range-value-background": '#FFF',
-      background: "rgba(0,0,0,1)",
-      textColor: "white",
-      border: 'none',
-    }
-  },
+
+  ...events,
 
   // iframe (inner) styles
   getCSSVariables({ flow, styles, RTL, position, ...vars }){
@@ -203,28 +191,6 @@ Knobs.prototype = {
     })
   },
 
-  /**
-   * Applys changes manually if `settings.live` is `false`
-   */
-  onSubmit(e){
-    e.preventDefault()
-
-    var elements = e.target.querySelectorAll('input')
-    this.settings.live = true
-    elements.forEach(elm => this.onChange({ target:{value:elm.value, name:elm.name} }))
-    this.settings.live = false
-    return false
-  },
-
-  onClick(e){
-    var target = e.target,
-        is = n => target.classList.contains(n)
-
-    if( is('knobs__knob__reset') ){
-      this.resetKnobByName(target.name)
-    }
-  },
-
   calculateGroupsHeights(){
     var groupElms = this.DOM.form.querySelectorAll('.fieldset__group')
 
@@ -349,88 +315,8 @@ Knobs.prototype = {
     this.resetAll()
   },
 
-  onChange(e){
-    var knobData = this.getKnobDataByName(e.target.name),
-        runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
-        isCheckbox = knobData && knobData.type == 'checkbox',
-        updatedData;
-
-    if( !knobData )
-      return
-
-    if( !isCheckbox && !this.settings.live )
-      return
-
-    if( e.type == 'input' && runOnInput )
-      return
-
-    updatedData = { ...knobData, value:e.target.value }
-
-    raf(() => this.updateDOM(updatedData))
-    typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData)
-  },
-
-  onInput(e){
-    var inputelm = e.target;
-
-    inputelm.parentNode.style.setProperty('--value',inputelm.value);
-    inputelm.parentNode.style.setProperty('--text-value', JSON.stringify(inputelm.value))
-  },
-
   setKnobChangedFlag( knobElm, action ){
     knobElm && knobElm[(action == false ? 'remove' : 'set') + 'Attribute']('data-changed', true)
-  },
-
-  bindEvents(){
-    this.eventsRefs = this.eventsRefs || {
-      onChange: e => {
-        // only knobs' inputs have a "name" attribute
-        if( !e.target.name ) return
-
-        this.setKnobChangedFlag( this.getKnobElm(e.target.name) )
-        this.onChange(e)
-      },
-      onInput: e => {
-        try{
-          let isSectionToggler = e.target.classList.contains('toggleSection'),
-              groupElm,
-              sectionHeight;
-
-          // previously used "resizeObserver", but in Firefox the resize callback is called only after and not during every frame of the resize,
-          // so this hacky-approach beflow is needed to adjust the offset of the iframe *before* the knobs group section is expanded
-          if( isSectionToggler && e.target.checked ){
-            groupElm = e.target.parentNode.querySelector('.fieldset__group')
-            sectionHeight = groupElm.style.getPropertyValue('--height');
-            this.setIframeProps({ heightOffset:sectionHeight })
-          }
-        }
-        catch(err){}
-
-        if( !e.target.name ) return
-
-        this.onInput(e)
-        this.onChange(e)
-      },
-      onTransitionEnd: e => {
-        if( e.target.classList.contains('fieldset__group') ){
-          this.setIframeProps()
-        }
-      },
-      onReset : this.resetAll.bind(this, null),
-      onSubmit: this.onSubmit.bind(this),
-      onClick : this.onClick.bind(this)
-    }
-
-    var { onChange, onInput, onReset, onSubmit, onClick, onTransitionEnd } = this.eventsRefs
-
-    this.DOM.form.addEventListener('change', onChange)
-    this.DOM.form.addEventListener('input', onInput)
-    this.DOM.form.addEventListener('reset', onReset)
-    this.DOM.form.addEventListener('submit', onSubmit)
-    this.DOM.scope.addEventListener('click', onClick)
-    this.DOM.mainToggler.addEventListener('change', e => this.toggle(e.target.checked))
-
-    this.DOM.form.addEventListener('transitionend', onTransitionEnd)
   }
 }
 

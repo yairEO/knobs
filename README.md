@@ -48,6 +48,7 @@ It's so easy & quick to use Knobs, about 1 minute!
 * Labels - allows grouping of every knob defined after a label
 * **Expand/Collapse** knobs groups
 * Apply change live, on-the-fly, or with an <kbd>Apply</kbd> button
+* Automatically uses already-declared CSS variables as knobs values, if possible
 * Knobs are completely **isolated** within an *iframe* (unaffected by page styles)
 * Allows 3 states of visibility:
   * Always visible
@@ -127,6 +128,20 @@ Optional. An array of 3 items:
 2. (`String`) - Units (*optional* - Ex. `%` or `px`)
 3. (`HTML NODE`) - Reference to an HTML node to apply the knob's CSS variable on (*optional*)
 
+Sometimes it is wanted for variables to be defined unitless, for calculation-purposes, like so:
+
+```css
+div{
+  --size: 10;
+  /* limits with width to a minimum of 10px by using unitless variable for the "max" function */
+  width: calc(Max(50, var(--size)) * 1px);
+}
+```
+
+So, when a unitless-variable is desired, but ultimatly it will have a unit, then `units` (*2nd* item in the array)
+should be written with a dash prefix, Ex.: `-px`, and it will be displayed in the label correctly but ignored when
+applying the variable.
+
 **`label`**
 
 A text which is displayed alongside the knob
@@ -153,6 +168,9 @@ Then in your CSS you can write the below, so when `--hide` is not defined,
 ```css
 display: var(--hide, block);
 ```
+
+It is possible to use an already-declared CSS-varaible (on the target element) by emmiting the `value`
+prop from the knob decleration.
 </details>
 
 
@@ -192,7 +210,7 @@ var settings = {
 
   knobs: [
     {
-      cssVar: ['width', 'px'],
+      cssVar: ['width', '-px'], // prefix unit with '-' makes it only a part of the title but not of the variable
       label: 'Width',
       type: 'range',
       value: 200,

@@ -106,7 +106,112 @@
       return `<div><input type='${data.type}' ${this.knobAttrs(data)}></div>`
   }
 
-  var raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60));
+  const raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60));
+  function bindEvents(){
+    this.eventsRefs = this.eventsRefs || {
+      change: e => {
+        if( !e.target.name ) return
+        this.setKnobChangedFlag( this.getKnobElm(e.target.name) );
+        this.onChange(e);
+      },
+      input: e => {
+        try{
+          let isSectionToggler = e.target.classList.contains('toggleSection'),
+              groupElm,
+              sectionHeight;
+          if( isSectionToggler && e.target.checked ){
+            groupElm = e.target.parentNode.querySelector('.fieldset__group');
+            sectionHeight = groupElm.style.getPropertyValue('--height');
+            this.setIframeProps({ heightOffset:sectionHeight });
+          }
+        }
+        catch(err){}
+        if( !e.target.name ) return
+        this.onInput(e);
+        this.onChange(e);
+      },
+      transitionend: e => {
+        if( e.target.classList.contains('fieldset__group') ){
+          this.setIframeProps();
+        }
+      },
+      mainToggler: e => this.toggle(e.target.checked),
+      reset : this.resetAll.bind(this, null),
+      submit: this.onSubmit.bind(this),
+      click : this.onClick.bind(this)
+    };
+    [
+      ['form', 'change'],
+      ['form', 'input'],
+      ['form', 'reset'],
+      ['form', 'submit'],
+      ['form', 'transitionend'],
+      ['scope', 'click'],
+      ['mainToggler', 'change', this.eventsRefs.mainToggler],
+    ].forEach(([elm, event, cb]) =>
+      this.DOM[elm].addEventListener(event,  cb || this.eventsRefs[event].bind(this))
+    );
+  }
+  function onInput(e){
+    var inputelm = e.target;
+    inputelm.parentNode.style.setProperty('--value',inputelm.value);
+    inputelm.parentNode.style.setProperty('--text-value', JSON.stringify(inputelm.value));
+  }
+  function onChange(e){
+    var knobData = this.getKnobDataByName(e.target.name),
+        runOnInput = e.type == 'input' && knobData && knobData.type != 'range',
+        isCheckbox = knobData && knobData.type == 'checkbox',
+        updatedData;
+    if( !knobData )
+      return
+    if( !isCheckbox && !this.settings.live )
+      return
+    if( e.type == 'input' && runOnInput )
+      return
+    updatedData = { ...knobData, value:e.target.value };
+    raf(() => this.updateDOM(updatedData));
+    typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData);
+  }
+  function onSubmit(e){
+    e.preventDefault();
+    var elements = e.target.querySelectorAll('input');
+    this.settings.live = true;
+    elements.forEach(elm => this.onChange({ target:{value:elm.value, name:elm.name} }));
+    this.settings.live = false;
+    return false
+  }
+  function onClick(e){
+    var target = e.target,
+        is = n => target.classList.contains(n);
+    if( is('knobs__knob__reset') )
+      this.resetKnobByName(target.name);
+  }
+
+  var events = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    bindEvents: bindEvents,
+    onInput: onInput,
+    onChange: onChange,
+    onSubmit: onSubmit,
+    onClick: onClick
+  });
+
+  var DEFAULTS = {
+    visible: 0,
+    live: true,
+    theme: {
+      flow: 'horizontal',
+      styles: '',
+      RTL: false,
+      position: 'top right',
+      primaryColor: '#0366D6',
+      "range-value-background": '#FFF',
+      background: "rgba(0,0,0,1)",
+      textColor: "white",
+      border: 'none',
+    }
+  };
+
   function Knobs(settings){
     if ( !isModernBrowser())
       return this
@@ -120,28 +225,14 @@
             : knob
       ))
       : [];
-    this.settings = mergeDeep({...this._defaults, appendTo:document.body}, restOfSettings);
+    this.settings = mergeDeep({...DEFAULTS, appendTo:document.body}, restOfSettings);
     this.DOM = {};
     this.state = {};
     this.build();
   }
   Knobs.prototype = {
     _types: ['range', 'color', 'checkbox', 'text'],
-    _defaults: {
-      visible: 0,
-      live: true,
-      theme: {
-        flow: 'horizontal',
-        styles: '',
-        RTL: false,
-        position: 'top right',
-        primaryColor: '#0366D6',
-        "range-value-background": '#FFF',
-        background: "rgba(0,0,0,1)",
-        textColor: "white",
-        border: 'none',
-      }
-    },
+    ...events,
     getCSSVariables({ flow, styles, RTL, position, ...vars }){
       var output = '', p;
       for( p in vars )
@@ -238,21 +329,6 @@
           knobData.__name = knobData.label.replace('/ /g','-') + Math.random().toString(36).slice(-6);
       });
     },
-    onSubmit(e){
-      e.preventDefault();
-      var elements = e.target.querySelectorAll('input');
-      this.settings.live = true;
-      elements.forEach(elm => this.onChange({ target:{value:elm.value, name:elm.name} }));
-      this.settings.live = false;
-      return false
-    },
-    onClick(e){
-      var target = e.target,
-          is = n => target.classList.contains(n);
-      if( is('knobs__knob__reset') ){
-        this.resetKnobByName(target.name);
-      }
-    },
     calculateGroupsHeights(){
       var groupElms = this.DOM.form.querySelectorAll('.fieldset__group');
       groupElms.forEach(groupElm => {
@@ -324,69 +400,8 @@
       this.toggle(this.DOM.mainToggler.checked);
       this.resetAll();
     },
-    onChange(e){
-      var knobData = this.getKnobDataByName(e.target.name),
-          runOnInput = e.type == 'input' && knobData && knobData.type != 'range',
-          isCheckbox = knobData && knobData.type == 'checkbox',
-          updatedData;
-      if( !knobData )
-        return
-      if( !isCheckbox && !this.settings.live )
-        return
-      if( e.type == 'input' && runOnInput )
-        return
-      updatedData = { ...knobData, value:e.target.value };
-      raf(() => this.updateDOM(updatedData));
-      typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData);
-    },
-    onInput(e){
-      var inputelm = e.target;
-      inputelm.parentNode.style.setProperty('--value',inputelm.value);
-      inputelm.parentNode.style.setProperty('--text-value', JSON.stringify(inputelm.value));
-    },
     setKnobChangedFlag( knobElm, action ){
       knobElm && knobElm[(action == false ? 'remove' : 'set') + 'Attribute']('data-changed', true);
-    },
-    bindEvents(){
-      this.eventsRefs = this.eventsRefs || {
-        onChange: e => {
-          if( !e.target.name ) return
-          this.setKnobChangedFlag( this.getKnobElm(e.target.name) );
-          this.onChange(e);
-        },
-        onInput: e => {
-          try{
-            let isSectionToggler = e.target.classList.contains('toggleSection'),
-                groupElm,
-                sectionHeight;
-            if( isSectionToggler && e.target.checked ){
-              groupElm = e.target.parentNode.querySelector('.fieldset__group');
-              sectionHeight = groupElm.style.getPropertyValue('--height');
-              this.setIframeProps({ heightOffset:sectionHeight });
-            }
-          }
-          catch(err){}
-          if( !e.target.name ) return
-          this.onInput(e);
-          this.onChange(e);
-        },
-        onTransitionEnd: e => {
-          if( e.target.classList.contains('fieldset__group') ){
-            this.setIframeProps();
-          }
-        },
-        onReset : this.resetAll.bind(this, null),
-        onSubmit: this.onSubmit.bind(this),
-        onClick : this.onClick.bind(this)
-      };
-      var { onChange, onInput, onReset, onSubmit, onClick, onTransitionEnd } = this.eventsRefs;
-      this.DOM.form.addEventListener('change', onChange);
-      this.DOM.form.addEventListener('input', onInput);
-      this.DOM.form.addEventListener('reset', onReset);
-      this.DOM.form.addEventListener('submit', onSubmit);
-      this.DOM.scope.addEventListener('click', onClick);
-      this.DOM.mainToggler.addEventListener('change', e => this.toggle(e.target.checked));
-      this.DOM.form.addEventListener('transitionend', onTransitionEnd);
     }
   };
 
