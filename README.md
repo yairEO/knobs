@@ -76,9 +76,10 @@ new Knobs(settings)
 |--------------|-----------------------|---------|--------------------------------------------------------------------------------------------------------------------|
 | theme        | `Object`              |         | Knobs theme variables.  Since the Knobs are encapsulated within an iframe,  they cannot be be styled from outside. |
 | live         | `Boolean`             | `true`  | Should changes be immediately applied                                                                              |
+| persist      | `Boolean`             | `false` | Persist changes using the browser's localstorage. Store `key/value` per knob, where `key` is the knob's *label*.   |
 | visible      | `Number`              | `0`     | `0` - Starts as hidden<br> `1` - Starts as visible<br> `2` - Always visible                                        |
-| CSSVarTarget | `Element`/`NodeList ` |         | Global HTML element(s) for which to apply the CSS custom properties.<br> Can also be configured per-knob.             |
-| knobs        | `Array`               |         | Array of Objects describing the knobs controllers on-screen
+| CSSVarTarget | `Element`/`NodeList ` |         | Global HTML element(s) for which to apply the CSS custom properties.<br> Can also be configured per-knob.          |
+| knobs        | `Array`               |         | Array of Objects describing the knobs controllers on-screen                                                        |
 
 <details>
   <summary><strong>theme</strong> (defaults)</summary>

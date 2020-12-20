@@ -5,8 +5,10 @@ import colorPickerStyles from '@yaireo/color-picker/dist/styles.css'
 import isObject from './utils/isObject'
 import { mergeDeep } from './utils/mergeDeep'
 import isModernBrowser from './utils/isModernBrowser'
+import cloneKnobs from './cloneKnobs'
 import * as templates from './templates'
 import * as events from './events'
+import * as persist from './persist'
 import DEFAULTS from './defaults'
 
 function Knobs(settings){
@@ -14,22 +16,14 @@ function Knobs(settings){
   if ( !isModernBrowser())
     return this
 
-  const { knobs, ...restOfSettings } = settings || {}
-
-  // manual deep-clone the "knobs" setting, because for hours I couldn't find a single piece of code
-  // on the internet which was able to correctly clone it
-  this.knobs = knobs
-    ? knobs.map(knob => (
-      knob.cssVar
-        ? {...knob, cssVar:[...knob.cssVar]}
-        : isObject(knob)
-          ? {...knob}
-          : knob
-    ))
-    : []
+  const { knobs = [], ...restOfSettings } = settings || {}
 
   // for the rest, deep cloining appear to work fine
   this.settings = mergeDeep({...DEFAULTS, appendTo:document.body}, restOfSettings)
+
+  // manual deep-clone the "knobs" setting, because for hours I couldn't find a single piece of code
+  // on the internet which was able to correctly clone it
+  this._knobs = this.cloneKnobs(knobs, this.getSetPersistedData())
 
   this.DOM = {}
   this.state = {}
@@ -40,6 +34,20 @@ Knobs.prototype = {
   _types: ['range', 'color', 'checkbox', 'text'],
 
   ...events,
+  ...persist,
+
+  cloneKnobs,
+
+  set knobs(knobs){
+    if( knobs && knobs instanceof Array ){
+      this._knobs = this.cloneKnobs(knobs, this.getSetPersistedData())
+      this.render()
+    }
+  },
+
+  get knobs(){
+    return this._knobs
+  },
 
   // iframe (inner) styles
   getCSSVariables({ flow, styles, RTL, position, ...vars }){
@@ -49,6 +57,32 @@ Knobs.prototype = {
       output += `--${p}:${vars[p]}; `
 
     return output
+  },
+
+  getKnobValueFromCSSVar(data){
+    let value
+
+    // when/if "value" property is unspecified in the knob's data, assume
+    // there's a CSS variable already set, so try to get the value from it:
+    if( !("value" in data) && data.cssVar && data.cssVar.length ){
+      let CSSVarTarget = data.cssVar[2] || this.settings.CSSVarTarget
+
+      if( CSSVarTarget.length )
+        CSSVarTarget = CSSVarTarget[0]
+
+      value = getComputedStyle(CSSVarTarget).getPropertyValue(`--${data.cssVar[0]}`).trim()
+
+
+      // if type "range" - parse value as unitless
+      if( data.type == 'range' )
+        value = parseInt(value)
+
+      // if type "color" - parse value as color
+
+      // if type "checkbox" - if variable exists it means the value should be "true"
+
+      return value
+    }
   },
 
   parseHTML( s ){
@@ -127,29 +161,7 @@ Knobs.prototype = {
    */
   knobAttrs(data){
     var attributes = `name="${data.__name}"`,
-        blacklist = ['label', 'type', 'onchange', 'cssvar', '__name'],
-        CSSVarTarget
-
-    // when/if "value" property is unspecified in the knob's data, assume
-    // there's a CSS variable already set, so try to get the value from it:
-    if( !("value" in data) && data.cssVar && data.cssVar.length ){
-      CSSVarTarget = data.cssVar[2] || this.settings.CSSVarTarget
-
-      if( CSSVarTarget.length )
-        CSSVarTarget = CSSVarTarget[0]
-
-      data.value = getComputedStyle(CSSVarTarget).getPropertyValue(`--${data.cssVar[0]}`).trim()
-
-      // if type "range" - parse value as unitless
-      if( data.type == 'range' )
-        data.value = parseInt(data.value)
-
-
-      // if type "color" - parse value as color
-
-      // if type "checkbox" - if variable exists it means the value should be "true"
-
-    }
+        blacklist = ['label', 'type', 'onchange', 'cssvar', '__name']
 
     for( var attr in data ){
       if( !blacklist.includes(attr.toLowerCase()) )
@@ -160,7 +172,7 @@ Knobs.prototype = {
   },
 
   getKnobDataByName( name ){
-    return this.knobs.filter(Boolean).find(d => d.__name == name)
+    return this._knobs.filter(Boolean).find(d => d.__name == name)
   },
 
   getInputByName( name ){
@@ -171,7 +183,11 @@ Knobs.prototype = {
     return this.getInputByName(name).closest('.knobs__knob')
   },
 
-  // if settings.CSSVarTarget exists or
+  /**
+   * updates the relevant DOM node (if CSS variable is applied)
+   * should fire from a knob's input's (onchange) event listener
+   * @param {Object}
+   */
   updateDOM({ cssVar, value, type, __name:name }){
     if( !cssVar || !cssVar.length ) return
 
@@ -198,29 +214,47 @@ Knobs.prototype = {
         elm.style[action](`--${cssVarName}`, value + (cssVarUnit||''));
   },
 
-  resetAll( knobsData ){
-    (knobsData || this.knobs).forEach(d => {
+  /**
+   * Apply all knobs changes and fire all knobs' "onChange" callbacks
+   * @param {Object} knobsData specific knobs to apply to
+   * @param {Boolean} reset should the value reset before applying
+   */
+  applyKnobs( knobsData, reset ){
+    (knobsData || this._knobs).forEach(d => {
       if( !d || !d.type ) return
+
+      // TEMP - skip resetting checkboxes until further improving the persist storage to support them
+      if( d.type == 'checkbox' ) return
 
       var isCheckbox = d.type == 'checkbox',
           isRange = d.type == 'range',
           inputElm = this.getInputByName(d.__name),
           e = { target:inputElm },
+          vKey = reset ? 'originalValue' : 'value',
           resetTitle;
 
       if( isCheckbox )
         resetTitle = inputElm.checked = !!d.checked
       else
-        resetTitle = inputElm.value = d.value
+        resetTitle = inputElm.value = d[vKey]
+
 
       this.setResetKnobTitle(d.__name, resetTitle)
 
-      if( isRange )
-        inputElm.parentNode.style.setProperty('--value', d.value)
+      // if( isRange )
+      //   inputElm.parentNode.style.setProperty('--value', d[vKey])
 
       this.onInput(e)
       this.onChange(e)
-      this.setKnobChangedFlag(this.getKnobElm(d.__name), false)
+
+      // for some reason, where reseting the form through the "reset" input,
+      // the range slider's thumb is not moved because the value has not been refistered by the browser..
+      // so need to set the value again..
+      setTimeout(() => {
+        inputElm.value = d[vKey]
+      })
+
+      this.setKnobChangedFlag(this.getKnobElm(d.__name), d.value != d.originalValue)
     })
   },
 
@@ -240,14 +274,7 @@ Knobs.prototype = {
 
   resetKnobByName( name ){
     this.setKnobChangedFlag(this.getKnobElm(name), false)
-    this.resetAll([this.getKnobDataByName(name)])
-  },
-
-  generateIds(){
-    this.knobs.forEach(knobData => {
-      if( knobData && knobData.type )
-        knobData.__name = knobData.label.replace('/ /g','-') + Math.random().toString(36).slice(-6)
-    })
+    this.applyKnobs([this.getKnobDataByName(name)], true)
   },
 
   calculateGroupsHeights(){
@@ -345,12 +372,10 @@ Knobs.prototype = {
   },
 
   render(){
-    this.generateIds()
-
     // maps a flat knobs array into multiple groups, after each label (if label exists)
     // this step is needed so each group (after item in the knobs array after a "label" item) could be
     // expanded/collapsed individually.
-    var knobsGroups = this.knobs.reduce((acc, knobData) => {
+    var knobsGroups = this._knobs.reduce((acc, knobData) => {
         if( knobData && !isObject(knobData) && acc[acc.length - 1].length ) acc.push([])
         acc[acc.length - 1].push(knobData)
         return acc
@@ -371,7 +396,7 @@ Knobs.prototype = {
 
     this.toggle(this.DOM.mainToggler.checked)
 
-    this.resetAll()
+    this.applyKnobs()
 
     // color picker CSS
     const colorPickerCSSExists = [...document.styleSheets].some(s => s.title == 'color-picker')
@@ -379,11 +404,15 @@ Knobs.prototype = {
     if( !colorPickerCSSExists )
       document.head.insertAdjacentHTML('beforeend', `<style title='color-picker'>
       ${colorPickerStyles}
-      .color-picker{ transform: translateY(calc(var(--offset) * -1px)) !important; }
       .color-picker[style~='left:']{ z-index: 999999; position: fixed; }
       </style>`)
   },
 
+  /**
+   * This flag marks a knobs as "dirty" (one that was changed by the user), so the "reset" icon would be highlighted
+   * @param {*} knobElm
+   * @param {*} action
+   */
   setKnobChangedFlag( knobElm, action ){
     knobElm && knobElm[(action == false ? 'remove' : 'set') + 'Attribute']('data-changed', true)
   }

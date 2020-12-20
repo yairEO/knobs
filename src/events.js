@@ -49,7 +49,7 @@ export function bindEvents(){
   }
     },
     mainToggler: e => this.toggle(e.target.checked),
-    reset : this.resetAll.bind(this, null),
+    reset : this.applyKnobs.bind(this, null, true),
     submit: this.onSubmit.bind(this),
     click : this.onClick.bind(this),
     focusin : this.onFocus.bind(this)
@@ -78,10 +78,14 @@ export function onFocus(e) {
 }
 
 export function onInput(e){
-  var inputelm = e.target;
+  var inputelm = e.target,
+      { label } = this.getKnobDataByName(e.target.name)
 
   inputelm.parentNode.style.setProperty('--value', inputelm.value);
   inputelm.parentNode.style.setProperty('--text-value', JSON.stringify(inputelm.value))
+
+  if( inputelm.value != undefined )
+    this.getSetPersistedData({ [label]:inputelm.value })
 }
 
 export function onChange(e){
@@ -102,6 +106,7 @@ export function onChange(e){
   updatedData = { ...knobData, value:e.target.value }
 
   raf(() => this.updateDOM(updatedData))
+
   typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData)
 }
 

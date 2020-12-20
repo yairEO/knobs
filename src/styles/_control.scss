@@ -10,7 +10,9 @@
   z-index: 1;
 
   > input {
-    color: black;
+    color: var(--textColor);
+    border: 0;
+    background: none;
     margin-left: 1em;
   }
 }
