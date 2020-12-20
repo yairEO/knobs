@@ -1,11 +1,13 @@
+import ColorPicker from '@yaireo/color-picker'
+import { reposition } from 'nanopop'
 import mainStyles from './styles/styles.scss'
+import colorPickerStyles from '@yaireo/color-picker/dist/styles.css'
 import isObject from './utils/isObject'
 import { mergeDeep } from './utils/mergeDeep'
 import isModernBrowser from './utils/isModernBrowser'
 import * as templates from './templates'
 import * as events from './events'
 import DEFAULTS from './defaults'
-
 
 function Knobs(settings){
   // since Knobs relies on CSS variables, no need to proceed if browser support is inadequate
@@ -59,6 +61,63 @@ Knobs.prototype = {
     scope: templates.scope,
     knob: templates.knob,
     fieldset: templates.fieldset
+  },
+
+  hideColorPickers( exceptNode ){
+    document.querySelectorAll('.color-picker').forEach(elm => elm != exceptNode && elm.classList.add('hidden'))
+  },
+
+  toggleColorPicker( inputElm ){
+    const { value } = inputElm,
+          // { position } = this.settings.theme,
+          // totalHeight = this.DOM.scope.clientHeight,
+          that = this
+
+    const cPicker = inputElm.colorPicker || new ColorPicker({
+      color: value,
+      className: 'hidden',
+
+      // because the color-picker is outside the iframe, "onClickOutside" will not register
+      // clicked within the iframe.
+      onClickOutside(e){
+        if( !cPicker.DOM.scope.classList.contains('hidden')  )
+        that.hideColorPickers( cPicker.DOM.scope )
+
+        let action = 'add'
+
+        // if clicked on the input element, toggle picker's visibility
+        if( e.target == inputElm )
+          action = 'toggle'
+
+        // if "escape" key was pressed, add the "hidden" class
+        if( e.key == 'Escape' )
+          action = 'add'
+
+        cPicker.DOM.scope.classList[action]('hidden')
+      },
+
+      onInput(color){
+        inputElm.value = color
+        that.onInput({ type:'input', target:inputElm })
+        that.onChange({ type:'change', target:inputElm })
+      },
+    })
+
+    if( !document.body.contains(cPicker.DOM.scope) ){
+      inputElm.colorPicker = cPicker
+      document.body.appendChild(cPicker.DOM.scope)
+    }
+
+    reposition( this.DOM.iframe, cPicker.DOM.scope )
+    cPicker.DOM.scope.classList.toggle('hidden')
+
+    // adjust offsets to the color picker
+    // const colorPickerHeight = cPicker.DOM.scope.clientHeight
+    // if( totalHeight >= colorPickerHeight ){
+    //   if( position.includes('top') ){
+    //     cPicker.DOM.scope.style.setProperty('--offset', colorPickerHeight + (totalHeight - colorPickerHeight)/2)
+    //   }
+    // }
   },
 
   /**
@@ -313,6 +372,16 @@ Knobs.prototype = {
     this.toggle(this.DOM.mainToggler.checked)
 
     this.resetAll()
+
+    // color picker CSS
+    const colorPickerCSSExists = [...document.styleSheets].some(s => s.title == 'color-picker')
+
+    if( !colorPickerCSSExists )
+      document.head.insertAdjacentHTML('beforeend', `<style title='color-picker'>
+      ${colorPickerStyles}
+      .color-picker{ transform: translateY(calc(var(--offset) * -1px)) !important; }
+      .color-picker[style~='left:']{ z-index: 999999; position: fixed; }
+      </style>`)
   },
 
   setKnobChangedFlag( knobElm, action ){

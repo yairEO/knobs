@@ -69,22 +69,25 @@ function getLegend({ label, checked }){
 }
 
 function getInput(data){
-  if( data.type == 'range' )
+  let { type, step, min, max, value } = data
+
+  if( type == 'range' )
     return `
-      <div class="range" style="--step:${data.step||1}; --min:${data.min}; --max:${data.max}; --value:${data.value}; --text-value:'${data.value}'">
+      <div class="range" style="--step:${step||1}; --min:${min}; --max:${max}; --value:${value}; --text-value:'${value}'">
         <input type="range" ${this.knobAttrs(data)}>
         <output></output>
         <div class='range__progress'></div>
       </div>`
 
-  if( data.type == 'checkbox' )
+  if( type == 'checkbox' )
     return `
       <div class="switch">
-        <input type='${data.type}' ${this.knobAttrs(data)} class="switch__input">
+        <input type='${type}' ${this.knobAttrs(data)} class="switch__input">
         <div class='switch__gfx'></div>
       </div>`
 
-  else
-    return `<div><input type='${data.type}' ${this.knobAttrs(data)}></div>`
+  if( type == 'color' )
+    type = 'text'
 
+  return `<div><input type='${type}' data-type='${data.type}' ${this.knobAttrs(data)}></div>`
 }

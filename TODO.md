@@ -1,7 +1,8 @@
-- [X] Allow setting units in a way that it's a part of knob's title but not part of the variable
+- [x] Allow setting units in a way that it's a part of knob's title but not part of the variable
 - [x] Auto-detect initial CSS variables values from the target element, and populate knobs, if "value" prop is not specified
-- [ ] Support wheel event for sliders
-- [ ] Change native color picker to custom one
+- [x] Support wheel event for sliders
+- [x] Change native color picker to custom one
 - [ ] Optionally Add (-) (+) buttons to range sliders for sensetive changes (vaie Knob JSON)
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)
+- [ ] persist changes (setting) to localstorage

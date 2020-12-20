@@ -40,8 +40,8 @@ It's so easy & quick to use Knobs, about 1 minute!
 
 ### Features:
 
-* `Range` input
-* `Color` input
+* `Range` input (*wheel*-supported)
+* `Color` input with awesome custom [color picker](https://github.com/yairEO/color-picker)
 * `Checkbox` input
 * Resset all (to defaults)
 * Reset individual

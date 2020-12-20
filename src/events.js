@@ -35,10 +35,24 @@ export function bindEvents(){
         this.setIframeProps()
       }
     },
+    wheel: e => {
+      // disable window scroll: https://stackoverflow.com/a/23606063/104380
+      e.preventDefault()
+
+      const { value, max, step } = e.target,
+        delta = Math.sign(e.deltaY) * (+step||1) * -1 // normalize jump value to either -1 or 1
+
+      if( value && max ){
+        e.target.value = Math.min(Math.max(+value + delta, 0), +max)
+        this.onInput(e)
+        this.onChange(e)
+  }
+    },
     mainToggler: e => this.toggle(e.target.checked),
     reset : this.resetAll.bind(this, null),
     submit: this.onSubmit.bind(this),
-    click : this.onClick.bind(this)
+    click : this.onClick.bind(this),
+    focusin : this.onFocus.bind(this)
   };
 
   [
@@ -46,18 +60,27 @@ export function bindEvents(){
     ['form', 'input'],
     ['form', 'reset'],
     ['form', 'submit'],
+    ['form', 'focusin'],
     ['form', 'transitionend'],
     ['scope', 'click'],
+    ['scope', 'wheel'],
     ['mainToggler', 'change', this.eventsRefs.mainToggler],
   ].forEach(([elm, event, cb]) =>
-    this.DOM[elm].addEventListener(event,  cb || this.eventsRefs[event].bind(this))
+    this.DOM[elm].addEventListener(event,  cb || this.eventsRefs[event].bind(this), { passive:false })
   )
+
+  // window.addEventListener('storage', this.eventsRefs.onStorage)
+}
+
+export function onFocus(e) {
+  if( e.target.dataset.type == 'color' )
+    setTimeout(_ => this.toggleColorPicker(e.target), 100)
 }
 
 export function onInput(e){
   var inputelm = e.target;
 
-  inputelm.parentNode.style.setProperty('--value',inputelm.value);
+  inputelm.parentNode.style.setProperty('--value', inputelm.value);
   inputelm.parentNode.style.setProperty('--text-value', JSON.stringify(inputelm.value))
 }
 
@@ -82,7 +105,7 @@ export function onChange(e){
   typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData)
 }
 
-  /**
+/**
 * Applys changes manually if `settings.live` is `false`
 */
 export function onSubmit(e){
@@ -101,4 +124,6 @@ export function onClick(e){
 
   if( is('knobs__knob__reset') )
     this.resetKnobByName(target.name)
+
+  this.hideColorPickers()
 }
