@@ -25,8 +25,7 @@
     ],
     "scripts": {
         "start": "rollup -c -w",
-        "push": "git push origin",
-        "push:tags": "git push origin --tags"
+        "test": "echo \"No test specified\""
     },
     "author": {
         "name": "Yair Even-Or",
