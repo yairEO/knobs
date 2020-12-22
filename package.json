@@ -1,9 +1,16 @@
 {
     "name": "@yaireo/knobs",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "homepage": "https://github.com/yairEO/knobs",
     "description": "UI knobs controllers for JS/CSS live manipulation of various parameters",
-    "keywords": ["knobs", "controller", "ui", "component", "visual", "parameters"],
+    "keywords": [
+        "knobs",
+        "controller",
+        "ui",
+        "component",
+        "visual",
+        "parameters"
+    ],
     "scripts": {
         "start": "rollup -c -w",
         "build:prod": "npm run clean && npm run bundle:prod",
