@@ -1,6 +1,6 @@
 {
     "name": "@yaireo/knobs",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "homepage": "https://github.com/yairEO/knobs",
     "description": "UI knobs controllers for JS/CSS live manipulation of various parameters",
     "keywords": [
@@ -16,7 +16,7 @@
         "build:prod": "npm run clean && npm run bundle:prod",
         "clean": "rm -rf knobs.min.js",
         "bundle:prod": "rollup -c rollup.config.prod.js",
-        "prepublishOnly": "build:prod && pkg-ok",
+        "prepublishOnly": "npm run build:prod && pkg-ok",
         "test": "echo \"No test specified\""
     },
     "main": "./knobs.min.js",
