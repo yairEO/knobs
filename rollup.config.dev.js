@@ -22,7 +22,7 @@ export default [
     plugins: [
       serve(), // index.html should be in root of project
       livereload({ watch:'src', delay:1500, exts: [ 'html', 'js', 'scss', 'css' ] }),
-      terser(),
+    //  terser(),
       babel({ babelHelpers: 'bundled' }),
       scss({ output: false, outputStyle: 'compressed', watch: 'src/styles', }),
       cleanup(),

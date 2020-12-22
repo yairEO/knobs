@@ -3,13 +3,19 @@
     "version": "0.3.0",
     "homepage": "https://github.com/yairEO/knobs",
     "description": "UI knobs controllers for JS/CSS live manipulation of various parameters",
-    "keywords": [
-        "knobs",
-        "controller",
-        "ui",
-        "component",
-        "visual",
-        "parameters"
+    "keywords": ["knobs", "controller", "ui", "component", "visual", "parameters"],
+    "scripts": {
+        "start": "rollup -c -w",
+        "build:prod": "npm run clean && npm run bundle:prod",
+        "clean": "rm -rf knobs.min.js",
+        "bundle:prod": "rollup -c rollup.config.prod.js",
+        "prepublishOnly": "pkg-ok",
+        "test": "echo \"No test specified\""
+    },
+    "main": "./knobs.min.js",
+    "files": [
+        "knobs.js",
+        "knobs.min.js"
     ],
     "license": "MIT",
     "_npmUser": {
@@ -23,19 +29,10 @@
         "not IE_Mob 11",
         "not op_mini all"
     ],
-    "scripts": {
-        "start": "rollup -c -w",
-        "test": "echo \"No test specified\""
-    },
     "author": {
         "name": "Yair Even-Or",
         "email": "vsync.design@gmail.com"
     },
-    "main": "./knobs.min.js",
-    "files": [
-        "knobs.js",
-        "knobs.min.js"
-    ],
     "np": {
         "yarn": false,
         "contents": "dist",

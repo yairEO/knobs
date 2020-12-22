@@ -2,8 +2,8 @@
 - [x] Auto-detect initial CSS variables values from the target element, and populate knobs, if "value" prop is not specified
 - [x] Support wheel event for sliders
 - [x] Change native color picker to custom one
-- [ ] Persist changes (setting) to localstorage
+- [x] Persist changes (setting) to localstorage
+- [ ] Add history (undo) per knob
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)
 - [ ] Optionally Add (-) (+) buttons to range sliders for sensetive changes (vaie Knob JSON)
-- [ ] Add history (undo) steps which would work alongside the "reset" action
