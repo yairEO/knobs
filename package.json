@@ -37,6 +37,11 @@
         "knobs.js",
         "knobs.min.js"
     ],
+    "np": {
+        "yarn": false,
+        "contents": "dist",
+        "yolo": true
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/yairEO/knobs.git"
