@@ -12,7 +12,7 @@
         "parameters"
     ],
     "scripts": {
-        "start": "rollup -c -w",
+        "start": "rollup -c rollup.config.dev.js -w",
         "build:prod": "npm run clean && npm run bundle:prod",
         "clean": "rm -rf knobs.min.js",
         "bundle:prod": "rollup -c rollup.config.prod.js",
@@ -68,7 +68,7 @@
         "rollup-plugin-terser": "^7.0.2"
     },
     "dependencies": {
-        "@yaireo/color-picker": "^0.9.9",
+        "@yaireo/color-picker": "^0.10.0",
         "nanopop": "^2.1.0",
         "node-sass": "^5.0.0"
     }
