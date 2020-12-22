@@ -19,7 +19,7 @@ export function scope(){
         <!-- Knobs goes here -->
         <section class='knobs__controls'>
           ${live ? '' : `<input type="submit" value="Apply">`}
-          <input type="reset" value="↩ Reset">
+          <input type="reset" value="↩ Reset" title="Reset to defaults">
           <a class='poweredBy' href='https://github.com/yairEO/knobs' target='_blank'>Get <em>Knobs</em></a>
         </section>
       </form>

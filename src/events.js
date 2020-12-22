@@ -78,14 +78,16 @@ export function onFocus(e) {
 }
 
 export function onInput(e){
-  var inputelm = e.target,
-      { label } = this.getKnobDataByName(e.target.name)
+  const inputElm = e.target,
+        value = inputElm.value,
+        { label } = this.getKnobDataByName(e.target.name)
 
-  inputelm.parentNode.style.setProperty('--value', inputelm.value);
-  inputelm.parentNode.style.setProperty('--text-value', JSON.stringify(inputelm.value))
+  inputElm.parentNode.style.setProperty('--value', value);
+  inputElm.parentNode.style.setProperty('--text-value', JSON.stringify(value))
 
-  if( inputelm.value != undefined )
-    this.getSetPersistedData({ [label]:inputelm.value })
+  if( value != undefined && label ){
+    this.getSetPersistedData({ [label]:inputElm.type == 'checkbox' ? [inputElm.checked, value]: value })
+  }
 }
 
 export function onChange(e){

@@ -20,11 +20,7 @@ function Knobs(settings){
 
   // for the rest, deep cloining appear to work fine
   this.settings = mergeDeep({...DEFAULTS, appendTo:document.body}, restOfSettings)
-
-  // manual deep-clone the "knobs" setting, because for hours I couldn't find a single piece of code
-  // on the internet which was able to correctly clone it
-  this._knobs = this.cloneKnobs(knobs, this.getSetPersistedData())
-
+  this.knobs = knobs
   this.DOM = {}
   this.state = {}
   this.build()
@@ -38,18 +34,29 @@ Knobs.prototype = {
 
   cloneKnobs,
 
+  /**
+   * "Knobs" property setter
+   */
   set knobs(knobs){
     if( knobs && knobs instanceof Array ){
+      // manual deep-clone the "knobs" setting, because for hours I couldn't find a single piece of code
+      // on the internet which was able to correctly clone it
       this._knobs = this.cloneKnobs(knobs, this.getSetPersistedData())
-      this.render()
+      this.DOM && this.render()
     }
   },
 
+  /**
+   * "knobs" property getter
+   */
   get knobs(){
     return this._knobs
   },
 
-  // iframe (inner) styles
+  /**
+   * Generate styles for the iframe using the "theme" property in the settings
+   * @param {Object} vars
+   */
   getCSSVariables({ flow, styles, RTL, position, ...vars }){
     var output = '', p;
 
@@ -59,7 +66,12 @@ Knobs.prototype = {
     return output
   },
 
-  getKnobValueFromCSSVar(data){
+  /**
+   * Try to extract & parse CSS variables which would be used as default values
+   * for knobs wgucg has no "value" property defined.
+   * @param {Object} data Knobs data
+   */
+  getKnobValueFromCSSVar( data ){
     let value
 
     // when/if "value" property is unspecified in the knob's data, assume
@@ -83,12 +95,6 @@ Knobs.prototype = {
 
       return value
     }
-  },
-
-  parseHTML( s ){
-      var parser = new DOMParser(),
-          node = parser.parseFromString(s.trim(), "text/html")
-      return node.body.firstElementChild
   },
 
   templates: {
@@ -164,6 +170,7 @@ Knobs.prototype = {
         blacklist = ['label', 'type', 'onchange', 'cssvar', '__name']
 
     for( var attr in data ){
+      if( attr == 'checked' && !data[attr] ) continue
       if( !blacklist.includes(attr.toLowerCase()) )
         attributes += ` ${attr}="${data[attr]}"`
     }
@@ -230,7 +237,7 @@ Knobs.prototype = {
           isRange = d.type == 'range',
           inputElm = this.getInputByName(d.__name),
           e = { target:inputElm },
-          vKey = reset ? 'originalValue' : 'value',
+          vKey = reset ? 'defaultValue' : 'value',
           resetTitle;
 
       if( isCheckbox )
@@ -247,14 +254,14 @@ Knobs.prototype = {
       this.onInput(e)
       this.onChange(e)
 
-      // for some reason, where reseting the form through the "reset" input,
+      // for some reason, if the form was reset through the "reset" input,
       // the range slider's thumb is not moved because the value has not been refistered by the browser..
       // so need to set the value again..
       setTimeout(() => {
         inputElm.value = d[vKey]
       })
 
-      this.setKnobChangedFlag(this.getKnobElm(d.__name), d.value != d.originalValue)
+      this.setKnobChangedFlag(this.getKnobElm(d.__name), d.value != d.defaultValue)
     })
   },
 
