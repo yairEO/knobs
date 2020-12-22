@@ -16,7 +16,7 @@
         "build:prod": "npm run clean && npm run bundle:prod",
         "clean": "rm -rf knobs.min.js",
         "bundle:prod": "rollup -c rollup.config.prod.js",
-        "prepublishOnly": "pkg-ok",
+        "prepublishOnly": "build:prod && pkg-ok",
         "test": "echo \"No test specified\""
     },
     "main": "./knobs.min.js",
