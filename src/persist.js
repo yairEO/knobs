@@ -1,7 +1,7 @@
 export function getSetPersistedData( data ){
   // if "persist" is "false", do not save to localstorage
   let _store = this.settings.persist,
-      storeKey = '@yaireo/knobs',
+      storeKey = '@yaireo/knobs/knobs',
       customKey = typeof _store == 'string' ? '/'+_store : '',
       persistedData = {};
 

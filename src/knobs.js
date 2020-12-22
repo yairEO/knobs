@@ -116,6 +116,8 @@ Knobs.prototype = {
     const cPicker = inputElm.colorPicker || new ColorPicker({
       color: value,
       className: 'hidden',
+      swatches: [],
+      swatchesLocalStorage: true,
 
       // because the color-picker is outside the iframe, "onClickOutside" will not register
       // clicked within the iframe.
@@ -149,9 +151,9 @@ Knobs.prototype = {
     }
 
     reposition( this.DOM.iframe, cPicker.DOM.scope )
-    cPicker.DOM.scope.classList.toggle('hidden')
+    cPicker.DOM.scope.classList.remove('hidden')
 
-    // adjust offsets to the color picker
+    // adjust screen position offsets to the color picker
     // const colorPickerHeight = cPicker.DOM.scope.clientHeight
     // if( totalHeight >= colorPickerHeight ){
     //   if( position.includes('top') ){

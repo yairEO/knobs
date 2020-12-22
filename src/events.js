@@ -85,9 +85,8 @@ export function onInput(e){
   inputElm.parentNode.style.setProperty('--value', value);
   inputElm.parentNode.style.setProperty('--text-value', JSON.stringify(value))
 
-  if( value != undefined && label ){
+  if( value != undefined && label )
     this.getSetPersistedData({ [label]:inputElm.type == 'checkbox' ? [inputElm.checked, value]: value })
-  }
 }
 
 export function onChange(e){
