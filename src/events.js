@@ -98,17 +98,18 @@ export function onFocus(e) {
  */
 export function onInput(e){
   const inputElm = e.target,
-        value = inputElm.value,
+        { type, value, checked } = inputElm,
+        isCheckbox = type == 'checkbox',
         { label } = this.getKnobDataByName(e.target.name)
 
   inputElm.parentNode.style.setProperty('--value', value);
   inputElm.parentNode.style.setProperty('--text-value', JSON.stringify(value))
 
-  this.setKnobDataByName(e.target.name, {value})
+  this.setKnobDataByName(e.target.name, isCheckbox ? {checked} : {value})
 
   if( value != undefined && label )
     // save knob's new value
-    this.getSetPersistedData({ [label]:inputElm.type == 'checkbox' ? [inputElm.checked, value]: value })
+    this.getSetPersistedData({ [label]:isCheckbox ? [inputElm.checked, value]: value })
 }
 
 /**
