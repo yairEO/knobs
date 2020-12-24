@@ -349,6 +349,7 @@ Knobs.prototype = {
       : {...knobData, [key]:key == 'checked' ? knobData.defaultChecked : knobData.defaultValue }
 
     this.updateDOM(knobData)
+    typeof knobData.onChange == 'function' && knobData.onChange(null, knobData)
   },
 
   /**

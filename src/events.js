@@ -117,8 +117,7 @@ export function onInput(e){
 export function onChange(e){
   var knobData = this.getKnobDataByName(e.target.name),
       runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
-      isCheckbox = knobData && knobData.type == 'checkbox',
-      updatedData;
+      isCheckbox = knobData && knobData.type == 'checkbox';
 
   if( !knobData )
     return
@@ -131,7 +130,7 @@ export function onChange(e){
 
   raf(() => this.updateDOM(knobData))
 
-  typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData)
+  typeof knobData.onChange == 'function' && knobData.onChange(e, knobData)
 }
 
 /**

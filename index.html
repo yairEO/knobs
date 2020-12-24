@@ -123,9 +123,9 @@
         type: 'checkbox',
         value: 'none',
         checked: knobs1.settings.theme.flow == 'compact',
-        onChange: e => {
+        onChange: (e, knobData) => {
           if(knobs1){
-            knobs1.DOM.scope[`${(e.target.checked ? "set" : "remove")}Attribute`]("data-flow", "compact")
+            knobs1.DOM.scope[`${(knobData.checked ? "set" : "remove")}Attribute`]("data-flow", "compact")
             setTimeout(()=> {
               knobs1.calculateGroupsHeights()
               knobs1.toggle(knobs1.state.visible)
@@ -141,9 +141,9 @@
         min: 0,
         max: 10,
         step: 1,
-        onChange: e => {
+        onChange: (e, knobData) => {
           if(knobs1){
-            knobs1.DOM.scope.style.setProperty(`--knobs-gap`, `${e.target.value}px`)
+            knobs1.DOM.scope.style.setProperty(`--knobs-gap`, `${knobData.value}px`)
             knobs1.calculateGroupsHeights()
             knobs1.toggle(knobs1.state.visible)
           }
