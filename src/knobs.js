@@ -351,6 +351,15 @@ Knobs.prototype = {
     this.updateDOM(knobData)
   },
 
+  /**
+   * This flag marks a knobs as "dirty" (one that was changed by the user), so the "reset" icon would be highlighted
+   * @param {*} knobElm
+   * @param {*} action
+   */
+  setKnobChangedFlag( knobElm, action ){
+    knobElm && knobElm[(action == false ? 'remove' : 'set') + 'Attribute']('data-changed', true)
+  },
+
   build(){
     this.createIframe()
     setTimeout(this.bindEvents.bind(this))
@@ -442,15 +451,6 @@ Knobs.prototype = {
       ${colorPickerStyles}
       .color-picker[style~='left:']{ z-index: 999999; position: fixed; }
       </style>`)
-  },
-
-  /**
-   * This flag marks a knobs as "dirty" (one that was changed by the user), so the "reset" icon would be highlighted
-   * @param {*} knobElm
-   * @param {*} action
-   */
-  setKnobChangedFlag( knobElm, action ){
-    knobElm && knobElm[(action == false ? 'remove' : 'set') + 'Attribute']('data-changed', true)
   }
 }
 
