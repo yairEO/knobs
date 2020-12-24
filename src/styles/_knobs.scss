@@ -265,6 +265,52 @@ html, body{
       }
     }
 
+    &__toggle{
+      display: var(--knobs-toggle, none);
+      order: 1;
+      align-self: center;
+      margin: 0 5px 0 0;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      outline: none;
+      border-radius: 50%;
+      position: relative;
+      text-align: center;
+      line-height: 10px;
+
+      &::before{
+        content: '';
+        position: absolute;
+        top:0; right:0; bottom:0; left:0;
+        border: 1px solid var(--textColor);
+        opacity: .4;
+        border-radius: 3px;
+      }
+
+      &:checked::after{
+        content: '✔';
+        color: var(--textColor);
+        font-size: 12px;
+        text-shadow: -1px -2px var(--background), 4px -2px var(--background);
+        position: relative;
+        z-index: 1;
+      }
+
+      &:not(:checked) ~ {
+        *{
+          pointer-events: none !important;
+        }
+
+        // cannot use opacity/filter on the label itself because it has a background which is needed for collapse/expand
+        label > *{
+          filter: grayscale(100%);
+          opacity: .4;
+          transition: .2s;
+        }
+      }
+    }
+
     &__reset{
       order: 0;
       pointer-events: none;

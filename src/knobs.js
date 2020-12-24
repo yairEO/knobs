@@ -60,6 +60,10 @@ Knobs.prototype = {
   getCSSVariables({ flow, styles, RTL, position, ...vars }){
     var output = '', p;
 
+    // "knobsToggle" is not in the "theme" prop, and it's a special case where a variable is needed
+    if( this.settings.knobsToggle )
+      vars['knobs-toggle'] = 1
+
     for( p in vars )
       output += `--${p}:${vars[p]}; `
 
@@ -168,7 +172,7 @@ Knobs.prototype = {
    * @returns String
    */
   knobAttrs(data){
-    var attributes = `name="${data.__name}"`,
+    var attributes = `name="${data.__name}" is-knob-input`,
         blacklist = ['label', 'type', 'onchange', 'cssvar', '__name']
 
     for( var attr in data ){
@@ -182,6 +186,21 @@ Knobs.prototype = {
 
   getKnobDataByName( name ){
     return this._knobs.filter(Boolean).find(d => d.__name == name)
+  },
+
+  /**
+   * Set (multiple) key/value properties for a certain Knob
+   * @param {String} name knob's name
+   * @param {Object} d Data to set (key/value)
+   */
+  setKnobDataByName( name, d){
+    if( name && d && isObject(d) ){
+      const knobData = this.getKnobDataByName(name)
+
+      for( let key in d )
+        // if type number, cast
+        knobData[key] = +d[key] == d[key] ? +d[key] : d[key]
+    }
   },
 
   getInputByName( name ){
@@ -232,26 +251,22 @@ Knobs.prototype = {
     (knobsData || this._knobs).forEach(d => {
       if( !d || !d.type ) return
 
-      // TEMP - skip resetting checkboxes until further improving the persist storage to support them
-      if( d.type == 'checkbox' ) return
-
       var isCheckbox = d.type == 'checkbox',
           isRange = d.type == 'range',
           inputElm = this.getInputByName(d.__name),
           e = { target:inputElm },
           vKey = reset ? 'defaultValue' : 'value',
+          checkedKey = reset ? 'defaultChecked' : 'checked',
           resetTitle;
 
-      if( isCheckbox )
+      if( isCheckbox ){
         resetTitle = inputElm.checked = !!d.checked
+        inputElm.checked = d[checkedKey]
+      }
       else
         resetTitle = inputElm.value = d[vKey]
 
-
       this.setResetKnobTitle(d.__name, resetTitle)
-
-      // if( isRange )
-      //   inputElm.parentNode.style.setProperty('--value', d[vKey])
 
       this.onInput(e)
       this.onChange(e)
@@ -260,7 +275,8 @@ Knobs.prototype = {
       // the range slider's thumb is not moved because the value has not been refistered by the browser..
       // so need to set the value again..
       setTimeout(() => {
-        inputElm.value = d[vKey]
+        if( !isCheckbox )
+          inputElm.value = d[vKey]
       })
 
       this.setKnobChangedFlag(this.getKnobElm(d.__name), d.value != d.defaultValue)
@@ -322,6 +338,17 @@ Knobs.prototype = {
 
     // briefly set a big width/height for the iframe so it could be meassured correctly
     this.setIframeProps()
+  },
+
+  toggleKnob( name, isToggled ){
+    let knobData = this.getKnobDataByName(name),
+        key = knobData.type == 'checkbox' ? 'checked' : 'value'
+
+    knobData = isToggled
+      ? {...knobData, [key]:key == 'checked' ? knobData.checked : knobData.value }
+      : {...knobData, [key]:key == 'checked' ? knobData.defaultChecked : knobData.defaultValue }
+
+    this.updateDOM(knobData)
   },
 
   build(){

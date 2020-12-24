@@ -11,8 +11,10 @@ export function bindEvents(){
     },
 
     input: e => {
+      const is = cls => e.target.classList.contains(cls)
+
       try{
-        let isSectionToggler = e.target.classList.contains('toggleSection'),
+        let isSectionToggler = is('toggleSection'),
         // sectionHeight,
             groupElm;
 
@@ -26,10 +28,13 @@ export function bindEvents(){
       }
       catch(err){}
 
-      if( !e.target.name ) return
+      if( e.target.hasAttribute('is-knob-input') ){
+        this.onInput(e)
+        this.onChange(e)
+      }
 
-      this.onInput(e)
-      this.onChange(e)
+      else if ( is('knobs__knob__toggle') )
+        this.toggleKnob( e.target.dataset.forKnob, e.target.checked )
     },
 
     transitionend: e => {
@@ -80,6 +85,9 @@ export function onFocus(e) {
     setTimeout(_ => this.toggleColorPicker(e.target), 100)
 }
 
+/**
+ * only for knobs inputs
+ */
 export function onInput(e){
   const inputElm = e.target,
         value = inputElm.value,
@@ -88,10 +96,16 @@ export function onInput(e){
   inputElm.parentNode.style.setProperty('--value', value);
   inputElm.parentNode.style.setProperty('--text-value', JSON.stringify(value))
 
+  this.setKnobDataByName(e.target.name, {value})
+
   if( value != undefined && label )
+    // save knob's new value
     this.getSetPersistedData({ [label]:inputElm.type == 'checkbox' ? [inputElm.checked, value]: value })
 }
 
+/**
+ * only for knobs inputs
+ */
 export function onChange(e){
   var knobData = this.getKnobDataByName(e.target.name),
       runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
@@ -107,9 +121,7 @@ export function onChange(e){
   if( e.type == 'input' && runOnInput )
     return
 
-  updatedData = { ...knobData, value:e.target.value }
-
-  raf(() => this.updateDOM(updatedData))
+  raf(() => this.updateDOM(knobData))
 
   typeof knobData.onChange == 'function' && knobData.onChange(e, updatedData)
 }
