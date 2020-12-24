@@ -9,18 +9,19 @@ export function bindEvents(){
       this.setKnobChangedFlag( this.getKnobElm(e.target.name) )
       this.onChange(e)
     },
+
     input: e => {
       try{
         let isSectionToggler = e.target.classList.contains('toggleSection'),
-            groupElm,
-            sectionHeight;
+        // sectionHeight,
+            groupElm;
 
         // previously used "resizeObserver", but in Firefox the resize callback is called only after and not during every frame of the resize,
         // so this hacky-approach beflow is needed to adjust the offset of the iframe *before* the knobs group section is expanded
         if( isSectionToggler && e.target.checked ){
           groupElm = e.target.parentNode.querySelector('.fieldset__group')
-          sectionHeight = groupElm.style.getPropertyValue('--height');
-          this.setIframeProps({ heightOffset:sectionHeight })
+          // sectionHeight = groupElm.style.getPropertyValue('--height');
+          this.setIframeProps({ heightOffset:999 }) // better to temporarly set a large height and then at "transitionend"  put the exact height
         }
       }
       catch(err){}
@@ -30,11 +31,13 @@ export function bindEvents(){
       this.onInput(e)
       this.onChange(e)
     },
+
     transitionend: e => {
       if( e.target.classList.contains('fieldset__group') ){
         this.setIframeProps()
       }
     },
+
     wheel: e => {
       // disable window scroll: https://stackoverflow.com/a/23606063/104380
       e.preventDefault()

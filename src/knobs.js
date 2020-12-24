@@ -296,7 +296,7 @@ Knobs.prototype = {
 
   setIframeProps( opts ){
     var action = (this.state.visible == false ? 'remove' : 'set') + 'Property',
-        iframeBodyElm = this.DOM.iframe.contentWindow.document.body,
+        // iframeBodyElm = this.DOM.iframe.contentWindow.document.body,
         style = this.DOM.iframe.style,
         { heightOffset = 0 } = opts || {};
 
