@@ -102,7 +102,7 @@ html, body{
       }
 
       & ~ .knobs__knob__reset{
-    //  /   margin-bottom: calc(var(--knobs-gap, 6px) * 2);
+        // margin-bottom: calc(var(--knobs-gap, 6px) * 2);
         align-self: flex-start;
         margin-top: .5ch;
       }
@@ -143,10 +143,9 @@ html, body{
       display: table;
       border: 0;
       padding: 0;
-      margin: var(--side-pad);
+      margin: 0;
       opacity: 0;
       transform: translateX(calc(22% * var(--LTR-Bool)));
-      overflow: hidden;
 
       // if only a single fieldset and it has a legend: disallow collapsing
       &:only-of-type{
@@ -166,8 +165,13 @@ html, body{
     }
 
     .fieldset__group{
-      overflow: hidden;
+      &[transition-done]{
+        // needed for the hover tooltips (of range sliders)
+        overflow: visible;
+      }
+
       &__wrap{
+        padding: var(--side-pad);
         transition: var(--knobs-group-transition);
       }
     }
@@ -203,6 +207,7 @@ html, body{
     & label > :last-child {
       flex: 1;
       text-align: right;
+      align-self: center;
     }
   }
 
@@ -211,7 +216,6 @@ html, body{
 
     display: flex;
     align-items: center;
-    margin: 0 0 var(--side-pad);
     font-weight: 700;
     opacity: .66;
     cursor: pointer;
@@ -237,121 +241,26 @@ html, body{
     }
   }
 
-  &__knob{
-    $self: &;
-    display: flex;
-    position: relative;
-
-    &:hover{
-      #{$self}__reset{
-        // transform: none;
-      }
-
-      #{$self}__label{
-        opacity: 1;
-      }
-    }
-
-    // only show the "rest" button if knob has changed.
-    // this allows the user to know which one was changed, where many knobs exist
-    &[data-changed]{
-      #{$self}__reset{
-        opacity: .75;
-        pointer-events: auto;
-
-        &:hover{
-          opacity: 1;
-          background: var(--textColor);
-          color: var(--background);
-          transition: 0s;
-        }
-      }
-    }
-
-    &__toggle{
-      display: var(--knobs-toggle, none);
-      order: 1;
-      align-self: center;
-      margin: 0 5px 0 0;
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      outline: none;
-      border-radius: 50%;
-      position: relative;
-      text-align: center;
-      line-height: 10px;
-
-      &::before{
-        content: '';
-        position: absolute;
-        top:0; right:0; bottom:0; left:0;
-        border: 1px solid var(--textColor);
-        opacity: .4;
-        border-radius: 3px;
-      }
-
-      &:checked::after{
-        content: '✔';
-        color: var(--textColor);
-        font-size: 12px;
-        text-shadow: -1px -2px var(--background), 3px -2px var(--background);
-        position: relative;
-        z-index: 1;
-      }
-
-      &:not(:checked) ~ *{
-        pointer-events: none !important;
-        filter: grayscale(100%);
-        opacity: .4;
-        transition: .2s;
-      }
-    }
-
-    &__reset{
-      order: 0;
-      pointer-events: none;
-      margin-right: .5em;
-      padding: 0;
-      align-self: center;
-      color: inherit;
-      background: none;
-      border: 0;
-      cursor: pointer;
-      opacity: .33;
-      outline: none;
-      border-radius: 50%;
-      width: 2ch;
-      height: 2ch;
-      transition: .15s ease-out;
-    }
-
-    &__label {
-      margin-right: 2ch;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      opacity: .8;
-      transition: 80ms;
-
-      // variable units (if exists)
-      &::after{
-        content: attr(data-units);
-        opacity: .5;
-        margin-left: 1ch;
-      }
-    }
-  }
-
   .toggleSection{
+    // visible knobs group
+    &:checked{
+      ~ .fieldset__group[transitioned]{
+        overflow: hidden;
+      }
+    }
+
+    // hidden knobs group
     &:not(:checked){
       ~ .knobs__legend{
-        margin: 0;
+        margin-bottom: 1em;
       }
+
       ~ .fieldset__group{
+        overflow: hidden;
+
         .fieldset__group__wrap{
           opacity: 0;
-          margin-top: calc(-1em + var(--height) * -1px);
+          margin-top: calc(var(--height) * -1px);
           text-shadow: 0px 3px 2px;
         }
       }

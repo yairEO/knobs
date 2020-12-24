@@ -1,4 +1,5 @@
 const raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60))
+const is = (elm, cls) => elm.classList.contains(cls)
 
 export function bindEvents(){
   this.eventsRefs = this.eventsRefs || {
@@ -11,10 +12,8 @@ export function bindEvents(){
     },
 
     input: e => {
-      const is = cls => e.target.classList.contains(cls)
-
       try{
-        let isSectionToggler = is('toggleSection'),
+        let isSectionToggler = is(e.target, 'toggleSection'),
         // sectionHeight,
             groupElm;
 
@@ -33,12 +32,20 @@ export function bindEvents(){
         this.onChange(e)
       }
 
-      else if ( is('knobs__knob__toggle') )
+      else if ( is(e.target, 'knobs__knob__toggle') )
         this.toggleKnob( e.target.dataset.forKnob, e.target.checked )
     },
 
+    transitionstart: e => {
+      // this dirst trick is needed to add "overflow:hidden" to the group while transitied
+      if( is(e.target, 'fieldset__group__wrap') ){
+        e.target.parentNode.setAttribute('transitioned', 1)
+      }
+    },
+
     transitionend: e => {
-      if( e.target.classList.contains('fieldset__group') ){
+      if( is(e.target, 'fieldset__group__wrap') ){
+        e.target.parentNode.removeAttribute('transitioned')
         this.setIframeProps()
       }
     },
@@ -70,6 +77,7 @@ export function bindEvents(){
     ['form', 'submit'],
     ['form', 'focusin'],
     ['form', 'transitionend'],
+    ['form', 'transitionstart'],
     ['scope', 'click'],
     ['scope', 'wheel'],
     ['mainToggler', 'change', this.eventsRefs.mainToggler],
@@ -140,10 +148,9 @@ export function onSubmit(e){
 }
 
 export function onClick(e){
-  var target = e.target,
-      is = n => target.classList.contains(n)
+  var target = e.target
 
-  if( is('knobs__knob__reset') )
+  if( is(target, 'knobs__knob__reset') )
     this.resetKnobByName(target.name)
 
   this.hideColorPickers()

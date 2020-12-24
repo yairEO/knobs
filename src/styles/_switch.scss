@@ -1,12 +1,25 @@
-.knobs .switch{
-  --color-bg: #444;
-  --color-bg-on: #444;
-  --thumb-color-off: #d75d4a;
-  --thumb-color-on: #4ec964;
-  --thumb-scale: 1.1;
-  --width-multiplier: 2.5;
-  --thumb-animation-pad: 15%;
-  --size: 11px;
+.knobs{
+  &[data-flow='compact']{
+    .switch{
+      --size: 10px;
+      --thumb-scale: 1.3;
 
-  input:focus + div{ outline: none; }
+      &__gfx{
+        padding: 0;
+      }
+    }
+  }
+
+  .switch{
+    --color-bg: #444;
+    --color-bg-on: #444;
+    --thumb-color-off: #d75d4a;
+    --thumb-color-on: #4ec964;
+    --thumb-scale: 1.1;
+    --width-multiplier: 2.5;
+    --thumb-animation-pad: 15%;
+    --size: 1em;
+
+    input:focus + div{ outline: none; }
+  }
 }
