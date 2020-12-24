@@ -227,7 +227,7 @@ html, body{
     &::before{ margin-right: $lineGap; }
     &::after{ margin-left: $lineGap; }
 
-    &:hover{
+    &:hover:not(:active){
       opacity: .85;
       &::before{ margin-right: $lineGap * 3;  }
       &::after{ margin-left: $lineGap * 3;  }
