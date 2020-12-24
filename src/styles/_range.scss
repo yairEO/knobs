@@ -6,12 +6,14 @@
   --value-active-color: var(--range-track-color);
   --value-background: transparent;
   --progress-color: #444;
-  --thumb-size: 20px;
+  --thumb-size: 14px;
   --track-height: calc(var(--thumb-size)/3);
-  --thumb-shadow: 0 0 3px rgba(0,0,0,.2);
   --ticks-thickness: 1px;
   --ticks-height: 0px;
   --show-min-max: none;
+  --thumb-color: var(--fill-color);
+  --thumb-shadow: 0 0 3px rgba(0,0,0,.2);
+  --inner-shadow: 0 0 0 calc(var(--thumb-size)/6) inset white;
 
   color: transparent;
 
