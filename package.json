@@ -21,8 +21,8 @@
     },
     "main": "./knobs.min.js",
     "files": [
-        "knobs.js",
-        "knobs.min.js"
+        "knobs.min.js",
+        "src/styles"
     ],
     "license": "MIT",
     "_npmUser": {

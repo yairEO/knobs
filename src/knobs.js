@@ -3,6 +3,7 @@ import { reposition } from 'nanopop'
 import mainStyles from './styles/styles.scss'
 import colorPickerStyles from '@yaireo/color-picker/dist/styles.css'
 import isObject from './utils/isObject'
+import parseHTML from './utils/parseHTML'
 import { mergeDeep } from './utils/mergeDeep'
 import isModernBrowser from './utils/isModernBrowser'
 import cloneKnobs from './cloneKnobs'
@@ -101,11 +102,7 @@ Knobs.prototype = {
     }
   },
 
-  templates: {
-    scope: templates.scope,
-    knob: templates.knob,
-    fieldset: templates.fieldset
-  },
+  templates,
 
   hideColorPickers( exceptNode ){
     document.querySelectorAll('.color-picker').forEach(elm => elm != exceptNode && elm.classList.add('hidden'))
@@ -330,6 +327,9 @@ Knobs.prototype = {
 
   // show/hide Knobs (as a whole)
   toggle( state ){
+    if( !this.DOM.mainToggler )
+      return
+
     if( state === undefined )
       state = !this.DOM.mainToggler.checked
 
@@ -361,7 +361,18 @@ Knobs.prototype = {
   },
 
   build(){
-    this.createIframe()
+    if( this.settings.standalone ){
+      this.DOM.scope = parseHTML(this.templates.knobs.call(this, {withToggler:false}))
+    }
+    else{
+      const iframeDoc = this.createIframe()
+      this.DOM.scope = iframeDoc.body.querySelector('.knobs')
+      this.DOM.mainToggler = iframeDoc.getElementById('knobsToggle')
+    }
+
+    this.DOM.form = this.DOM.scope.querySelector('form')
+
+    this.render()
     setTimeout(this.bindEvents.bind(this))
   },
 
@@ -408,12 +419,7 @@ Knobs.prototype = {
     // done manipulating the iframe's content
     iframeDoc.close()
 
-    // save references to HTML elements within the iframe, for future access
-    this.DOM.scope = iframeDoc.body.querySelector('.knobs')
-    this.DOM.form = this.DOM.scope.querySelector('form')
-    this.DOM.mainToggler = iframeDoc.getElementById('knobsToggle')
-
-    this.render()
+    return iframeDoc
   },
 
   render(){
@@ -438,8 +444,7 @@ Knobs.prototype = {
     this.calculateGroupsHeights()
 
     // calculate iframe size
-
-    this.toggle(this.DOM.mainToggler.checked)
+    this.DOM.mainToggler && this.toggle(this.DOM.mainToggler.checked)
 
     this.applyKnobs()
 

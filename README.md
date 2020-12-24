@@ -81,7 +81,7 @@ new Knobs(settings)
 | CSSVarTarget | `Element`/`NodeList ` |         | Global HTML element(s) for which to apply the CSS custom properties.<br> Can also be configured per-knob.          |
 | knobsToggle  | `Boolean`             | `false` | if `true` - adds a checkbox next to each knob, which allows temporarily disabling the knob, reverting to default   |
 | knobs        | `Array`               |         | Array of Objects describing the knobs controllers on-screen                                                        |
-
+| standalone   | `Boolean`             | `false` | if `true` - does not create an iframe and appends it to the page, but simply gives the developer the DOM node, as is, to inject manually with `knobs.DOM.scope` node. Note that CSS in also needed ('./src/styles/styles.scss`)
 <details>
   <summary><strong>theme</strong> (defaults)</summary>
 

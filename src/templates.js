@@ -8,12 +8,22 @@ var settingsIcon = `<div class='leversIcon'>
 `
 
 export function scope(){
-  const {visible, live, theme} = this.settings;
+  const {visible} = this.settings;
 
   return `
     <input hidden type='checkbox' ${visible ? 'checked' : ''} id='knobsToggle' />
+    ${knobs.call(this, {})}
+  `
+}
+
+export function knobs({ withToggler = true}){
+  const {visible, live, theme} = this.settings;
+
+  return `
     <aside class='knobs' data-position='${theme.position}' data-flow='${theme.flow}'>
-      <label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>${settingsIcon}</label>
+      ${withToggler ?
+      `<label title='Demo Settings' ${visible == 2 ? "style='display:none'" : ''} for='knobsToggle'>${settingsIcon}</label>`
+      : ''}
       <div class='knobs__bg'></div>
       <form class='knobs__labels'>
         <!-- Knobs goes here -->

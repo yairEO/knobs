@@ -4,7 +4,7 @@
 - [x] Change native color picker to custom one
 - [x] Persist changes (setting) to localstorage
 - [x] Add a toggle button next to each knob (if supplied in setting to allow it)
-- [ ] Make knobs setting to allow creating a non-iframe knobs element (which can be used/places however desired)
+- [x] Make knobs setting to allow creating a non-iframe knobs element (which can be used/places however desired)
 - [ ] Add history (undo) per knob
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)

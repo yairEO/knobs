@@ -74,7 +74,7 @@ export function bindEvents(){
     ['scope', 'wheel'],
     ['mainToggler', 'change', this.eventsRefs.mainToggler],
   ].forEach(([elm, event, cb]) =>
-    this.DOM[elm].addEventListener(event,  cb || this.eventsRefs[event].bind(this), { passive:false })
+    this.DOM[elm] && this.DOM[elm].addEventListener(event,  cb || this.eventsRefs[event].bind(this), { passive:false })
   )
 
   // window.addEventListener('storage', this.eventsRefs.onStorage)
