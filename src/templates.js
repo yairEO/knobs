@@ -42,7 +42,9 @@ export function fieldset(knobsGroups){
   return `<fieldset ${legend ? 'data-has-legend' : ''}>
     ${legend ? legend : ''}
     <div class="fieldset__group">
-      ${knobs.map(knob.bind(this)).join("")}
+      <div class="fieldset__group__wrap">
+        ${knobs.map(knob.bind(this)).join("")}
+      </div>
     </div>
   </fieldset>`
 }

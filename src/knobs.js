@@ -303,7 +303,7 @@ Knobs.prototype = {
   },
 
   calculateGroupsHeights(){
-    var groupElms = this.DOM.form.querySelectorAll('.fieldset__group')
+    var groupElms = this.DOM.form.querySelectorAll('.fieldset__group__wrap')
 
     groupElms.forEach(groupElm => {
       groupElm.style.setProperty('--height', groupElm.clientHeight)

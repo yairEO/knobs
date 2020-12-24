@@ -166,7 +166,10 @@ html, body{
     }
 
     .fieldset__group{
-      transition: var(--knobs-group-transition);
+      overflow: hidden;
+      &__wrap{
+        transition: var(--knobs-group-transition);
+      }
     }
 
     hr{
@@ -185,7 +188,7 @@ html, body{
       display: flex;
       position: relative;
       z-index: 1;
-      background: var(--background);
+      // background: var(--background);
 
       > * {
         padding: var(--knobs-gap, 6px) 0;
@@ -292,22 +295,16 @@ html, body{
         content: '✔';
         color: var(--textColor);
         font-size: 12px;
-        text-shadow: -1px -2px var(--background), 4px -2px var(--background);
+        text-shadow: -1px -2px var(--background), 3px -2px var(--background);
         position: relative;
         z-index: 1;
       }
 
-      &:not(:checked) ~ {
-        *{
-          pointer-events: none !important;
-        }
-
-        // cannot use opacity/filter on the label itself because it has a background which is needed for collapse/expand
-        label > *{
-          filter: grayscale(100%);
-          opacity: .4;
-          transition: .2s;
-        }
+      &:not(:checked) ~ *{
+        pointer-events: none !important;
+        filter: grayscale(100%);
+        opacity: .4;
+        transition: .2s;
       }
     }
 
@@ -348,10 +345,15 @@ html, body{
 
   .toggleSection{
     &:not(:checked){
+      ~ .knobs__legend{
+        margin: 0;
+      }
       ~ .fieldset__group{
-        opacity: 0;
-        margin-top: calc(-1em + var(--height) * -1px);
-        text-shadow: 0px 3px 2px;
+        .fieldset__group__wrap{
+          opacity: 0;
+          margin-top: calc(-1em + var(--height) * -1px);
+          text-shadow: 0px 3px 2px;
+        }
       }
     }
   }
