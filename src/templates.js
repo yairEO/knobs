@@ -38,15 +38,16 @@ export function knobs({ withToggler = true}){
 }
 
 // group of knobs which is described by a label or a separator
-export function fieldset(knobsGroups){
+export function fieldset(knobsGroup){
   var legend, knobs;
 
-  if( isObject(knobsGroups[0]) ){
-    knobs = knobsGroups
+  if( isObject(knobsGroup[0]) ){
+    knobs = knobsGroup
   }
   else{
-    [legend, ...knobs] = knobsGroups;
-    legend = getLegend(legend instanceof Array ? { label:legend[0], checked:!!legend[1] } : { label:legend, checked:true })
+    [legend, ...knobs] = knobsGroup;
+    let getLegendParams = legend instanceof Array ? { label:legend[0], checked:!!legend[1] } : { label:legend, checked:true }
+    legend = getLegend({ ...getLegendParams, knobsCount:knobs.length })
   }
 
   return `<fieldset ${legend ? 'data-has-legend' : ''}>
@@ -62,7 +63,7 @@ export function fieldset(knobsGroups){
 export function knob(data){
   if( data && data.type )
     return `<div class='knobs__knob'>
-        <input type='checkbox' data-for-knob='${data.__name}' checked class='knobs__knob__toggle' title='Temporarily disable the knob' />
+        <input type='checkbox' css-util-before data-for-knob='${data.__name}' checked class='knobs__knob__toggle' title='Temporarily disable the knob' />
         <label data-type='${data.type}'>
           <div class='knobs__knob__label' ${data.cssVar && data.cssVar[1] ? `data-units='${data.cssVar[1].replace('-','')}'` : ''}>${data.label}</div>
           <div class='knobs__knob__inputWrap'>
@@ -74,11 +75,14 @@ export function knob(data){
     `
 }
 
-function getLegend({ label, checked }){
+function getLegend({ label, checked, knobsCount }){
   var id = label.replace(/ /g, '-') + Math.random().toString(36).slice(-6);
 
   return `<input hidden id="${id}" type="checkbox" ${checked ? "checked" : ""} class="toggleSection">
-          <label class='knobs__legend' for="${id}" title="Expand/Collapse">${label}</label>`
+          <label class='knobs__legend' for="${id}" title="Expand/Collapse">
+            ${label}
+            <span class='knobs__legend__knobsCount' css-util-before>${knobsCount}</span>
+          </label>`
 }
 
 function getInput(data){
