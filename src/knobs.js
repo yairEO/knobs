@@ -89,6 +89,9 @@ Knobs.prototype = {
 
       value = getComputedStyle(CSSVarTarget).getPropertyValue(`--${data.cssVar[0]}`).trim()
 
+      if( isNaN(value) )
+        console.warn("@yaireo/knobs", )
+
 
       // if type "range" - parse value as unitless
       if( data.type == 'range' )
@@ -316,7 +319,7 @@ Knobs.prototype = {
 
     if( action == 'setProperty' ){
       style.setProperty(`--knobsWidth`, '2000px')
-      style.setProperty(`--knobsHeight`, '1000px')
+      style.setProperty(`--knobsHeight`, '10000px')
     }
 
     var { clientWidth, clientHeight } = this.DOM.scope
@@ -368,6 +371,7 @@ Knobs.prototype = {
     else{
       const iframeDoc = this.createIframe()
       this.DOM.scope = iframeDoc.body.querySelector('.knobs')
+      this.DOM.groups = iframeDoc.body.querySelector('.knobs__groups')
       this.DOM.mainToggler = iframeDoc.getElementById('knobsToggle')
     }
 
@@ -397,7 +401,7 @@ Knobs.prototype = {
         z-index: 999999;
         ${(theme.position+" ").split(" ").join(":0;")}
         width: var(--knobsWidth, 56px);
-        height: var(--knobsHeight, 56px);
+        height: clamp(56px, var(--knobsHeight, 56px), 100%);
     `
 
     // first append the iframe to the DOM
@@ -433,14 +437,11 @@ Knobs.prototype = {
         return acc
       }, [[]])
 
-    // cleanup previous knobs fieldsets wrappers
-    this.DOM.form.querySelectorAll('fieldset').forEach(elm => elm.remove())
-
     //create an HTML-string from the template
-    var HTML = knobsGroups.map(this.templates.fieldset.bind(this)).join("")
+    var fieldsetElms = knobsGroups.map(this.templates.fieldset.bind(this)).join("")
 
-    // inject knobs into the <fieldset> element
-    this.DOM.form.insertAdjacentHTML('afterbegin', HTML)
+    // cleanup & inject knobs into the <fieldset> element
+    this.DOM.groups.innerHTML = fieldsetElms
 
     this.calculateGroupsHeights()
 

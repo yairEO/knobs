@@ -26,7 +26,9 @@ export function knobs({ withToggler = true}){
       : ''}
       <div class='knobs__bg'></div>
       <form class='knobs__labels'>
-        <!-- Knobs goes here -->
+        <div class='knobs__groups'>
+          <!-- Knobs goes here -->
+        </div>
         <section class='knobs__controls'>
           ${live ? '' : `<input type="submit" value="Apply">`}
           <input type="reset" value="↩ Reset" title="Reset to defaults">

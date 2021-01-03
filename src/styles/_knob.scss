@@ -10,6 +10,7 @@
     $self: &;
     display: flex;
     position: relative;
+    line-height: var(--line-height);
 
     &:hover{
       #{$self}__reset{

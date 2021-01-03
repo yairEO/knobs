@@ -80,6 +80,7 @@ html, body{
   --in-easing: cubic-bezier(.75,0,.35,1);
   --in-duration: .3;
   --color-size: 20px;
+  --line-height: Max(0px, var(--color-size)); // units must be the same
   --knobs-group-transition: .33s cubic-bezier(.45, 0, .2, 1);
   --LTR-Bool: 1;  /* -1 for RTL */
 
@@ -120,9 +121,11 @@ html, body{
   }
 
   &__bg{
+    pointer-events: none;
     position: absolute;
     top: 0;
     right: 0;
+    z-index: -1;
     margin: var(--toggleOffset);
     width: var(--toggleSize);
     height: var(--toggleSize);
@@ -134,10 +137,12 @@ html, body{
 
   /* the <form> element which is the actual knobs wrapper */
   &__labels {
-  //  background: var(--background);
+    //  background: var(--background);
+    display: flex;
+    flex-flow: column;
+    max-height: 100%;
     border: var(--border);
     transform: translateX(calc(100.1% * var(--LTR-Bool)));
-    overflow: hidden;
 
     fieldset {
       display: table;
@@ -155,7 +160,6 @@ html, body{
       }
 
       &:first-child {
-        margin-top: calc(var(--side-pad) * 2.5);
         // this allows the output of a range slider to be seen
         // on the first fieldset if it has no legend
         &:not([data-has-legend]){
@@ -208,6 +212,17 @@ html, body{
       flex: 1;
       text-align: right;
       align-self: center;
+    }
+  }
+
+  &__groups{
+    flex: 1;
+    margin-top: calc(var(--side-pad) * 2.5);
+    overflow-y: scroll;
+    scrollbar-width: none; // hides scrollbar (currently only in Firefox)
+
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 

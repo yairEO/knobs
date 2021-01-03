@@ -22,7 +22,7 @@ export function bindEvents(){
         if( isSectionToggler && e.target.checked ){
           groupElm = e.target.parentNode.querySelector('.fieldset__group')
           // sectionHeight = groupElm.style.getPropertyValue('--height');
-          this.setIframeProps({ heightOffset:999 }) // better to temporarly set a large height and then at "transitionend"  put the exact height
+          this.setIframeProps({ heightOffset:9999 }) // better to temporarly set a large height and then at "transitionend" put the exact height
         }
       }
       catch(err){}
@@ -51,17 +51,18 @@ export function bindEvents(){
     },
 
     wheel: e => {
-      // disable window scroll: https://stackoverflow.com/a/23606063/104380
-      e.preventDefault()
-
-      const { value, max, step } = e.target,
+      const { value, max, step, type } = e.target,
         delta = Math.sign(e.deltaY) * (+step||1) * -1 // normalize jump value to either -1 or 1
+
+      // disable window scroll: https://stackoverflow.com/a/23606063/104380
+      if( type == 'range' )
+        e.preventDefault()
 
       if( value && max ){
         e.target.value = Math.min(Math.max(+value + delta, 0), +max)
         this.onInput(e)
         this.onChange(e)
-  }
+      }
     },
     mainToggler: e => this.toggle(e.target.checked),
     reset : this.applyKnobs.bind(this, null, true),
@@ -85,7 +86,23 @@ export function bindEvents(){
     this.DOM[elm] && this.DOM[elm].addEventListener(event,  cb || this.eventsRefs[event].bind(this), { passive:false })
   )
 
+  whenKnobsParentResizes.call(this)
   // window.addEventListener('storage', this.eventsRefs.onStorage)
+}
+
+function whenKnobsParentResizes(){
+  let debounceTimer,
+      that = this;
+
+  // if the page which added Knobs is resized, re-calculate iframe height
+  const resizeObserver = new ResizeObserver(entries => {
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(()=> {
+      that.setIframeProps()
+    }, 500)
+  })
+
+  resizeObserver.observe( this.settings.appendTo )
 }
 
 export function onFocus(e) {
