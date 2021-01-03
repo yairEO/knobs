@@ -1,19 +1,22 @@
 // https://github.com/yairEO/ui-range
 // overrides:
-.knobs .range {
+.knobs .range-slider {
   --fill-color: var(--range-track-color);
   --primaryColor: var(--range-value-background);
+
   --value-active-color: var(--range-track-color);
   --value-background: transparent;
-  --progress-color: #444;
+  --value-background-hover: white;
+
+  --progress-background: #444;
   --thumb-size: 14px;
   --track-height: calc(var(--thumb-size)/3);
   --ticks-thickness: 1px;
   --ticks-height: 0px;
   --show-min-max: none;
-  --thumb-color: var(--fill-color);
-  --thumb-shadow: 0 0 3px rgba(0,0,0,.2);
-  --inner-shadow: 0 0 0 calc(var(--thumb-size)/6) inset white;
+  --thumb-color: var(--range-track-color);
+  --thumb-shadow: 0 0 3px rgba(0,0,0,.2), 0 0 0 calc(var(--thumb-size)/6) inset white;
+  --thumb-shadow-active: 0 0 3px rgba(0,0,0,.2), 0 0 0 calc(var(--thumb-size)/4) inset white;
 
   color: transparent;
 

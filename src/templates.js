@@ -90,10 +90,10 @@ function getInput(data){
 
   if( type == 'range' )
     return `
-      <div class="range" style="--step:${step||1}; --min:${min}; --max:${max}; --value:${value}; --text-value:'${value}'">
+      <div class="range-slider" style="--step:${step||1}; --min:${min}; --max:${max}; --value:${value}; --text-value:'${value}'">
         <input type="range" ${this.knobAttrs(data)}>
         <output></output>
-        <div class='range__progress'></div>
+        <div class='range-slider__progress'></div>
       </div>`
 
   if( type == 'checkbox' )

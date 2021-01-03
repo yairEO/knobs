@@ -96,7 +96,7 @@ html, body{
     label[data-type='range']{
       flex-flow: column;
 
-      .range{
+      .range-slider{
         --thumb-size: 12px;
         --track-height: calc(var(--thumb-size)/2);
       }
@@ -199,7 +199,7 @@ html, body{
       }
     }
 
-    & .range,
+    & .range-slider,
     & input[type=text] {
       min-width: 200px;
     }
