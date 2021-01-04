@@ -7,7 +7,6 @@ export function bindEvents(){
       // only knobs' inputs have a "name" attribute
       if( !e.target.name ) return
 
-      this.setKnobChangedFlag( this.getKnobElm(e.target.name) )
       this.onChange(e)
     },
 
@@ -133,9 +132,11 @@ export function onInput(e){
  * only for knobs inputs
  */
 export function onChange(e){
-  var knobData = this.getKnobDataByName(e.target.name),
-      runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
-      isCheckbox = knobData && knobData.type == 'checkbox';
+  this.setKnobChangedFlag( this.getKnobElm(e.target.name) )
+
+  const knobData = this.getKnobDataByName(e.target.name),
+        runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
+        isCheckbox = knobData && knobData.type == 'checkbox';
 
   if( !knobData )
     return

@@ -91,7 +91,7 @@ Knobs.prototype = {
       value = getComputedStyle(CSSVarTarget).getPropertyValue(`--${data.cssVar[0]}`).trim()
 
       if( isNaN(value) )
-        console.warn("@yaireo/knobs -", "could not parse variable value:", data.cssVar[0])
+        console.warn("@yaireo/knobs -", "Unable to parse variable value:", data.cssVar[0])
 
 
       // if type "range" - parse value as unitless

@@ -5,7 +5,11 @@
 - [x] Persist changes (setting) to localstorage
 - [x] Add a toggle button next to each knob (if supplied in setting to allow it)
 - [x] Make knobs setting to allow creating a non-iframe knobs element (which can be used/places however desired)
-- [ ] Add history (undo) per knob
+- [x] automatically-detected values are not working as expecetd (maybe detecting the wrong element)
+- [x] max height - allow scroll of knobs when height is more than viewport (use resize observer)
+- [ ] fix color not ".range" class colliding with document's one
+- [ ] fix color knobs unable to revert
+- [ ] add dropdown knob (select)
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)
 - [ ] Optionally Add (-) (+) buttons to range sliders for sensetive changes (vaie Knob JSON)
