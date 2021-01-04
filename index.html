@@ -86,7 +86,6 @@
           cssVar: ['main-bg', null, document.body], // [alias for the CSS variable, units, applies on element]
           label: 'Page background',
           type: 'color',
-          value: '#FFFFFF',
         //  onChange: console.log
         },
         {
@@ -117,7 +116,7 @@
     })
 
     knobs1.knobs = [...knobs1.knobs, ...[
-      ["Knobs Self Parameters", 0],
+      ["Knobs Self Parameters", 1],
       {
         label: 'Compact View',
         type: 'checkbox',
@@ -153,20 +152,16 @@
         cssVar: ['background', null, knobs1.DOM.scope],
         label: 'Knobs Background',
         type: 'color',
-        value: '#000000'
       },
       {
         cssVar: ['primaryColor', null, knobs1.DOM.scope],
         label: 'Slider Color',
         type: 'color',
-        value: '#0366D6'
       },
       {
         cssVar: ['textColor', null, knobs1.DOM.scope],
         label: 'Text Color',
         type: 'color',
-        value: '#FFFFFF'
-
       }
     ]]
 

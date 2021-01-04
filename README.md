@@ -150,8 +150,8 @@ A text which is displayed alongside the knob
 
 **`value`**
 
-Acts as the initial value of the knob, except if the knob is a `checkbox`, in which case,
-if the knob also has `cssVar` property set, then check the checkbox is checked, that CSS variable
+Acts as the initial value of the *knob*, except for `checkbox` *knobs*, in which case,
+if the knob also has `cssVar` property set, then the checkbox is *checked*, that CSS variable
 `value` will be the `value` property of the knob, Ex.
 
 ```js
@@ -171,8 +171,11 @@ Then in your CSS you can write the below, so when `--hide` is not defined,
 display: var(--hide, block);
 ```
 
-It is possible to use an already-declared CSS-varaible (on the target element) by emmiting the `value`
-prop from the knob decleration.
+It is possible to use an *already-declared* CSS-varaible (on the target element) by emmiting the `value`
+prop from the *knob* decleration. The program will try to get the value using `getComputedStyle` and `getPropertyValue`.
+
+Variables which has `calc` or any other computations might result in `NaN`. In which case, a `console.warn` will be presented
+and a manually typed `value` property for the *knob* would be advised.
 </details>
 
 

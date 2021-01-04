@@ -72,6 +72,7 @@ export function bindEvents(){
   };
 
   [
+    ['scope', 'click'],
     ['form', 'change'],
     ['form', 'input'],
     ['form', 'reset'],
@@ -79,7 +80,6 @@ export function bindEvents(){
     ['form', 'focusin'],
     ['form', 'transitionend'],
     ['form', 'transitionstart'],
-    ['scope', 'click'],
     ['scope', 'wheel'],
     ['mainToggler', 'change', this.eventsRefs.mainToggler],
   ].forEach(([elm, event, cb]) =>
@@ -106,8 +106,8 @@ function whenKnobsParentResizes(){
 }
 
 export function onFocus(e) {
-  if( e.target.dataset.type == 'color' )
-    setTimeout(_ => this.toggleColorPicker(e.target), 100)
+  // if( e.target.dataset.type == 'color' )
+  //   setTimeout(_ => this.toggleColorPicker(e.target), 100)
 }
 
 /**
@@ -165,10 +165,13 @@ export function onSubmit(e){
 }
 
 export function onClick(e){
-  var target = e.target
+  const {target} = e
+
+  this.hideColorPickers(target.colorPicker ? target.colorPicker.DOM.scope : null)
 
   if( is(target, 'knobs__knob__reset') )
     this.resetKnobByName(target.name)
 
-  this.hideColorPickers()
+  if( target.dataset.type == 'color' )
+    setTimeout(_ => this.toggleColorPicker(target), 100)
 }

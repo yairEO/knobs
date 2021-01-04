@@ -1,6 +1,7 @@
 import ColorPicker from '@yaireo/color-picker'
 import { reposition } from 'nanopop'
 import mainStyles from './styles/styles.scss'
+import hostStyles from './styles/host.scss'
 import colorPickerStyles from '@yaireo/color-picker/dist/styles.css'
 import isObject from './utils/isObject'
 import parseHTML from './utils/parseHTML'
@@ -90,7 +91,7 @@ Knobs.prototype = {
       value = getComputedStyle(CSSVarTarget).getPropertyValue(`--${data.cssVar[0]}`).trim()
 
       if( isNaN(value) )
-        console.warn("@yaireo/knobs", )
+        console.warn("@yaireo/knobs -", "could not parse variable value:", data.cssVar[0])
 
 
       // if type "range" - parse value as unitless
@@ -117,14 +118,22 @@ Knobs.prototype = {
           // totalHeight = this.DOM.scope.clientHeight,
           that = this
 
-    const cPicker = inputElm.colorPicker || new ColorPicker({
+    let cPicker = inputElm.colorPicker
+
+    // if already visible, hide
+    if( cPicker && !cPicker.DOM.scope.classList.contains('hidden') ){
+      cPicker.DOM.scope.classList.add('hidden')
+      return
+    }
+
+    cPicker = cPicker || new ColorPicker({
       color: value,
       className: 'hidden',
       swatches: [],
       swatchesLocalStorage: true,
 
       // because the color-picker is outside the iframe, "onClickOutside" will not register
-      // clicked within the iframe.
+      // clicked within the iframe (knobs area).
       onClickOutside(e){
         if( !cPicker.DOM.scope.classList.contains('hidden')  )
         that.hideColorPickers( cPicker.DOM.scope )
@@ -154,8 +163,11 @@ Knobs.prototype = {
       document.body.appendChild(cPicker.DOM.scope)
     }
 
-    reposition( this.DOM.iframe, cPicker.DOM.scope )
-    cPicker.DOM.scope.classList.remove('hidden')
+    // small delay before the Node is safely in the DOM
+    setTimeout(()=>{
+      reposition( this.DOM.iframe, cPicker.DOM.scope )
+      cPicker.DOM.scope.classList.remove('hidden')
+    }, 100)
 
     // adjust screen position offsets to the color picker
     // const colorPickerHeight = cPicker.DOM.scope.clientHeight
@@ -451,12 +463,12 @@ Knobs.prototype = {
     this.applyKnobs()
 
     // color picker CSS
-    const colorPickerCSSExists = [...document.styleSheets].some(s => s.title == 'color-picker')
+    const hostCSSExists = [...document.styleSheets].some(s => s.title == '@yaireo/knobs')
 
-    if( !colorPickerCSSExists )
-      document.head.insertAdjacentHTML('beforeend', `<style title='color-picker'>
+    if( !hostCSSExists )
+      document.head.insertAdjacentHTML('beforeend', `<style title='@yaireo/knobs'>
       ${colorPickerStyles}
-      .color-picker[style~='left:']{ z-index: 999999; position: fixed; }
+      ${hostStyles}
       </style>`)
   }
 }
