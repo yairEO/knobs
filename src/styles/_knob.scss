@@ -72,6 +72,9 @@
         filter: grayscale(100%);
         opacity: .4;
         transition: .2s;
+
+        ::-webkit-slider-thumb { pointer-events: none !important; }
+        ::-moz-slider-thumb { pointer-events: none !important; }
       }
     }
 
