@@ -176,7 +176,13 @@ prop from the *knob* decleration. The program will try to get the value using `g
 
 Variables which has `calc` or any other computations might result in `NaN`. In which case, a `console.warn` will be presented
 and a manually typed `value` property for the *knob* would be advised.
+
+**`isToggled`**
+If this property is set to `false`, the knob will be toggled *off* by default.
+
+Will only take affect if `knobsToggle` setting is set to `true`
 </details>
+
 
 
 ## Install:

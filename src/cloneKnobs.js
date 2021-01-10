@@ -7,6 +7,9 @@ export default function(knobs, persistedData){
         k.defaultValue = k.defaultValue ?? k.value ?? this.getKnobValueFromCSSVar(k)
         k.defaultChecked = k.defaultChecked ?? !!k.checked
 
+      if( !this.settings.knobsToggle && k.isToggled === false )
+        delete k.isToggled
+
       if( persistedData ){
         if( k.type == 'checkbox' ){
           k.checked = persistedData[k.label]?.[0] ?? k.defaultChecked

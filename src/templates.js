@@ -65,7 +65,7 @@ export function fieldset(knobsGroup){
 export function knob(data){
   if( data && data.type )
     return `<div class='knobs__knob'>
-        <input type='checkbox' css-util-before data-for-knob='${data.__name}' checked class='knobs__knob__toggle' title='Temporarily disable the knob' />
+        <input type='checkbox' css-util-before data-for-knob='${data.__name}' ${data.isToggled === false ? "" : "checked"} class='knobs__knob__toggle' title='Temporarily disable the knob' />
         <label data-type='${data.type}'>
           <div class='knobs__knob__label' ${data.cssVar && data.cssVar[1] ? `data-units='${data.cssVar[1].replace('-','')}'` : ''}>${data.label}</div>
           <div class='knobs__knob__inputWrap'>

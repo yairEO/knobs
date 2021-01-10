@@ -261,7 +261,7 @@ Knobs.prototype = {
    */
   applyKnobs( knobsData, reset ){
     (knobsData || this._knobs).forEach(d => {
-      if( !d || !d.type ) return
+      if( !d || !d.type || d.isToggled === false ) return
 
       var isCheckbox = d.type == 'checkbox',
           isRange = d.type == 'range',
