@@ -132,6 +132,7 @@ html, body{
     border-radius: 50%;
     background: var(--background);
     opacity: .8;
+    backdrop-filter: blur(8px);
     transition:  120ms;
   }
 

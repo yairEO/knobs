@@ -43,7 +43,7 @@ Knobs.prototype = {
     if( knobs && knobs instanceof Array ){
       // manual deep-clone the "knobs" setting, because for hours I couldn't find a single piece of code
       // on the internet which was able to correctly clone it
-      this._knobs = this.cloneKnobs(knobs, this.getSetPersistedData())
+      this._knobs = this.cloneKnobs(knobs, this.getPersistedData())
       this.DOM && this.render()
     }
   },
@@ -90,10 +90,6 @@ Knobs.prototype = {
 
       value = getComputedStyle(CSSVarTarget).getPropertyValue(`--${data.cssVar[0]}`).trim()
 
-      if( isNaN(value) )
-        console.warn("@yaireo/knobs -", "Unable to parse variable value:", data.cssVar[0])
-
-
       // if type "range" - parse value as unitless
       if( data.type == 'range' )
         value = parseInt(value)
@@ -101,6 +97,9 @@ Knobs.prototype = {
       // if type "color" - parse value as color
 
       // if type "checkbox" - if variable exists it means the value should be "true"
+
+      // if( isNaN(value) )
+      //   console.warn("@yaireo/knobs -", "Unable to parse variable value:", data.cssVar[0])
 
       return value
     }
@@ -357,14 +356,20 @@ Knobs.prototype = {
 
   toggleKnob( name, isToggled ){
     let knobData = this.getKnobDataByName(name),
-        key = knobData.type == 'checkbox' ? 'checked' : 'value'
+        key = knobData.type == 'checkbox' ? 'checked' : 'value',
+        // knob can be either a chekbox or an input element with an actual value
+        keyVal = isToggled
+          ? key == 'checked' ? knobData.checked : knobData.value
+          : key == 'checked' ? knobData.defaultChecked : knobData.defaultValue
 
-    knobData = isToggled
-      ? {...knobData, [key]:key == 'checked' ? knobData.checked : knobData.value }
-      : {...knobData, [key]:key == 'checked' ? knobData.defaultChecked : knobData.defaultValue }
+    knobData.isToggled = isToggled
+    knobData[key] = keyVal
 
     this.updateDOM(knobData)
+
     typeof knobData.onChange == 'function' && knobData.onChange(null, knobData)
+
+    this.setPersistedData() // { [knobData.label]:knobData.type == 'checkbox' ? [inputElm.checked, knobData.value] : knobData.value }
   },
 
   /**

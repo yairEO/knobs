@@ -125,7 +125,8 @@ export function onInput(e){
 
   if( value != undefined && label )
     // save knob's new value
-    this.getSetPersistedData({ [label]:isCheckbox ? [inputElm.checked, value]: value })
+    this.setPersistedData()
+    // this.getSetPersistedData({ [label]:isCheckbox ? [inputElm.checked, value] : value })
 }
 
 /**

@@ -10,7 +10,7 @@
 - [x] fix color knobs unable to revert
 - [x] Fix checkbox alignment when in compact-mode
 - [x] Add ability to pre-define a knob as non-checked
-- [ ] Presist knob checkbox (enable/disable) as well
+- [x] Presist knob checkbox (enable/disable) as well
 - [ ] add dropdown knob (select)
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)
