@@ -95,6 +95,8 @@ Knobs.prototype = {
         value = parseInt(value)
 
       // if type "color" - parse value as color
+      if( data.type == 'color' && !value )
+        value = 'transparent'
 
       // if type "checkbox" - if variable exists it means the value should be "true"
 
@@ -254,7 +256,7 @@ Knobs.prototype = {
   },
 
   /**
-   * Apply all knobs changes and fire all knobs' "onChange" callbacks
+   * Apply all knobs (or a single knob) changes and fire all knobs' "onChange" callbacks
    * @param {Object} knobsData specific knobs to apply to
    * @param {Boolean} reset should the value reset before applying
    */
@@ -262,15 +264,15 @@ Knobs.prototype = {
     (knobsData || this._knobs).forEach(d => {
       if( !d || !d.type || d.isToggled === false ) return
 
-      var isCheckbox = d.type == 'checkbox',
-          isRange = d.type == 'range',
-          inputElm = this.getInputByName(d.__name),
+      const isType = name => d.type == name
+
+      var inputElm = this.getInputByName(d.__name),
           e = { target:inputElm },
           vKey = reset ? 'defaultValue' : 'value',
           checkedKey = reset ? 'defaultChecked' : 'checked',
           resetTitle;
 
-      if( isCheckbox ){
+      if( isType('checkbox') ){
         resetTitle = inputElm.checked = !!d.checked
         inputElm.checked = d[checkedKey]
       }
@@ -286,8 +288,11 @@ Knobs.prototype = {
       // the range slider's thumb is not moved because the value has not been refistered by the browser..
       // so need to set the value again..
       setTimeout(() => {
-        if( !isCheckbox )
+        if( !isType('checkbox') )
           inputElm.value = d[vKey]
+
+        if( isType('color') )
+          inputElm.title = inputElm.value
       })
 
       this.setKnobChangedFlag(this.getKnobElm(d.__name), d.value != d.defaultValue)
