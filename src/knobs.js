@@ -186,7 +186,7 @@ Knobs.prototype = {
    */
   knobAttrs(data){
     var attributes = `name="${data.__name}" is-knob-input`,
-        blacklist = ['label', 'type', 'onchange', 'values', 'selected', 'cssvar', '__name']
+        blacklist = ['label', 'type', 'onchange', 'options', 'selected', 'cssvar', '__name']
 
     for( var attr in data ){
       if( attr == 'checked' && !data[attr] ) continue
@@ -222,6 +222,17 @@ Knobs.prototype = {
 
   getKnobElm( name ){
     return this.getInputByName(name).closest('.knobs__knob')
+  },
+
+  /**
+   * Get all other knobs which also affect the same CSS variables and change their value
+   */
+  getSimilarKnobs( toKnob ){
+    return this.knobs.filter(knob =>
+      knob?.cssVar?.[0] &&
+      knob?.cssVar?.[0] == toKnob?.cssVar?.[0] && // affects same CSS variable
+      knob.__name != toKnob.__name // ignore current knob which was just changed
+    )
   },
 
   /**
@@ -293,13 +304,14 @@ Knobs.prototype = {
       // for some reason, if the form was reset through the "reset" input,
       // the range slider's thumb is not moved because the value has not been refistered by the browser..
       // so need to set the value again..
-      setTimeout(() => {
+      // SEEMS THE BUG HAS BEEN FIXED IN LATEST CHROME
+    //  setTimeout(() => {
         if( !isType('checkbox') )
           inputElm.value = d[vKey]
 
         if( isType('color') )
           inputElm.title = inputElm.value
-      })
+     // })
 
       this.setKnobChangedFlag(this.getKnobElm(d.__name), d.value != d.defaultValue)
     })

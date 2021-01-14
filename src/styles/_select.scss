@@ -1,14 +1,44 @@
-.knobs select{
-  font: inherit;
-  background: none;
-  color: var(--textColor);
-  padding: 3px 0;
-  cursor: pointer;
-  border-radius: 3px;
-  outline: none;
+.knobs label[data-type='select']{
+  .knobs__knob__inputWrap{
+    &::before{
+      // "--value" variable only exists for valid select values. if this variable exists, hide this psuedo element.
+      // this calc must reside within a varible or the space between the minus signs is removed
+      --hide: Calc(var(--value)  -  var(--value));
+
+      content: 'N/A';
+      font-style: italic;
+      opacity: var(--hide);
+      filter: opacity(0.5);
+      position: absolute;
+      right: 2em;
+      pointer-events: none;
+    }
+  }
+
+  &::after{
+    content: '❯';
+    pointer-events: none;
+    align-self: center;
+    transform: translate(-100%, var(--offset-y, -1px)) rotate(90deg) scaleY(.8);
+    transition: .1s;
+  }
 
   &:hover{
-    box-shadow: 0 0 0 3px rgba(white, .2) inset;
+    --offset-y: 1px;
+  }
+
+  select{
+    font: inherit;
+    background: none;
+    color: var(--textColor);
+    padding: 3px 0;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    text-align-last: right;
+    appearance: none;
+    padding: 0 1.1em 0 0;
+
   }
 
   option{

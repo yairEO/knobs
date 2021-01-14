@@ -142,18 +142,14 @@ export function onChange(e){
   if( !knobData )
     return
 
-  // find all other knobs which also affect the same CSS variables and change their value
-  if( knobData?.cssVar?.[0] ){
-    let similarKnobs = this.knobs.filter(knob =>
-      knob?.cssVar?.[0] == knobData?.cssVar?.[0] && // affects same CSS variable
-      knob.__name != knobData.__name // ignore current knob which was just changed
-    )
+  const similarKnobs = this.getSimilarKnobs(knobData)
 
+  if( similarKnobs.length ){
     similarKnobs.forEach(knob => {
-      let inputElm = this.getInputByName(knob.__name)
-      inputElm.value = knobData.value
-      this.onInput({ target:inputElm })
-    })
+      const inputElm = this.getInputByName(knob.__name)
+        inputElm.value = knobData.value
+        this.onInput({ target:inputElm })
+      })
   }
 
   if( !isCheckbox && !this.settings.live )
