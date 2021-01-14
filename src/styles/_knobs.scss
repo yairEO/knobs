@@ -94,6 +94,7 @@ html, body{
   &[data-flow='compact']{
     --color-size: 16px;
 
+    label[data-type='select'],
     label[data-type='range']{
       flex-flow: column;
 
@@ -205,6 +206,7 @@ html, body{
     }
 
     & .range-slider,
+    & select,
     & input[type=text] {
       min-width: 200px;
     }

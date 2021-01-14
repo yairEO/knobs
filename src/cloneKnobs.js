@@ -13,8 +13,16 @@ export default function(knobs, persistedData){
       if( persistedData ){
         // if current iterated knob exists in the persisted data array, use it
         let thisKnobPersistedData = persistedData.find(a => a.label == k.label)
-        if( thisKnobPersistedData )
+        if( thisKnobPersistedData ){
+          if( k.defaultValue )
+            thisKnobPersistedData.defaultValue = k.defaultValue
+          // override persisted "select" knob options to make sure they are the latest
+          if( k.options ){
+            thisKnobPersistedData.options = k.options
+          }
+
           return thisKnobPersistedData
+        }
       }
 
       // cast to type "number" if needed (per input type)

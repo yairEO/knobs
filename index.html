@@ -57,14 +57,23 @@
         //  onChange: console.log
         },
         {
+          isToggled: false,
           cssVar: ['height', 'vh'],
           label: 'Height',
           type: 'range',
         //  value: 20,
           min: 0,
           max: 100,
-          isToggled: false,
         //  onChange: console.log
+        },
+        {
+          isToggled: false,
+          cssVar: ['width', '-px'],
+          label: 'Width preset',
+          type: 'select',
+          options: [20, 150, [200, '200 nice pixels'], 500],
+          value: 150,
+          defaultValue: 150
         },
         "Label example",
         {

@@ -87,8 +87,8 @@ function getLegend({ label, checked, knobsCount }){
           </label>`
 }
 
-function getInput(data){
-  let { type, step, min, max, value } = data
+function getInput( data ){
+  let { type, step, min, max, value, options } = data
 
   if( type == 'range' )
     return `
@@ -104,6 +104,12 @@ function getInput(data){
         <input type='${type}' ${this.knobAttrs(data)} class="switch__input">
         <div class='switch__gfx'></div>
       </div>`
+
+  if( type == 'select' && options?.length )
+    return `
+      <select ${this.knobAttrs(data)}>
+        ${options.map(v => `<option ${(Array.isArray(v) ? v[0] : v) == data.value ? 'selected' : ''} value='${(Array.isArray(v) ? v[0] : v)}'>${(Array.isArray(v) ? v[1] : v)}</option>`)}
+      </select>`
 
   if( type == 'color' )
     type = 'text'

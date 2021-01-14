@@ -186,7 +186,7 @@ Knobs.prototype = {
    */
   knobAttrs(data){
     var attributes = `name="${data.__name}" is-knob-input`,
-        blacklist = ['label', 'type', 'onchange', 'cssvar', '__name']
+        blacklist = ['label', 'type', 'onchange', 'values', 'selected', 'cssvar', '__name']
 
     for( var attr in data ){
       if( attr == 'checked' && !data[attr] ) continue
@@ -217,7 +217,7 @@ Knobs.prototype = {
   },
 
   getInputByName( name ){
-    return this.DOM.scope.querySelector(`input[name="${name}"`)
+    return this.DOM.scope.querySelector(`[name="${name}"`)
   },
 
   getKnobElm( name ){
@@ -281,8 +281,14 @@ Knobs.prototype = {
 
       this.setResetKnobTitle(d.__name, resetTitle)
 
-      this.onInput(e)
-      this.onChange(e)
+      // wrote this specifically for knobs of type "select" which other knobs might also affect the same CSS variable
+      // so the select value won't take affect if the current value of the input is not one of the possible options.
+      // This can happen if a range slider, which has more free-range, set the value to something else, which also affected
+      // the "select" knob.
+      if( inputElm.value !== '' || inputElm.value === d.value ){
+        this.onInput(e)
+        this.onChange(e)
+      }
 
       // for some reason, if the form was reset through the "reset" input,
       // the range slider's thumb is not moved because the value has not been refistered by the browser..

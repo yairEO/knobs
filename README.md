@@ -43,6 +43,7 @@ It's so easy & quick to use Knobs, about 1 minute!
 * `Range` input (*wheel*-supported)
 * `Color` input with awesome custom [color picker](https://github.com/yairEO/color-picker)
 * `Checkbox` input
+* `select` dropdown (native)
 * Resset all (to defaults)
 * Reset individual
 * Labels - allows grouping of every knob defined after a label
@@ -181,6 +182,13 @@ and a manually typed `value` property for the *knob* would be advised.
 If this property is set to `false`, the knob will be toggled *off* by default.
 
 Will only take affect if `knobsToggle` setting is set to `true`
+
+**`options`**
+Used for knobs of type `select`. An Array of options to render.
+
+    [20, 150, [200, '200 nice pixels'], 500]
+
+An option can be split to the actual value it represents and its textual value, as the above example shows.
 </details>
 
 
@@ -229,6 +237,15 @@ var settings = {
       max: 500,
       step: 50,
       onChange: console.log  // javascript callback on every "input" event
+    },
+    {
+      cssVar: ['width', '-px'],
+      label: 'Width preset',
+      type: 'select',
+      options: [20, 150, [200, '200 nice pixels'], 500],
+      value: 150, // should be one of the options
+      defaultValue: 150 // value for which to reset to (optional)
+      isToggled: false, // this knob will not take affect by default
     },
     {
       cssVar: ['height', 'vh'],

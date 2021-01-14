@@ -1,0 +1,17 @@
+.knobs select{
+  font: inherit;
+  background: none;
+  color: var(--textColor);
+  padding: 3px 0;
+  cursor: pointer;
+  border-radius: 3px;
+  outline: none;
+
+  &:hover{
+    box-shadow: 0 0 0 3px rgba(white, .2) inset;
+  }
+
+  option{
+    background: var(--background);
+  }
+}

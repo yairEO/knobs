@@ -11,7 +11,8 @@
 - [x] Fix checkbox alignment when in compact-mode
 - [x] Add ability to pre-define a knob as non-checked
 - [x] Presist knob checkbox (enable/disable) as well
-- [ ] add dropdown knob (select)
+- [x] Add title attribute (the input's value) to color input elements
+- [x] add dropdown knob (select)
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)
 - [ ] Optionally Add (-) (+) buttons to range sliders for sensetive changes (vaie Knob JSON)

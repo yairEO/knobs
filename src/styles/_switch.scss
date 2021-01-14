@@ -20,6 +20,11 @@
     --thumb-animation-pad: 15%;
     --size: 1em;
 
+    .switch__gfx{
+      background: none;
+      border: 1px solid var(--bg, var(--color-bg));
+    }
+
     input:focus + div{ outline: none; }
   }
 }
