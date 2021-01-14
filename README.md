@@ -19,7 +19,7 @@
 <p align="center">
 <br>
   <a href='https://codepen.io/vsync/pen/KKMwyRO'>
-      <img src="./demo.gif?sanitize=true" alt="Knobs"/>
+      <img src="./demo.apng?sanitize=true" alt="Knobs"/>
   </a>
 <br>
 <p>
