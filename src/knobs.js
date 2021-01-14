@@ -186,7 +186,7 @@ Knobs.prototype = {
    */
   knobAttrs(data){
     var attributes = `name="${data.__name}" is-knob-input`,
-        blacklist = ['label', 'type', 'onchange', 'options', 'selected', 'cssvar', '__name']
+        blacklist = ['label', 'type', 'onchange', 'options', 'selected', 'cssvar', '__name', 'istoggled', 'defaultchecked', 'defaultvalue']
 
     for( var attr in data ){
       if( attr == 'checked' && !data[attr] ) continue
@@ -273,15 +273,18 @@ Knobs.prototype = {
    */
   applyKnobs( knobsData, reset ){
     (knobsData || this._knobs).forEach(d => {
-      if( !d || !d.type || d.isToggled === false ) return
-
       const isType = name => d.type == name
 
       var inputElm = this.getInputByName(d.__name),
-          e = { target:inputElm },
-          vKey = reset ? 'defaultValue' : 'value',
-          checkedKey = reset ? 'defaultChecked' : 'checked',
-          resetTitle;
+      e = { target:inputElm },
+      vKey = reset ? 'defaultValue' : 'value',
+      checkedKey = reset ? 'defaultChecked' : 'checked',
+      resetTitle;
+
+      if( d.type == 'select' )
+        inputElm.parentNode.style.setProperty('--value', d.value);
+
+      if( !d || !d.type || d.isToggled === false ) return
 
       if( isType('checkbox') ){
         resetTitle = inputElm.checked = !!d.checked
