@@ -24,7 +24,7 @@ export default [
       livereload({ watch:'src', delay:1500, exts: [ 'html', 'js', 'scss', 'css' ] }),
     //  terser(),
       babel({ babelHelpers: 'bundled' }),
-      scss({ output: false, outputStyle: 'compressed', watch: 'src/styles', }),
+      scss({ output: false, watch: 'src/styles', }),
       cleanup(),
       nodeResolve(),
       commonjs()

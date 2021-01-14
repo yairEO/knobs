@@ -132,7 +132,7 @@ export function onInput(e){
 /**
  * only for knobs inputs
  */
-export function onChange(e){
+export function onChange(e, ignoreSimilar){
   this.setKnobChangedFlag( this.getKnobElm(e.target.name) )
 
   const knobData = this.getKnobDataByName(e.target.name),
@@ -142,14 +142,14 @@ export function onChange(e){
   if( !knobData )
     return
 
-  const similarKnobs = this.getSimilarKnobs(knobData)
+  const similarKnobs = ignoreSimilar ? [] : this.getSimilarKnobs(knobData)
 
   if( similarKnobs.length ){
     similarKnobs.forEach(knob => {
       const inputElm = this.getInputByName(knob.__name)
-        inputElm.value = knobData.value
-        this.onInput({ target:inputElm })
-      })
+      inputElm.value = knobData.value
+      this.onInput({ target:inputElm })
+    })
   }
 
   if( !isCheckbox && !this.settings.live )

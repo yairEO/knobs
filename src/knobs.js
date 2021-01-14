@@ -231,7 +231,7 @@ Knobs.prototype = {
     return this.knobs.filter(knob =>
       knob?.cssVar?.[0] &&
       knob?.cssVar?.[0] == toKnob?.cssVar?.[0] && // affects same CSS variable
-      knob.__name != toKnob.__name // ignore current knob which was just changed
+      knob.__name != toKnob.__name // exclude itself
     )
   },
 
@@ -298,20 +298,20 @@ Knobs.prototype = {
       // the "select" knob.
       if( inputElm.value !== '' || inputElm.value === d.value ){
         this.onInput(e)
-        this.onChange(e)
+        this.onChange(e, true)
       }
 
       // for some reason, if the form was reset through the "reset" input,
       // the range slider's thumb is not moved because the value has not been refistered by the browser..
       // so need to set the value again..
       // SEEMS THE BUG HAS BEEN FIXED IN LATEST CHROME
-    //  setTimeout(() => {
+      setTimeout(() => {
         if( !isType('checkbox') )
           inputElm.value = d[vKey]
 
         if( isType('color') )
           inputElm.title = inputElm.value
-     // })
+      })
 
       this.setKnobChangedFlag(this.getKnobElm(d.__name), d.value != d.defaultValue)
     })
