@@ -69,7 +69,7 @@
 
       &:not(:checked) ~ *{
         pointer-events: none !important;
-        filter: grayscale(100%);
+        filter: grayscale(50%);
         opacity: .4;
         transition: .2s;
 

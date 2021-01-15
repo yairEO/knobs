@@ -236,6 +236,17 @@ Knobs.prototype = {
   },
 
   /**
+   * sets the parent of an input element with some CSS variables
+   * @param {HTMLElement} inputElm input element
+   */
+  setParentNodeValueVars( inputElm ){
+    inputElm && [
+      ['--value', inputElm.value],
+      ['--text-value', JSON.stringify(inputElm.value)]
+    ].forEach(([name, value]) => inputElm?.parentNode.style.setProperty(name, value))
+  },
+
+  /**
    * updates the relevant DOM node (if CSS variable is applied)
    * should fire from a knob's input's (onchange) event listener
    * @param {Object}
@@ -281,8 +292,7 @@ Knobs.prototype = {
       checkedKey = reset ? 'defaultChecked' : 'checked',
       resetTitle;
 
-      if( d.type == 'select' )
-        inputElm.parentNode.style.setProperty('--value', d.value);
+      this.setParentNodeValueVars(inputElm)
 
       if( !d || !d.type || d.isToggled === false ) return
 

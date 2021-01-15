@@ -118,9 +118,7 @@ export function onInput(e){
         isCheckbox = type == 'checkbox',
         { label } = this.getKnobDataByName(e.target.name)
 
-  inputElm.parentNode.style.setProperty('--value', value);
-  inputElm.parentNode.style.setProperty('--text-value', JSON.stringify(value))
-
+  this.setParentNodeValueVars(inputElm)
   this.setKnobDataByName(e.target.name, isCheckbox ? {checked} : {value})
 
   if( value != undefined && label )
