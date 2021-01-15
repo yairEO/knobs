@@ -202,6 +202,7 @@ npm i @yaireo/Knobs
 **Or include the JS file from a CDN source:**
 
 Get latest version due to current freequent updates: [unpkg.com/@yaireo/knobs@latest](unpkg.com/@yaireo/knobs@latest)
+>>>>>>> 15c8aea7b8d896692557ce7b32104025ab4993bb
 
 
 ## Example:
