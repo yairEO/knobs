@@ -199,9 +199,9 @@ An option can be split to the actual value it represents and its textual value, 
 npm i @yaireo/Knobs
 ```
 
-**Or include the JS file from a CDN source:**
+**CDN source:**
 
-Get latest version due to current freequent updates: [unpkg.com/@yaireo/knobs@latest](https://unpkg.com/@yaireo/knobs@latest)
+[https:unpkg.com/@yaireo/knobs@latest](https://unpkg.com/@yaireo/knobs@latest)
 
 
 ## Example:
