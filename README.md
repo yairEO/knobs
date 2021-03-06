@@ -201,7 +201,7 @@ npm i @yaireo/Knobs
 
 **CDN source:**
 
-[https:unpkg.com/@yaireo/knobs@latest](https://unpkg.com/@yaireo/knobs@latest)
+[https://unpkg.com/@yaireo/knobs@latest](https://unpkg.com/@yaireo/knobs@latest)
 
 
 ## Example:
