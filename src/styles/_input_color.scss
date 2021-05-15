@@ -9,13 +9,12 @@ label[data-type="color"]{
       height: calc(var(--color-size) - 2px); // same as border
       // transition: .2s var(--in-easing);
       background: var(--background) repeating-conic-gradient(#FFFFFF44 0% 25%, transparent 0% 50%) 0/7px 7px; // checkboard pattern
-      border: 2px solid transparent;
     }
   }
 
   &:hover > .knobs__knob__inputWrap > div{
-   // width: calc(var(--color-size) * 3);
-   box-shadow: 0 0 0 1px #FFFFFF66; // needed in case a color is same as knobs background
+    animation: colorHover .3s ease-out;
+   // box-shadow: 0 0 0 1px #FFFFFF66; // needed in case a color is same as knobs background
   }
 
   input{
@@ -32,4 +31,9 @@ label[data-type="color"]{
       color: transparent;
     }
   }
+}
+
+@keyframes colorHover{
+  30%{ width: calc(var(--color-size) * 4.5) }
+  60%{ width: calc(var(--color-size) * 3.5) }
 }

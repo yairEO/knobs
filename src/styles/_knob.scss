@@ -11,6 +11,7 @@
     display: flex;
     position: relative;
     line-height: var(--line-height);
+    min-height: 24px;
 
     &:hover{
       #{$self}__reset{
