@@ -42,11 +42,6 @@
         "name": "Yair Even-Or",
         "email": "vsync.design@gmail.com"
     },
-    "np": {
-        "yarn": false,
-        "contents": "dist",
-        "yolo": true
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/yairEO/knobs.git"
