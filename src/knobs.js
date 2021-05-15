@@ -1,5 +1,4 @@
 import ColorPicker from '@yaireo/color-picker'
-import { reposition } from 'nanopop'
 import mainStyles from './styles/styles.scss'
 import hostStyles from './styles/host.scss'
 import colorPickerStyles from '@yaireo/color-picker/dist/styles.css'
@@ -7,6 +6,7 @@ import isObject from './utils/isObject'
 import parseHTML from './utils/parseHTML'
 import { mergeDeep } from './utils/mergeDeep'
 import isModernBrowser from './utils/isModernBrowser'
+import position from './utils/position'
 import cloneKnobs from './cloneKnobs'
 import * as templates from './templates'
 import * as events from './events'
@@ -113,7 +113,7 @@ Knobs.prototype = {
     document.querySelectorAll('.color-picker').forEach(elm => elm != exceptNode && elm.classList.add('hidden'))
   },
 
-  toggleColorPicker( inputElm ){
+  toggleColorPicker( inputElm, pos ){
     const { value } = inputElm,
           // { position } = this.settings.theme,
           // totalHeight = this.DOM.scope.clientHeight,
@@ -166,7 +166,7 @@ Knobs.prototype = {
 
     // small delay before the Node is safely in the DOM
     setTimeout(()=>{
-      reposition( this.DOM.iframe, cPicker.DOM.scope )
+      position(cPicker.DOM.scope, pos)
       cPicker.DOM.scope.classList.remove('hidden')
     }, 100)
 
@@ -221,7 +221,8 @@ Knobs.prototype = {
   },
 
   getKnobElm( name ){
-    return this.getInputByName(name).closest('.knobs__knob')
+    const node = this.getInputByName(name)
+    return node ? node.closest('.knobs__knob') : undefined
   },
 
   /**

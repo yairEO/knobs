@@ -72,7 +72,6 @@
     "dependencies": {
         "@yaireo/color-picker": "^0.10.1",
         "@yaireo/ui-range": "^2.1.15",
-        "@yaireo/ui-switch": "^1.0.5",
-        "nanopop": "^2.1.0"
+        "@yaireo/ui-switch": "^1.0.5"
     }
 }

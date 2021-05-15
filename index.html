@@ -113,12 +113,32 @@
 
     setTimeout(knobs1.toggle.bind(knobs1), 1000)
 
+    var knobs3 = new Knobs({
+      live: false,
+      CSSVarTarget:[...settings.CSSVarTarget].slice(0,1),
+      knobs:["Only Title",...settings.knobs.slice(0,2)],
+      visible: 2,
+      theme: {
+        position: 'bottom right'
+      },
+      knobs: [
+        {
+          cssVar: ['width', 'px'],
+          label: 'Width',
+          type: 'range',
+          min: 0,
+          max: 500,
+          step: 50,
+        },
+        {type:'color', label:'color'}
+      ]
+    })
 
     var knobs2 = new Knobs({
       ...settings,
       live: false,
       CSSVarTarget:[...settings.CSSVarTarget].slice(0,1),
-      knobs:["Only Title",...settings.knobs.slice(0,2)],
+      knobs:["Only Title",...settings.knobs.slice(0,2), {type:'color', label:'color'}],
       theme:{
         position: 'top left',
         background:'midnightblue'

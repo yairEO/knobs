@@ -226,6 +226,10 @@ html, body{
     &::-webkit-scrollbar {
       display: none;
     }
+
+    > fieldset:first-child .knobs__knob:first-child .range-slider{
+      --value-offset-y: 14px;
+    }
   }
 
   &__legend{
