@@ -46,6 +46,7 @@ export function fieldset(knobsGroup){
   if( isObject(knobsGroup[0]) ){
     knobs = knobsGroup
   }
+
   else{
     [legend, ...knobs] = knobsGroup;
     let getLegendParams = legend instanceof Array ? { label:legend[0], checked:!!legend[1] } : { label:legend, checked:true }
@@ -81,9 +82,11 @@ function getLegend({ label, checked, knobsCount }){
   var id = label.replace(/ /g, '-') + Math.random().toString(36).slice(-6);
 
   return `<input hidden id="${id}" type="checkbox" ${checked ? "checked" : ""} class="toggleSection">
-          <label class='knobs__legend' for="${id}" title="Expand/Collapse">
-            ${label}
-            <span class='knobs__legend__knobsCount' css-util-before>${knobsCount}</span>
+          <label class="knobs__legend" ${label && `data-has-label`} for="${id}" title="Expand/Collapse">
+            <div>
+              ${label && `<span>${label}</span>`}
+              <span class='knobs__legend__knobsCount' css-util-before>${knobsCount}</span>
+            </div>
           </label>`
 }
 

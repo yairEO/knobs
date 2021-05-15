@@ -1,3 +1,1 @@
-export default function isObject(obj) {
-  return (obj+"") === "[object Object]"
-}
+export default obj => (obj+"") === "[object Object]"

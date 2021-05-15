@@ -13,6 +13,8 @@
 - [x] Presist knob checkbox (enable/disable) as well
 - [x] Add title attribute (the input's value) to color input elements
 - [x] add dropdown knob (select)
+- [x] Allows separator line without any text
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)
 - [ ] Optionally Add (-) (+) buttons to range sliders for sensetive changes (vaie Knob JSON)
+- [ ] Allow definding "options" alongside "slider" to show the dropdown at the same line as the slider

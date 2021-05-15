@@ -485,7 +485,7 @@ Knobs.prototype = {
     // this step is needed so each group (after item in the knobs array after a "label" item) could be
     // expanded/collapsed individually.
     var knobsGroups = this._knobs.reduce((acc, knobData) => {
-        if( knobData && !isObject(knobData) && acc[acc.length - 1].length ) acc.push([])
+        if( !isObject(knobData ) && acc[acc.length - 1].length ) acc.push([])
         acc[acc.length - 1].push(knobData)
         return acc
       }, [[]])

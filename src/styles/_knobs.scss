@@ -239,6 +239,13 @@ html, body{
     cursor: pointer;
     transition: .2s cubic-bezier(.45, 0, .2, 1);
 
+    &[data-has-label]{
+      gap: $lineGap;
+      &:hover{
+        gap: $lineGap * 2;
+      }
+    }
+
     &::before,
     &::after{
       content: '';
@@ -249,17 +256,18 @@ html, body{
       transition: inherit;
     }
 
-    &::before{ margin-right: $lineGap; }
-    &::after{ margin-left: $lineGap; }
-
-    &:hover:not(:active){
+    &:hover{
       opacity: .85;
-      &::before{ margin-right: $lineGap * 3;  }
-      &::after{ margin-left: $lineGap * 3;  }
+    }
+
+    > div{
+      display: flex;
+      align-items: center;
+      gap: $lineGap;
     }
 
     &__knobsCount{
-      margin-left: $lineGap;
+      display: inline-block;
       border-radius: 50%;
       width: 1.5em;
       height: 1.5em;
@@ -274,6 +282,10 @@ html, body{
         background: var(--textColor);
         opacity: .3;
       }
+
+      &:only-child{
+        margin: 0 $lineGap;
+      }
     }
   }
 
@@ -284,7 +296,6 @@ html, body{
         transform: scale(0);
         margin: 0;
         width: 0;
-        height: 0;
       }
 
       ~ .fieldset__group[transitioned]{

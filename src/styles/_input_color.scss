@@ -3,18 +3,19 @@ label[data-type="color"]{
   > .knobs__knob__inputWrap{
     & > div{
       display: inline-block;
-      border-radius: 50px;
+      border-radius: 5px;
       overflow: hidden;
-      width: var(--color-size);
-      height: var(--color-size);
-      transition: .3s var(--in-easing);
-      box-shadow: 0px 0px 7px -2px currentColor; // needed in case a color is same as knobs background
-      background: white repeating-conic-gradient(#DDD 0% 25%, transparent 0% 50%) 0/7px 7px;
+      width: calc(var(--color-size) * 4);
+      height: calc(var(--color-size) - 2px); // same as border
+      // transition: .2s var(--in-easing);
+      background: var(--background) repeating-conic-gradient(#FFFFFF44 0% 25%, transparent 0% 50%) 0/7px 7px; // checkboard pattern
+      border: 2px solid transparent;
     }
   }
 
   &:hover > .knobs__knob__inputWrap > div{
-    width: calc(var(--color-size) * 3);
+   // width: calc(var(--color-size) * 3);
+   box-shadow: 0 0 0 1px #FFFFFF66; // needed in case a color is same as knobs background
   }
 
   input{
