@@ -1,6 +1,6 @@
 {
     "name": "@yaireo/knobs",
-    "version": "1.0.4",
+    "version": "1.1.0",
     "homepage": "https://github.com/yairEO/knobs",
     "description": "UI knobs controllers for JS/CSS live manipulation of various parameters",
     "keywords": [
@@ -27,10 +27,6 @@
         "src/styles"
     ],
     "license": "MIT",
-    "_npmUser": {
-        "name": "vsync",
-        "email": "vsync.design@gmail.com"
-    },
     "browserslist": [
         ">3% and ie 11",
         "not dead",
