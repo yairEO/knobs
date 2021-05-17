@@ -191,7 +191,9 @@ Used for knobs of type `select`. An Array of options to render.
 An option can be split to the actual value it represents and its textual value, as the above example shows.
 
 **`knobClass`**
-Add your own *class* to the knob (row) element itself (for styling purposes)
+Add your own *class* to the knob (row) element itself (for styling purposes).
+Remember that in order to add custom styles, the `theme.styles` setting should be used, because all knobs
+are encapsulated within an *iframe* so your page styles won't affect anything that's inside.
 
 **`render`**
 Allows to render anything you want in the knob area.
