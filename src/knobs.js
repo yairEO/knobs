@@ -252,7 +252,7 @@ Knobs.prototype = {
    * should fire from a knob's input's (onchange) event listener
    * @param {Object}
    */
-  updateDOM({ cssVar, value, type, __name:name }){
+  updateDOM({ cssVar, value, type, isToggled, __name:name }){
     if( !cssVar || !cssVar.length ) return
 
     var [cssVarName, cssVarUnit, CSSVarTarget] = cssVar,
@@ -260,7 +260,7 @@ Knobs.prototype = {
         knobInput = this.getInputByName(name),
         action = 'setProperty';
 
-    if( type == 'checkbox' && knobInput && !knobInput.checked )
+    if( !isToggled || (type == 'checkbox' && knobInput && !knobInput.checked) )
       action = 'removeProperty';
 
     // units which are prefixed with '-' should not be used, and for presentational purposes only
@@ -397,7 +397,7 @@ Knobs.prototype = {
         // knob can be either a chekbox or an input element with an actual value
         keyVal = isToggled
           ? key == 'checked' ? knobData.checked : knobData.value
-          : key == 'checked' ? knobData.defaultChecked : knobData.defaultValue
+          : key == 'checked' ? knobData.defaultChecked : knobData.value
 
     knobData.isToggled = isToggled
     knobData[key] = keyVal

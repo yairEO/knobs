@@ -3,14 +3,14 @@ const is = (elm, cls) => elm.classList.contains(cls)
 
 export function bindEvents(){
   this.eventsRefs = this.eventsRefs || {
-    change: e => {
+    change(e){
       // only knobs' inputs have a "name" attribute
       if( !e.target.name ) return
 
       this.onChange(e)
     },
 
-    input: e => {
+    input(e){
       try{
         let isSectionToggler = is(e.target, 'toggleSection'),
         // sectionHeight,
@@ -35,21 +35,21 @@ export function bindEvents(){
         this.toggleKnob( e.target.dataset.forKnob, e.target.checked )
     },
 
-    transitionstart: e => {
-      // this dirst trick is needed to add "overflow:hidden" to the group while transitied
+    transitionstart(e){
+      // this dirty trick is needed to add "overflow:hidden" to the group while transitied
       if( is(e.target, 'fieldset__group__wrap') ){
         e.target.parentNode.setAttribute('transitioned', 1)
       }
     },
 
-    transitionend: e => {
+    transitionend(e){
       if( is(e.target, 'fieldset__group__wrap') ){
         e.target.parentNode.removeAttribute('transitioned')
         this.setIframeProps()
       }
     },
 
-    wheel: e => {
+    wheel(e){
       const { value, max, step, type } = e.target,
         delta = Math.sign(e.deltaY) * (+step||1) * -1 // normalize jump value to either -1 or 1
 
@@ -63,7 +63,7 @@ export function bindEvents(){
         this.onChange(e)
       }
     },
-    mainToggler: e => this.toggle(e.target.checked),
+    mainToggler(e){ this.toggle(e.target.checked) },
     reset : this.applyKnobs.bind(this, null, true),
     submit: this.onSubmit.bind(this),
     click : this.onClick.bind(this),
