@@ -189,8 +189,24 @@ Used for knobs of type `select`. An Array of options to render.
     [20, 150, [200, '200 nice pixels'], 500]
 
 An option can be split to the actual value it represents and its textual value, as the above example shows.
-</details>
 
+**`knobClass`**
+Add your own *class* to the knob (row) element itself (for styling purposes)
+
+**`render`**
+Allows to render anything you want in the knob area.
+Should return a *string* of HTML, for example:
+
+```js
+{
+  render: `
+    <button onclick='alert(1)'>1</button>
+    <button onclick='alert(2)'>2</button>
+  `,
+  knobClass: 'custom-actions'
+}
+```
+</details>
 
 
 ## Install:

@@ -47,11 +47,6 @@
       CSSVarTarget: document.querySelectorAll('.testSubject'),
       knobs: [
         {
-          type: 'button',
-          value: 'click me',
-          onChange: console.log
-        },
-        {
           cssVar: ['width', '-px'],
           label: 'Width',
           type: 'range',
@@ -59,6 +54,7 @@
           min: 0,
           max: 500,
           step: 50,
+          knobClass: 'width-knob'
         //  onChange: console.log
         },
         {
@@ -197,7 +193,14 @@
         cssVar: ['textColor', null, knobs1.DOM.scope],
         label: 'Text Color',
         type: 'color',
-      }
+      },
+      {
+        render: `
+          <button onclick='alert(1)'>1</button>
+          <button onclick='alert(2)'>2</button>
+        `,
+        knobClass: 'custom-actions'
+      },
     ]]
 
   /*
