@@ -3,7 +3,7 @@ import isObject from './utils/isObject'
 export default function(knobs, persistedData){
   return knobs.map(k => {
     if( k && k.type ){
-        k.__name = k.__name || k.label.replace('/ /g','-') + Math.random().toString(36).slice(-6)
+        k.__name = k.__name || (k.label?.replace('/ /g','-') || '') + Math.random().toString(36).slice(-6)
         k.defaultValue = k.defaultValue ?? k.value ?? this.getKnobValueFromCSSVar(k) // value to revert to, if wished to reset
         k.defaultChecked = k.defaultChecked ?? !!k.checked
 
@@ -12,7 +12,7 @@ export default function(knobs, persistedData){
 
       if( persistedData ){
         // if current iterated knob exists in the persisted data array, use it
-        let thisKnobPersistedData = persistedData.find(a => a.label == k.label)
+        let thisKnobPersistedData = persistedData.find(a => a.label && a.label == k.label)
         if( thisKnobPersistedData ){
           if( k.defaultValue )
             thisKnobPersistedData.defaultValue = k.defaultValue

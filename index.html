@@ -47,6 +47,11 @@
       CSSVarTarget: document.querySelectorAll('.testSubject'),
       knobs: [
         {
+          type: 'button',
+          value: 'click me',
+          onChange: console.log
+        },
+        {
           cssVar: ['width', '-px'],
           label: 'Width',
           type: 'range',
