@@ -1,6 +1,6 @@
 {
     "name": "@yaireo/knobs",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "homepage": "https://github.com/yairEO/knobs",
     "description": "UI knobs controllers for JS/CSS live manipulation of various parameters",
     "keywords": [
