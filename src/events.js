@@ -80,7 +80,7 @@ export function bindEvents(){
     ['form', 'transitionend'],
     ['form', 'transitionstart'],
     ['scope', 'wheel'],
-    ['mainToggler', 'change', this.eventsRefs.mainToggler],
+    ['mainToggler', 'change', this.eventsRefs.mainToggler.bind(this)],
   ].forEach(([elm, event, cb]) =>
     this.DOM[elm] && this.DOM[elm].addEventListener(event,  cb || this.eventsRefs[event].bind(this), { passive:false })
   )
