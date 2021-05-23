@@ -60,6 +60,22 @@
         border-radius: 3px;
       }
 
+      &::after{
+        content: '';
+        height: 100%;
+        z-index: 5;
+        width: 999px;
+        position: absolute;
+        left: 0;
+        pointer-events: none;
+      }
+
+      &:hover{
+        &::before{
+          opacity: 1;
+        }
+      }
+
       &:checked{
         &:hover ~ *{
           text-decoration: line-through;

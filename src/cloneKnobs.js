@@ -7,8 +7,9 @@ export default function(knobs, persistedData){
         k.defaultValue = k.defaultValue ?? k.value ?? this.getKnobValueFromCSSVar(k) // value to revert to, if wished to reset
         k.defaultChecked = k.defaultChecked ?? !!k.checked
 
-      if( !this.settings.knobsToggle && k.isToggled === false )
-        delete k.isToggled
+        k.isToggled = k.isToggled ?? true;
+      // if( !this.settings.knobsToggle && k.isToggled === false )
+      //   delete k.isToggled
 
       if( persistedData ){
         // if current iterated knob exists in the persisted data array, use it
