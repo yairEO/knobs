@@ -1,3 +1,8 @@
+/**
+ * positions a DOM element next to a certain position
+ * @param {HTMLElement} elm DOM element node
+ * @param {Object} pos x,y which should probably be within the viewport visible area
+ */
 export default (elm, pos) => {
   const overflowOffset = 20;
 
@@ -22,5 +27,6 @@ export default (elm, pos) => {
       // pos.y < elmSize.h // overflows top
   }
 
-  elm.style.cssText = `left: ${newPos.left}; top: ${newPos.top}`
+  elm.style.left = newPos.left;
+  elm.style.top = newPos.top;
 }

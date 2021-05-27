@@ -159,6 +159,8 @@ Knobs.prototype = {
       },
     })
 
+    // cPicker.setColor(value)
+
     if( !document.body.contains(cPicker.DOM.scope) ){
       inputElm.colorPicker = cPicker
       document.body.appendChild(cPicker.DOM.scope)
