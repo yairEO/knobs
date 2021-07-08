@@ -15,6 +15,7 @@
 - [x] add dropdown knob (select)
 - [x] Allows separator line without any text
 - [x] when changing slider value & disabling & enabling - does not re-apply the slider's value
+- [ ] Add Label titles - when hovering a label, should show a tooltip with optional explanation 
 - [ ] Add custom buttons
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)
