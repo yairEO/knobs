@@ -72,6 +72,7 @@ html, body{
 }
 
 .knobs {
+  --background: hsl(var(--base-color), var(--base-color-l));
   --range-track-color: var(--primaryColor);
   --knobs-gap: 3px;
   --side-pad: 12px;
@@ -206,7 +207,8 @@ html, body{
     }
 
     & .range-slider,
-    & input[type=text] {
+    & input[type=text]:not([size]),
+    & input[type=number]:not([size]) {
       min-width: 200px;
     }
 

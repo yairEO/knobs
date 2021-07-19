@@ -32,6 +32,10 @@
   <a class='testSubject'></a>
   <div class='testSubject'></div>
   <script>
+    const {changeColorFormat} = Knobs;
+    Knobs = Knobs.default;
+
+
     var settings = {
       theme: {
         styles: `
@@ -45,11 +49,17 @@
       },
       // live: false, // should update immediately (default true)
       // standalone: true,
-      visible: 0, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
-      persist: true, // persist changes using the browser's localstorage
+      visible: 1, // 0 - starts as hidden, 1 - starts as visible, 2 - always visible
+      persist: 0, // persist changes using the browser's localstorage. use a string to be able to flush the cache
       knobsToggle: true,
       CSSVarTarget: document.querySelectorAll('.testSubject'),
       knobs: [
+        {
+          label: 'Text',
+          type: 'number',
+          // size: 10,
+          placeholder: 'Type something'
+        },
         {
           cssVar: ['width', '-px'],
           label: 'Width',
@@ -111,11 +121,12 @@
           value: 'none',
         //  onChange: console.log
         },
+
       ]
     }
 
     var knobs1 = new Knobs(settings)
-
+/*
     setTimeout(knobs1.toggle.bind(knobs1), 1000)
 
     var knobs3 = new Knobs({
@@ -200,7 +211,7 @@
       },
       {
         render: `
-          <button onclick='alert(1)'>1</button>
+          <button onclick='xxx'>1</button>
           <button onclick='alert(2)'>2</button>
         `,
         knobClass: 'custom-actions'

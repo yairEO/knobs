@@ -1,4 +1,4 @@
-import ColorPicker from '@yaireo/color-picker'
+import ColorPicker, { changeColorFormat, CSStoHSLA } from '@yaireo/color-picker'
 import mainStyles from './styles/styles.scss'
 import hostStyles from './styles/host.scss'
 import colorPickerStyles from '@yaireo/color-picker/dist/styles.css'
@@ -7,6 +7,7 @@ import parseHTML from './utils/parseHTML'
 import { mergeDeep } from './utils/mergeDeep'
 import isModernBrowser from './utils/isModernBrowser'
 import position from './utils/position'
+import getKnobsGroups from './utils/getKnobsGroups'
 import cloneKnobs from './cloneKnobs'
 import * as templates from './templates'
 import * as events from './events'
@@ -56,7 +57,7 @@ Knobs.prototype = {
   },
 
   /**
-   * Generate styles for the iframe using the "theme" property in the settings
+   * Generate styles for the iframe's <body> using the "theme" property in the settings
    * @param {Object} vars
    */
   getCSSVariables({ flow, styles, RTL, position, ...vars }){
@@ -65,6 +66,12 @@ Knobs.prototype = {
     // "knobsToggle" is not in the "theme" prop, and it's a special case where a variable is needed
     if( this.settings.knobsToggle )
       vars['knobs-toggle'] = 1
+
+    // automatically convert the color to HSLA so further manipulations could be made
+    const baseColor = CSStoHSLA(changeColorFormat(vars['base-color'], 'hsl'))
+    vars['base-color'] = `${baseColor[0]}, ${baseColor[1]}%`
+    vars['base-color-l'] = `${baseColor[2]}%`
+    vars['base-color-a'] = `${baseColor[3]}%`
 
     for( p in vars )
       output += `--${p}:${vars[p]}; `
@@ -214,7 +221,7 @@ Knobs.prototype = {
 
       for( let key in d )
         // if type number, cast
-        knobData[key] = +d[key] == d[key] ? +d[key] : d[key]
+        knobData[key] = +d[key] === d[key] ? +d[key] : d[key]
     }
   },
 
@@ -487,11 +494,7 @@ Knobs.prototype = {
     // maps a flat knobs array into multiple groups, after each label (if label exists)
     // this step is needed so each group (after item in the knobs array after a "label" item) could be
     // expanded/collapsed individually.
-    var knobsGroups = this._knobs.reduce((acc, knobData) => {
-        if( !isObject(knobData ) && acc[acc.length - 1].length ) acc.push([])
-        acc[acc.length - 1].push(knobData)
-        return acc
-      }, [[]])
+    var knobsGroups = getKnobsGroups(this._knobs)
 
     //create an HTML-string from the template
     var fieldsetElms = knobsGroups.map(this.templates.fieldset.bind(this)).join("")
@@ -515,6 +518,8 @@ Knobs.prototype = {
       ${hostStyles}
       </style>`)
   }
-}
+};
 
-export default Knobs
+export { changeColorFormat };
+
+export default Knobs;
