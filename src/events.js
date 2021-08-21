@@ -135,7 +135,8 @@ export function onChange(e, ignoreSimilar){
 
   const knobData = this.getKnobDataByName(e.target.name),
         runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
-        isCheckbox = knobData && knobData.type == 'checkbox';
+        isCheckbox = knobData && knobData.type == 'checkbox',
+        extraData = {}
 
   if( !knobData )
     return
@@ -158,7 +159,10 @@ export function onChange(e, ignoreSimilar){
 
   raf(() => this.updateDOM(knobData))
 
-  typeof knobData.onChange == 'function' && knobData.onChange(e, knobData)
+  if( knobData.type === 'color' )
+    extraData.hsla = CSStoHSLA(changeColorFormat(knobData.value, 'HSL'))
+
+  typeof knobData.onChange == 'function' && knobData.onChange(e, knobData, extraData)
 }
 
 /**

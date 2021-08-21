@@ -32,7 +32,7 @@
   <a class='testSubject'></a>
   <div class='testSubject'></div>
   <script>
-    const {changeColorFormat} = Knobs;
+    const { changeColorFormat, CSStoHSLA } = Knobs;
     Knobs = Knobs.default;
 
 
@@ -104,8 +104,9 @@
           cssVar: ['bg'], // alias for the CSS variable
           label: 'Box color',
           type: 'color',
+          defaultFormat: 'hsla',
         //  value: '#45FDA9',
-        //  onChange: console.log
+          onChange: (a,b,c) => console.log(  c   )
         },
         {
           cssVar: ['main-bg', null, document.body], // [alias for the CSS variable, units, applies on element]
