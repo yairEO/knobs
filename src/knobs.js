@@ -121,7 +121,8 @@ Knobs.prototype = {
   },
 
   toggleColorPicker( inputElm, pos ){
-    const { value } = inputElm,
+    const { value, name } = inputElm,
+          knobData = this.getKnobDataByName(name), // TODO: continue this..
           // { position } = this.settings.theme,
           // totalHeight = this.DOM.scope.clientHeight,
           that = this
@@ -135,6 +136,7 @@ Knobs.prototype = {
     }
 
     cPicker = cPicker || new ColorPicker({
+      defaultFormat: knobData.defaultFormat,
       color: value,
       className: 'hidden',
       swatches: [],
@@ -520,6 +522,6 @@ Knobs.prototype = {
   }
 };
 
-export { changeColorFormat };
+export { changeColorFormat, CSStoHSLA };
 
 export default Knobs;
