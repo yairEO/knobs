@@ -4,7 +4,7 @@ import hostStyles from './styles/host.scss'
 import colorPickerStyles from '@yaireo/color-picker/dist/styles.css'
 import isObject from './utils/isObject'
 import parseHTML from './utils/parseHTML'
-import { mergeDeep } from './utils/mergeDeep'
+import mergeDeep from './utils/mergeDeep'
 import isModernBrowser from './utils/isModernBrowser'
 import position from './utils/position'
 import getKnobsGroups from './utils/getKnobsGroups'
@@ -13,6 +13,7 @@ import * as templates from './templates'
 import * as events from './events'
 import * as persist from './persist'
 import DEFAULTS from './defaults'
+import EventDispatcher from './utils/EventDispatcher'
 
 function Knobs(settings){
   // since Knobs relies on CSS variables, no need to proceed if browser support is inadequate
@@ -23,6 +24,7 @@ function Knobs(settings){
 
   // for the rest, deep cloining appear to work fine
   this.settings = mergeDeep({...DEFAULTS, appendTo:document.body}, restOfSettings)
+  mergeDeep(this, EventDispatcher());
   this.knobs = knobs
   this.DOM = {}
   this.state = {}
@@ -519,6 +521,9 @@ Knobs.prototype = {
       ${colorPickerStyles}
       ${hostStyles}
       </style>`)
+
+    this.trigger('render');
+    this.settings?.callbacks?.render()
   }
 };
 
