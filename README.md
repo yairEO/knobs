@@ -148,6 +148,10 @@ applying the variable.
 
 A text which is displayed alongside the knob
 
+**`labelTitle`**
+
+Optional `title` attribute for the knob's label
+
 **`value`**
 
 Acts as the initial value of the *knob*, except for `checkbox` *knobs*, in which case,
@@ -228,6 +232,11 @@ npm i @yaireo/Knobs
 import Knobs from '@yaireo/knobs'
 ```
 
+#### Additionaly Exported:
+
+`changeColorFormat` & `CSStoHSLA` - See [color-picker docs](https://github.com/yairEO/color-picker#helper-methods-exported-alongside-the-default-colorpicker)
+
+
 ### Defining Knobs:
 
 ```js
@@ -248,6 +257,7 @@ var settings = {
     {
       cssVar: ['width', '-px'], // prefix unit with '-' makes it only a part of the title but not of the variable
       label: 'Width',
+      labelTitle: 'Changes the width at steps of 50 pixels',
       type: 'range',
       value: 200,
       min: 0,
@@ -287,6 +297,7 @@ var settings = {
       cssVar: ['bg'], // alias for the CSS variable
       label: 'Color',
       type: 'color',
+      defaultFormat: 'hsla',
       value: '#45FDA9',
       onChange: console.log
     },

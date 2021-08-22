@@ -71,7 +71,7 @@ export function knob(data){
     return `<div class='knobs__knob ${data.knobClass||''}'>
         <input type='checkbox' css-util-before data-for-knob='${data.__name}' ${data.isToggled === false ? "" : "checked"} class='knobs__knob__toggle' title='Temporarily disable the knob' />
         <label data-type='${data.type}'>
-          ${data.label ? `<div class='knobs__knob__label' ${data.cssVar && data.cssVar[1] ? `data-units='${data.cssVar[1].replace('-','')}'` : ''}>${data.label}</div>` : ''}
+          ${data.label ? `<div class='knobs__knob__label' title='${data.labelTitle||''}' ${data.cssVar && data.cssVar[1] ? `data-units='${data.cssVar[1].replace('-','')}'` : ''}>${data.label}</div>` : ''}
           <div class='knobs__knob__inputWrap'>
             ${getInput.call(this, data)}
           </div>
