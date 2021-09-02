@@ -5,15 +5,14 @@
   <a href='https://simple.wikipedia.org/wiki/MIT_License'>
       <img src="https://img.shields.io/badge/license-MIT-lightgrey" />
   </a>
-  <img src="https://img.shields.io/bundlephobia/minzip/@yaireo/knobs" />
 </p>
 
 <h1 align="center">
-  <a href='https://codepen.io/vsync/pen/KKMwyRO'>Knobs</a> - UI controllers for JS/CSS live manipulation
+  <a href='https://codepen.io/vsync/pen/KKMwyRO'>Knobs</a> - UI controllers for JS/CSS manipulation
 </h1>
 
 <h3 align="center">
-  👉 Demos: <a href='https://codepen.io/vsync/pen/KKMwyRO' target='_blank'>Codepen</a> 👈
+  👉 <a href='https://codepen.io/vsync/pen/KKMwyRO' target='_blank'>Demo</a> 👈
 </h3>
 
 <p align="center">
@@ -23,6 +22,14 @@
   </a>
 <br>
 <p>
+
+
+|              | Size
+|--------------|-------------------------|
+| Minified     | 54kb
+| Brotli       | 13.5kb
+| GZIP         | 15kb
+
 
 ## What is this:
 
@@ -40,9 +47,10 @@ It's so easy & quick to use Knobs, about 1 minute!
 
 ### Features:
 
-* `Range` input (*wheel*-supported)
-* `Color` input with awesome custom [color picker](https://github.com/yairEO/color-picker)
-* `Checkbox` input
+* `range` input (*wheel*-supported)
+* `color` input with awesome custom [color picker](https://github.com/yairEO/color-picker)
+* `checkbox` input
+* `radio` inputs group
 * `select` dropdown (native)
 * Resset all (to defaults)
 * Reset individual
@@ -237,6 +245,12 @@ import Knobs from '@yaireo/knobs'
 `changeColorFormat` & `CSStoHSLA` - See [color-picker docs](https://github.com/yairEO/color-picker#helper-methods-exported-alongside-the-default-colorpicker)
 
 
+If *Knobs* is used on a webpage as a script tag (not imported as ESM/UMD)
+```js
+const { changeColorFormat, CSStoHSLA } = Knobs.color;
+Knobs = Knobs.default;
+```
+
 ### Defining Knobs:
 
 ```js
@@ -278,10 +292,23 @@ var settings = {
       cssVar: ['height', 'vh'],
       label: 'Height',
       type: 'range',
-      value: 20,
+      // value: 20,  // if a value is not defined, Knobs will try to get it from the CSS ("CSSVarTarget" selector) automatically
       min: 0,
       max: 100,
       onChange: console.log
+    },
+    {
+      cssVar: ['align'],
+      label: 'Align boxes',
+      type: 'radio',
+      name: 'align-radio-group',
+      options: [
+        { value:'left', hidden:true, label: '<svg viewBox="0 0 28 28"><path d="M28 21v2c0 0.547-0.453 1-1 1h-26c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h26c0.547 0 1 0.453 1 1zM22 15v2c0 0.547-0.453 1-1 1h-20c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h20c0.547 0 1 0.453 1 1zM26 9v2c0 0.547-0.453 1-1 1h-24c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h24c0.547 0 1 0.453 1 1zM20 3v2c0 0.547-0.453 1-1 1h-18c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h18c0.547 0 1 0.453 1 1z"></path></svg>' },
+        { value: 'center', label:'Center' },
+        { value:'right', hidden:true, label:'<svg viewBox="0 0 28 28"><path d="M28 21v2c0 0.547-0.453 1-1 1h-26c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h26c0.547 0 1 0.453 1 1zM28 15v2c0 0.547-0.453 1-1 1h-20c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h20c0.547 0 1 0.453 1 1zM28 9v2c0 0.547-0.453 1-1 1h-24c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h24c0.547 0 1 0.453 1 1zM28 3v2c0 0.547-0.453 1-1 1h-18c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h18c0.547 0 1 0.453 1 1z"></path></svg>' }
+      ],
+      value: 'center',
+      defaultValue: 'left'
     },
     {
       cssVar: ['radius', '%'],

@@ -19,7 +19,7 @@
         // transform: none;
       }
 
-      #{$self}__label{
+      #{$self}__label__text{
         opacity: 1;
       }
     }
@@ -124,7 +124,7 @@
       transition: .15s ease-out;
     }
 
-    &__label {
+    &__label__text {
       margin-right: 2ch;
       white-space: nowrap;
       display: flex;

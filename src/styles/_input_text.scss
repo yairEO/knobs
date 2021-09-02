@@ -7,7 +7,7 @@ label[data-type="text"], label[data-type="number"]{
     color: var(--textColor);
     outline: none;
     border: 0;
-    background: HSL(var(--base-color), calc(var(--base-color-l) + 15%));
+    background: var(--opaqueColor-15);
 
     &:focus{
       box-shadow: 0 0 0 1px HSL(var(--base-color), calc(var(--base-color-l) + 22%));

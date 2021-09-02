@@ -73,6 +73,7 @@ html, body{
 
 .knobs {
   --background: hsl(var(--base-color), var(--base-color-l));
+  --opaqueColor-15: HSL(var(--base-color), calc(var(--base-color-l) + 15%));
   --range-track-color: var(--primaryColor);
   --knobs-gap: 3px;
   --side-pad: 12px;
@@ -84,6 +85,7 @@ html, body{
   --line-height: Max(0px, var(--color-size)); // units must be the same
   --knobs-group-transition: .33s cubic-bezier(.45, 0, .2, 1);
   --LTR-Bool: 1;  /* -1 for RTL */
+
 
   font: 12px/1 'Fira Sans Condensed', sans-serif;
   color: var(--textColor);
@@ -109,7 +111,7 @@ html, body{
         margin-top: .5ch;
       }
 
-      .knobs__label{
+      .knobs__label__text{
         margin: 0;
         padding: 0;
       }

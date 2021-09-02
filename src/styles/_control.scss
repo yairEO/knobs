@@ -5,7 +5,10 @@
   opacity: 0;
   flex-direction: row-reverse;
   // border-top: 1px solid var(--textColor);
-  margin: var(--side-pad) var(--control-right-pad, var(--side-pad)) var(--side-pad) var(--control-left-pad, var(--side-pad));
+  margin: var(--side-pad)
+          var(--control-right-pad, var(--side-pad))
+          5px
+          var(--control-left-pad, var(--side-pad));
   position: relative;
   z-index: 1;
 
@@ -15,6 +18,13 @@
     background: none;
     margin-left: 1em;
     line-height: 1;
+    padding: 5px 8px;
+    border-radius: 3px;
+    position: relative;
+
+    &:hover:not(:active){
+      background: var(--opaqueColor-15);
+    }
   }
 }
 

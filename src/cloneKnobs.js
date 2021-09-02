@@ -1,13 +1,15 @@
 import isObject from './utils/isObject'
 
+const generateId = () => Math.random().toString(36).slice(-6);
+
 export default function(knobs, persistedData){
   return knobs.map(k => {
     if( k && k.type ){
-        k.__name = k.__name || (k.label?.replace('/ /g','-') || '') + Math.random().toString(36).slice(-6)
-        k.defaultValue = k.defaultValue ?? k.value ?? this.getKnobValueFromCSSVar(k) ?? ''// value to revert to, if wished to reset
-        k.defaultChecked = k.defaultChecked ?? !!k.checked
+      k.__name = k.__name || (k.label?.replaceAll(' ','-').toLowerCase() || '') + '-' + generateId()
+      k.defaultValue = k.defaultValue ?? k.value ?? this.getKnobValueFromCSSVar(k) ?? ''// value to revert to, if wished to reset
+      k.defaultChecked = k.defaultChecked ?? !!k.checked
 
-        k.isToggled = k.isToggled ?? true;
+      k.isToggled = k.isToggled ?? true;
       // if( !this.settings.knobsToggle && k.isToggled === false )
       //   delete k.isToggled
 
@@ -29,7 +31,7 @@ export default function(knobs, persistedData){
 
       // cast to type "number" if needed (per input type)
       if( k.type == 'range' ){
-        k.value = +k.value
+        k.value = +k.value || k.defaultValue
         k.defaultValue = +k.defaultValue
       }
       else if( k.type == 'checkbox' ){
@@ -38,8 +40,11 @@ export default function(knobs, persistedData){
       else{
         // value is not necessarily defined, if is wished to be feched from the CSS automatically
         k.value = k.value || k.defaultValue
-        console.log(k)
       }
+    }
+
+    if( k.render ) {
+      k.__name = "custom-" + generateId()
     }
 
     return k.cssVar

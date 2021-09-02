@@ -70,7 +70,8 @@ Knobs.prototype = {
       vars['knobs-toggle'] = 1
 
     // automatically convert the color to HSLA so further manipulations could be made
-    const baseColor = CSStoHSLA(changeColorFormat(vars['base-color'], 'hsl'))
+    const hslColor = changeColorFormat(vars['base-color'], 'hsl');  // example: "hsla(0, 0%, 0%, 100%)"
+    const baseColor = CSStoHSLA(hslColor)
     vars['base-color'] = `${baseColor[0]}, ${baseColor[1]}%`
     vars['base-color-l'] = `${baseColor[2]}%`
     vars['base-color-a'] = `${baseColor[3]}%`
@@ -123,7 +124,8 @@ Knobs.prototype = {
   },
 
   toggleColorPicker( inputElm, pos ){
-    const { value, name } = inputElm,
+    const value = inputElm.value,
+          name = inputElm.dataset.name,
           knobData = this.getKnobDataByName(name), // TODO: continue this..
           // { position } = this.settings.theme,
           // totalHeight = this.DOM.scope.clientHeight,
@@ -198,11 +200,15 @@ Knobs.prototype = {
    * @returns String
    */
   knobAttrs(data){
-    var attributes = `name="${data.__name}" is-knob-input`,
+    var attributes = `data-name="${data.__name}" is-knob-input`,
         blacklist = ['label', 'type', 'onchange', 'options', 'selected', 'cssvar', '__name', 'istoggled', 'defaultchecked', 'defaultvalue']
 
+    // each radio input has a `value` prop and the group itself (the knob) also has a value (initially from cloneKnobs.js)
+    if( data.type === 'radio' && data.groupValue === data.value )
+      data.checked = true;
+
     for( var attr in data ){
-      if( attr == 'checked' && !data[attr] ) continue
+      if( attr == 'checked' && !data[attr] ) continue  // if "checked" is "false", do not add this attribute
       if( !blacklist.includes(attr.toLowerCase()) )
         attributes += ` ${attr}="${data[attr]}"`
     }
@@ -211,7 +217,7 @@ Knobs.prototype = {
   },
 
   getKnobDataByName( name ){
-    return this._knobs.filter(Boolean).find(d => d.__name == name)
+    return this.knobs.filter(Boolean).find(d => d.__name == name)
   },
 
   /**
@@ -230,12 +236,13 @@ Knobs.prototype = {
   },
 
   getInputByName( name ){
-    return this.DOM.scope.querySelector(`[name="${name}"`)
+    const inputs = this.getKnobElm(name).querySelectorAll(`[data-name="${name}"`);
+
+    return inputs.length > 1 ? inputs : inputs[0]
   },
 
   getKnobElm( name ){
-    const node = this.getInputByName(name)
-    return node ? node.closest('.knobs__knob') : undefined
+    return this.DOM.scope.querySelector(`#${name}`)
   },
 
   /**
@@ -262,7 +269,7 @@ Knobs.prototype = {
 
   /**
    * updates the relevant DOM node (if CSS variable is applied)
-   * should fire from a knob's input's (onchange) event listener
+   * should fire from a knob's input's (onChange) event listener
    * @param {Object}
    */
   updateDOM({ cssVar, value, type, isToggled, __name:name }){
@@ -297,18 +304,33 @@ Knobs.prototype = {
    * @param {Boolean} reset should the value reset before applying
    */
   applyKnobs( knobsData, reset ){
-    (knobsData || this._knobs).forEach(d => {
-      const isType = name => d.type == name
+    (knobsData || this.knobs).forEach(d => {
+      if( !d || !d.__name || d.render ) return;  // do not procceed if is a seperator
 
-      var inputElm = this.getInputByName(d.__name),
-      e = { target:inputElm },
-      vKey = reset ? 'defaultValue' : 'value',
-      checkedKey = reset ? 'defaultChecked' : 'checked',
-      resetTitle;
+      var isType = name => d.type == name,
+          inputElm = this.getInputByName(d.__name),
+          e,
+          vKey = reset ? 'defaultValue' : 'value',
+          checkedKey = reset ? 'defaultChecked' : 'checked',
+          resetTitle;
 
+      // knob of type "radio" is the only one which has multiple inputs,
+      // but only the seelcted (checked) one is the important one in this case
+      if( isType('radio') ){
+        inputElm = [...inputElm];
+
+        if( reset ){
+          inputElm = inputElm.find(el => el.value == d[vKey]) // when resetting - find the input which should now be checked
+          inputElm.checked = true
+        }
+        else
+          inputElm = inputElm.find(el => el.checked)
+      }
+
+      e = { target:inputElm }
       this.setParentNodeValueVars(inputElm)
 
-      if( !d || !d.type || d.isToggled === false ) return
+      if( !d.type || d.isToggled === false ) return
 
       if( isType('checkbox') ){
         resetTitle = inputElm.checked = !!d.checked
@@ -323,7 +345,7 @@ Knobs.prototype = {
       // so the select value won't take affect if the current value of the input is not one of the possible options.
       // This can happen if a range slider, which has more free-range, set the value to something else, which also affected
       // the "select" knob.
-      if( inputElm.value !== '' || inputElm.value === d.value ){
+      if( inputElm.value !== '' || inputElm.value === d[vKey] ){
         this.onInput(e)
         this.onChange(e, true)
       }
@@ -498,7 +520,7 @@ Knobs.prototype = {
     // maps a flat knobs array into multiple groups, after each label (if label exists)
     // this step is needed so each group (after item in the knobs array after a "label" item) could be
     // expanded/collapsed individually.
-    var knobsGroups = getKnobsGroups(this._knobs)
+    var knobsGroups = getKnobsGroups(this.knobs)
 
     //create an HTML-string from the template
     var fieldsetElms = knobsGroups.map(this.templates.fieldset.bind(this)).join("")
@@ -512,6 +534,9 @@ Knobs.prototype = {
     this.DOM.mainToggler && this.toggle(this.DOM.mainToggler.checked)
 
     this.applyKnobs()
+
+    // apply custom scripts (per knob)
+    this.knobs.forEach(knob => knob && knob.script && knob.script(this, knob.__name))
 
     // color picker CSS
     const hostCSSExists = [...document.styleSheets].some(s => s.title == '@yaireo/knobs')
@@ -527,6 +552,9 @@ Knobs.prototype = {
   }
 };
 
-export { changeColorFormat, CSStoHSLA };
+export const color = {
+  format: changeColorFormat,
+  CSStoHSLA
+};
 
 export default Knobs;

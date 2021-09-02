@@ -25,6 +25,7 @@
       width: calc(var(--width) * 1px);
       height: var(--height, 200px);
       overflow: hidden;
+      justify-self: var(--align);
     }
   </style>
 </head>
@@ -32,15 +33,15 @@
   <a class='testSubject'></a>
   <div class='testSubject'></div>
   <script>
-    const { changeColorFormat, CSStoHSLA } = Knobs;
-    Knobs = Knobs.default;
+    const { changeColorFormat, CSStoHSLA } = Knobs.color;
+    Knobs = Knobs.default;  // "Knobs" is already defined on the window globally
 
 
     var settings = {
       theme: {
         styles: `
           .custom-actions{ margin: 5px 0; }
-          .custom-actions button{ padding: 0 1em; }
+          .custom-actions button{ padding: 0 1em; font-size: 30px; }
         `
         // flow: 'compact',
         // position: 'bottom left', // default
@@ -53,9 +54,15 @@
       persist: 0, // persist changes using the browser's localstorage. use a string to be able to flush the cache
       knobsToggle: true,
       CSSVarTarget: document.querySelectorAll('.testSubject'),
+      callbacks: {
+        render(){
+          console.log("knobs 1 ready")
+        }
+      },
       knobs: [
         {
-          label: 'Text',
+          label: 'Number',
+          labelTitle: 'An ordinary input element',
           type: 'number',
           // size: 10,
           placeholder: 'Type something'
@@ -90,6 +97,21 @@
           value: 150,
           defaultValue: 150
         },
+
+        {
+          cssVar: ['align'],
+          label: 'Align boxes',
+          type: 'radio',
+          name: 'align-radio-group',
+          options: [
+            { value:'left', hidden:true, label: '<svg viewBox="0 0 28 28"><path d="M28 21v2c0 0.547-0.453 1-1 1h-26c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h26c0.547 0 1 0.453 1 1zM22 15v2c0 0.547-0.453 1-1 1h-20c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h20c0.547 0 1 0.453 1 1zM26 9v2c0 0.547-0.453 1-1 1h-24c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h24c0.547 0 1 0.453 1 1zM20 3v2c0 0.547-0.453 1-1 1h-18c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h18c0.547 0 1 0.453 1 1z"></path></svg>' },
+            { value: 'center', label:'Center' },
+            { value:'right', hidden:true, label:'<svg viewBox="0 0 28 28"><path d="M28 21v2c0 0.547-0.453 1-1 1h-26c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h26c0.547 0 1 0.453 1 1zM28 15v2c0 0.547-0.453 1-1 1h-20c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h20c0.547 0 1 0.453 1 1zM28 9v2c0 0.547-0.453 1-1 1h-24c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h24c0.547 0 1 0.453 1 1zM28 3v2c0 0.547-0.453 1-1 1h-18c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h18c0.547 0 1 0.453 1 1z"></path></svg>' }
+          ],
+          value: 'center',
+          defaultValue: 'left'
+        },
+
         "",
         {
           cssVar: ['radius', '%'],
@@ -106,7 +128,7 @@
           type: 'color',
           defaultFormat: 'hsla',
         //  value: '#45FDA9',
-          onChange: (a,b,c) => console.log(  c   )
+          onChange: (a,b,c) => console.log(  a,b,c   )
         },
         {
           cssVar: ['main-bg', null, document.body], // [alias for the CSS variable, units, applies on element]
@@ -122,13 +144,13 @@
           value: 'none',
         //  onChange: console.log
         },
-
       ]
     }
 
     var knobs1 = new Knobs(settings)
-/*
-    setTimeout(knobs1.toggle.bind(knobs1), 1000)
+
+
+    // setTimeout(knobs1.toggle.bind(knobs1), 1000)
 
     var knobs3 = new Knobs({
       live: false,
@@ -138,17 +160,6 @@
       theme: {
         position: 'bottom right'
       },
-      knobs: [
-        {
-          cssVar: ['width', 'px'],
-          label: 'Width',
-          type: 'range',
-          min: 0,
-          max: 500,
-          step: 50,
-        },
-        {type:'color', label:'color'}
-      ]
     })
 
     var knobs2 = new Knobs({
@@ -211,10 +222,26 @@
         type: 'color',
       },
       {
+        label: 'Custom with label',
         render: `
-          <button onclick='xxx'>1</button>
-          <button onclick='alert(2)'>2</button>
+          <button type='button' class='specialBtn1'>1</button>
+          <button type='button' class='specialBtn2'>2</button>
         `,
+        script(knobs, name){
+          knobs.getKnobElm(name).addEventListener("click", e => {
+            if( e.target.tagName == 'BUTTON' )
+              alert(e.target.textContent)
+          })
+        },
+      },
+      {
+        render: `
+          <button type='button' class='specialBtn3'>😎</button>
+        `,
+        script(knobs){
+          const elm = knobs.DOM.scope.querySelector('.specialBtn3')
+          elm.addEventListener("click", () => alert('😎'))
+        },
         knobClass: 'custom-actions'
       },
     ]]

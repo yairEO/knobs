@@ -15,9 +15,10 @@
 - [x] add dropdown knob (select)
 - [x] Allows separator line without any text
 - [x] when changing slider value & disabling & enabling - does not re-apply the slider's value
-- [ ] color inputs - add knob settings for `default format` & `formats` to enforce only certain formats
-- [ ] color inputs - expose color-converion functions from color-picker so they could be used in a knob's `onChange` callback
-- [ ] Add Label titles - when hovering a label, should show a tooltip with optional explanation 
+- [x] color inputs - add knob settings for `default format` &
+- [x] color inputs - expose color-converion functions from color-picker so they could be used in a knob's `onChange` callback
+- [ ] color inputs - add `formats` knob property to enforce only certain formats
+- [x] Add Label titles - when hovering a label, should show a tooltip with optional explanation
 - [ ] Allow customizing the in/out transition duration
 - [ ] Allow custom radio inputs (as icons for example)
 - [ ] Add custom buttons

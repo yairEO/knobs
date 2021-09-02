@@ -22,11 +22,6 @@
     .knobs__bg{
       top: auto;
     }
-
-
-    &[data-position~='right']{
-      --control-right-pad: var(--toggleSize);
-    }
   }
 
 

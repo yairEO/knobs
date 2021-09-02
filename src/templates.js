@@ -64,16 +64,17 @@ export function fieldset(knobsGroup){
 }
 
 export function knob(data){
-  if( data.render )
+  if( data.render && !data.label )
     return `<div class='knobs__knob ${data.knobClass||''}'>${data.render}</div>`
 
-  if( data && data.type )
-    return `<div class='knobs__knob ${data.knobClass||''}'>
+
+  if( data )
+    return `<div class='knobs__knob ${data.knobClass||''}' id="${data.__name}">
         <input type='checkbox' css-util-before data-for-knob='${data.__name}' ${data.isToggled === false ? "" : "checked"} class='knobs__knob__toggle' title='Temporarily disable the knob' />
-        <label data-type='${data.type}'>
-          ${data.label ? `<div class='knobs__knob__label' title='${data.labelTitle||''}' ${data.cssVar && data.cssVar[1] ? `data-units='${data.cssVar[1].replace('-','')}'` : ''}>${data.label}</div>` : ''}
+        <label data-type='${data.type || ''}' class='knobs__knob__label'>
+          ${data.label ? `<div class='knobs__knob__label__text' title='${data.labelTitle||''}' ${data.cssVar && data.cssVar[1] ? `data-units='${data.cssVar[1].replace('-','')}'` : ''}>${data.label}</div>` : ''}
           <div class='knobs__knob__inputWrap'>
-            ${getInput.call(this, data)}
+            ${data.render ? data.render : getInput.call(this, data)}
           </div>
         </label>
         <button type='button' name='${data.__name}' class='knobs__knob__reset' title='Reset'>↩</button>
@@ -94,7 +95,7 @@ function getLegend({ label, checked, knobsCount }){
 }
 
 function getInput( data ){
-  let { type, step, min, max, value, options } = data
+  let { label, type, step, min, max, value, name, options } = data
 
   if( type == 'range' )
     return `
@@ -110,6 +111,12 @@ function getInput( data ){
         <input type='${type}' ${this.knobAttrs(data)} class="switch__input">
         <div class='switch__gfx'></div>
       </div>`
+
+  if( type == 'radio' && options?.length ){
+    data.name = data.name || label.toLowerCase().replaceAll(' ','-');
+
+    return options.map((v, i) => `<label title="${options[i].value}"><input type='radio' ${this.knobAttrs({...data, groupValue:data.value, ...options[i]})}/><div>${v.label}</div></label>`).join('')
+  }
 
   if( type == 'select' && options?.length )
     return `

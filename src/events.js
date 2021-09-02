@@ -1,11 +1,13 @@
+import { changeColorFormat } from '@yaireo/color-picker'
+
 const raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60))
 const is = (elm, cls) => elm.classList.contains(cls)
 
 export function bindEvents(){
   this.eventsRefs = this.eventsRefs || {
     change(e){
-      // only knobs' inputs have a "name" attribute
-      if( !e.target.name ) return
+      // only knobs' inputs have a "data-name" attribute
+      if( !e.target.dataset.name ) return
 
       this.onChange(e)
     },
@@ -114,12 +116,12 @@ export function onFocus(e) {
  */
 export function onInput(e){
   const inputElm = e.target,
-        { type, value, checked } = inputElm,
+        { type, value, checked, dataset:{name} } = inputElm,
         isCheckbox = type == 'checkbox',
-        { label } = this.getKnobDataByName(e.target.name)
+        { label } = this.getKnobDataByName(name)
 
   this.setParentNodeValueVars(inputElm)
-  this.setKnobDataByName(e.target.name, isCheckbox ? {checked} : {value})
+  this.setKnobDataByName(name, isCheckbox ? {checked} : {value})
 
   if( value != undefined && label )
     // save knob's new value
@@ -131,15 +133,19 @@ export function onInput(e){
  * only for knobs inputs
  */
 export function onChange(e, ignoreSimilar){
-  this.setKnobChangedFlag( this.getKnobElm(e.target.name) )
+  const name = e.target.dataset.name;
 
-  const knobData = this.getKnobDataByName(e.target.name),
+  this.setKnobChangedFlag( this.getKnobElm(name) )
+
+  const knobData = this.getKnobDataByName(name),
         runOnInput = e.type == 'input' && knobData && knobData.type != 'range', // forgot why I wrote this
         isCheckbox = knobData && knobData.type == 'checkbox',
         extraData = {}
 
-  if( !knobData )
+  if( !knobData ){
+    console.warn("Knob data was not found:", {name, knobData})
     return
+  }
 
   const similarKnobs = ignoreSimilar ? [] : this.getSimilarKnobs(knobData)
 
@@ -171,9 +177,9 @@ export function onChange(e, ignoreSimilar){
 export function onSubmit(e){
   e.preventDefault()
 
-  var elements = e.target.querySelectorAll('input')
+  var elements = e.target.querySelectorAll('input[data-name]')
   this.settings.live = true
-  elements.forEach(elm => this.onChange({ target:{value:elm.value, name:elm.name} }))
+  elements.forEach(elm => this.onChange({ target:{value:elm.value, type:elm.type, dataset:{name:elm.dataset.name}} }))
   this.settings.live = false
   return false
 }

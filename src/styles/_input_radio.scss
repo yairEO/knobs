@@ -1,0 +1,40 @@
+label[data-type="radio"]{
+  > .knobs__knob__inputWrap{
+    display: flex;
+    gap: var(--radio-group-gap, 1.5em);
+    align-items: center;
+    justify-content: flex-end;
+
+    > label{
+      flex: 0;
+      display: inline-flex;
+      gap: .5em;
+      align-items: center;
+
+      &:hover{
+        > *:not(input){
+          opacity: .7;
+        }
+      }
+
+      input{
+        margin: 0;
+
+        ~ * {
+          opacity: .5;
+          transition: .25s;
+        }
+
+        &:checked ~ * {
+          opacity: 1;
+          transition: 0s;
+        }
+      }
+    }
+
+    svg{
+      fill: var(--textColor);
+      height: 20px;
+    }
+  }
+}
