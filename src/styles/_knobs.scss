@@ -96,13 +96,15 @@ html, body{
   &[data-flow='compact']{
     --color-size: 16px;
 
-    label[data-type='select'],
     label[data-type='range']{
       flex-flow: column;
+      gap: var(--knobs-gap);
+      padding-top: 6px;
 
       .range-slider{
         --thumb-size: 12px;
         --track-height: calc(var(--thumb-size)/2);
+        width: 100%;
       }
 
       & ~ .knobs__knob__reset{
@@ -217,6 +219,7 @@ html, body{
     }
 
     & label:not(.knobs__legend) > :last-child {
+      width: 100%;
       flex: 1;
       text-align: right;
       align-self: center;
