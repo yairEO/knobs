@@ -186,7 +186,6 @@ export function onSubmit(e){
 
 export function onClick(e){
   const {target} = e
-  const iframePos = this.DOM.iframe.getBoundingClientRect()
 
   this.hideColorPickers(target.colorPicker ? target.colorPicker.DOM.scope : null)
 
@@ -194,5 +193,5 @@ export function onClick(e){
     this.resetKnobByName(target.name)
 
   if( target.dataset.type == 'color' )
-    setTimeout(_ => this.toggleColorPicker(target, {x:e.clientX + iframePos.x , y:e.clientY + iframePos.y + 20}), 100)
+    setTimeout(_ => this.toggleColorPicker(target), 100)
 }

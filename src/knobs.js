@@ -1,4 +1,5 @@
 import ColorPicker, { changeColorFormat, CSStoHSLA } from '@yaireo/color-picker'
+import position from '@yaireo/position'
 import mainStyles from './styles/styles.scss'
 import hostStyles from './styles/host.scss'
 import colorPickerStyles from '@yaireo/color-picker/dist/styles.css'
@@ -6,7 +7,6 @@ import isObject from './utils/isObject'
 import parseHTML from './utils/parseHTML'
 import mergeDeep from './utils/mergeDeep'
 import isModernBrowser from './utils/isModernBrowser'
-import position from './utils/position'
 import getKnobsGroups from './utils/getKnobsGroups'
 import cloneKnobs from './cloneKnobs'
 import * as templates from './templates'
@@ -69,7 +69,6 @@ Knobs.prototype = {
     if( this.settings.knobsToggle )
       vars['knobs-toggle'] = 1
 
-    // automatically convert the color to HSLA so further manipulations could be made
     const hslColor = changeColorFormat(vars['base-color'], 'hsl');  // example: "hsla(0, 0%, 0%, 100%)"
     const baseColor = CSStoHSLA(hslColor)
     vars['base-color'] = `${baseColor[0]}, ${baseColor[1]}%`
@@ -120,10 +119,14 @@ Knobs.prototype = {
   templates,
 
   hideColorPickers( exceptNode ){
-    document.querySelectorAll('.color-picker').forEach(elm => elm != exceptNode && elm.classList.add('hidden'))
+    document.querySelectorAll('.color-picker').forEach(elm => {
+      if( elm != exceptNode ){
+        elm.classList.add('hidden')
+      }
+    })
   },
 
-  toggleColorPicker( inputElm, pos ){
+  toggleColorPicker( inputElm ){
     const value = inputElm.value,
           name = inputElm.dataset.name,
           knobData = this.getKnobDataByName(name), // TODO: continue this..
@@ -149,18 +152,25 @@ Knobs.prototype = {
       // because the color-picker is outside the iframe, "onClickOutside" will not register
       // clicked within the iframe (knobs area).
       onClickOutside(e){
-        if( !cPicker.DOM.scope.classList.contains('hidden')  )
-        that.hideColorPickers( cPicker.DOM.scope )
+        const isHidden = cPicker.DOM.scope.classList.contains('hidden');
+
+        resizeObserver.observe(document.body)
+        intersectionObserver.observe(cPicker.DOM.scope)
+
+        if( !isHidden )
+          that.hideColorPickers( cPicker.DOM.scope ) // hides any shows color-picker except this one
 
         let action = 'add'
 
         // if clicked on the input element, toggle picker's visibility
-        if( e.target == inputElm )
-          action = 'toggle'
-
+        if( e.target == inputElm ) action = 'toggle'
         // if "escape" key was pressed, add the "hidden" class
-        if( e.key == 'Escape' )
-          action = 'add'
+        if( e.key == 'Escape' ) action = 'add'
+
+        if( !isHidden ){
+          resizeObserver.unobserve(document.body)
+          intersectionObserver.unobserve(cPicker.DOM.scope)
+        }
 
         cPicker.DOM.scope.classList[action]('hidden')
       },
@@ -179,9 +189,18 @@ Knobs.prototype = {
       document.body.appendChild(cPicker.DOM.scope)
     }
 
-    // small delay before the Node is safely in the DOM
-    setTimeout(()=>{
-      position(cPicker.DOM.scope, pos)
+    const observerCallback = () => {
+      position({ target:cPicker.DOM.scope, ref:inputElm })
+    }
+
+    const resizeObserver = new ResizeObserver(observerCallback)
+    const intersectionObserver = new IntersectionObserver(observerCallback, {root:document, threshold:1});
+
+    resizeObserver.observe(document.body)
+    intersectionObserver.observe(cPicker.DOM.scope)
+    observerCallback()
+
+    setTimeout(() => {
       cPicker.DOM.scope.classList.remove('hidden')
     }, 100)
 
@@ -272,20 +291,31 @@ Knobs.prototype = {
    * should fire from a knob's input's (onChange) event listener
    * @param {Object}
    */
-  updateDOM({ cssVar, value, type, isToggled, __name:name }){
+  updateDOM({ cssVar, value, type, isToggled, cssVarsHSLA, __name:name }){
     if( !cssVar || !cssVar.length ) return
 
     var [cssVarName, cssVarUnit, CSSVarTarget] = cssVar,
         targetElms = CSSVarTarget || this.settings.CSSVarTarget,
         knobInput = this.getInputByName(name),
-        action = 'setProperty';
+        action = 'setProperty',
+        vars = [[cssVarName, value]];
+
+    // units which are prefixed with '-' should not be used.
+    // exit only to inform the user about the final units outcome,
+    // when there is a CSS calculation involved with the raw number before applying the units (in css)
+    if( cssVarUnit && cssVarUnit[0] != '-' )
+      vars[0][1] += cssVarUnit||''
 
     if( !isToggled || (type == 'checkbox' && knobInput && !knobInput.checked) )
       action = 'removeProperty';
 
-    // units which are prefixed with '-' should not be used, and for presentational purposes only
-    if( cssVarUnit && cssVarUnit[0] == '-' )
-      cssVarUnit = '';
+    if( type == 'color' && cssVarsHSLA ){
+      const hsla = CSStoHSLA(changeColorFormat(value, 'HSL'))
+      vars.push([`${cssVarName}-h`, hsla[0]],
+                [`${cssVarName}-s`, hsla[1]],
+                [`${cssVarName}-l`, hsla[2]],
+                [`${cssVarName}-a`, hsla[3]])
+    }
 
     // if is a refference to a single-node, place in an array.
     // cannot use instanceof to check if is an element because some elements might be in iframes:
@@ -295,7 +325,8 @@ Knobs.prototype = {
 
     if( targetElms && targetElms.length && value !== undefined && cssVarName )
       for( let elm of targetElms )
-        elm.style[action](`--${cssVarName}`, value + (cssVarUnit||''));
+        for( let [prop, value] of vars )
+          elm.style[action](`--${prop}`, value)
   },
 
   /**

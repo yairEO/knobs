@@ -61,7 +61,8 @@
         "sass": "^1.38.2"
     },
     "dependencies": {
-        "@yaireo/color-picker": "~0.10.3",
+        "@yaireo/color-picker": "~0.11.0",
+        "@yaireo/position": "^1.0.6",
         "@yaireo/ui-range": "^2.1.15",
         "@yaireo/ui-switch": "^1.0.5"
     }
