@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎛️</text></svg>">
   <title>Knobs</title>
   <script src="knobs.min.js"></script>
   <style>
@@ -126,14 +127,15 @@
           cssVar: ['bg'], // alias for the CSS variable
           label: 'Box color',
           type: 'color',
-          defaultFormat: 'hsla',
         //  value: '#45FDA9',
-          onChange: (a,b,c) => console.log(  a,b,c   )
+          onChange: (a,b,c) => console.log(  c   )
         },
         {
           cssVar: ['main-bg', null, document.body], // [alias for the CSS variable, units, applies on element]
+          cssVarsHSLA: true,
           label: 'Page background',
           type: 'color',
+          defaultFormat: 'hsla',
         //  onChange: console.log
         },
         {
