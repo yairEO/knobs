@@ -187,8 +187,6 @@ export function onSubmit(e){
 export function onClick(e){
   const {target} = e
 
-  this.hideColorPickers(target.colorPicker ? target.colorPicker.DOM.scope : null)
-
   if( is(target, 'knobs__knob__reset') )
     this.resetKnobByName(target.name)
 

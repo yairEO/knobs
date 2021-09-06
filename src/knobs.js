@@ -118,6 +118,7 @@ Knobs.prototype = {
 
   templates,
 
+/* // not in use since onClickOutside is fired (which is managed by color-picker)
   hideColorPickers( exceptNode ){
     document.querySelectorAll('.color-picker').forEach(elm => {
       if( elm != exceptNode ){
@@ -125,20 +126,20 @@ Knobs.prototype = {
       }
     })
   },
-
+*/
   toggleColorPicker( inputElm ){
     const value = inputElm.value,
           name = inputElm.dataset.name,
-          knobData = this.getKnobDataByName(name), // TODO: continue this..
+          knobData = this.getKnobDataByName(name),
           // { position } = this.settings.theme,
           // totalHeight = this.DOM.scope.clientHeight,
           that = this
 
     let cPicker = inputElm.colorPicker
 
-    // if already visible, hide
-    if( cPicker && !cPicker.DOM.scope.classList.contains('hidden') ){
-      cPicker.DOM.scope.classList.add('hidden')
+    // if already visible, do nothing
+    if( cPicker  ){
+      cPicker.DOM.scope.classList.remove('hidden')
       return
     }
 
@@ -146,7 +147,7 @@ Knobs.prototype = {
       defaultFormat: knobData.defaultFormat,
       color: value,
       className: 'hidden',
-      swatches: [],
+      swatches: knobData.swatches || [],
       swatchesLocalStorage: true,
 
       // because the color-picker is outside the iframe, "onClickOutside" will not register
@@ -157,8 +158,8 @@ Knobs.prototype = {
         resizeObserver.observe(document.body)
         intersectionObserver.observe(cPicker.DOM.scope)
 
-        if( !isHidden )
-          that.hideColorPickers( cPicker.DOM.scope ) // hides any shows color-picker except this one
+        // if( !isHidden )
+        //   that.hideColorPickers( cPicker.DOM.scope ) // hides any other shown color-picker except this one
 
         let action = 'add'
 
@@ -185,8 +186,10 @@ Knobs.prototype = {
     // cPicker.setColor(value)
 
     if( !document.body.contains(cPicker.DOM.scope) ){
+      cPicker.DOM.scope.insertAdjacentHTML('afterbegin', `<h1>${knobData.label}</h1>`)
       inputElm.colorPicker = cPicker
-      document.body.appendChild(cPicker.DOM.scope)
+      this.DOM.iframe.before(cPicker.DOM.scope)
+     // document.body.appendChild(cPicker.DOM.scope)
     }
 
     const observerCallback = () => {

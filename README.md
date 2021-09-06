@@ -334,6 +334,7 @@ var settings = {
       type: 'color',
       defaultFormat: 'hsla',
       value: '#45FDA9',
+      swatches: ['red', 'gold'],  //  swatches which can be selected inside the color picker
       onChange: console.log
     },
 
