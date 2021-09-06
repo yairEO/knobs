@@ -201,6 +201,7 @@ Knobs.prototype = {
     observerCallback()
 
     setTimeout(() => {
+      cPicker.DOM.scope.querySelector('input').focus()
       cPicker.DOM.scope.classList.remove('hidden')
     }, 100)
 
