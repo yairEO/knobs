@@ -1,4 +1,12 @@
 <p align="center">
+<br>
+  <a href='https://codepen.io/vsync/pen/KKMwyRO'>
+      <img src="./demo1.apng?sanitize=true" alt="Knobs"/>
+  </a>
+<br>
+<p>
+
+<p align="center">
   <a href='https://www.npmjs.com/package/@yaireo/knobs'>
       <img src="https://img.shields.io/npm/v/@yaireo/knobs.svg" />
   </a>
@@ -8,28 +16,22 @@
 </p>
 
 <h1 align="center">
-  <a href='https://codepen.io/vsync/pen/KKMwyRO'>Knobs</a> - UI controllers for JS/CSS manipulation
+  <a href='https://codepen.io/vsync/pen/KKMwyRO'>Knobs</a> 🎛️ UI controllers for JS/CSS manipulation
 </h1>
 
 <h3 align="center">
   👉 <a href='https://codepen.io/vsync/pen/KKMwyRO' target='_blank'>Demo</a> 👈
+  <br><br>
 </h3>
 
-<p align="center">
-<br>
-  <a href='https://codepen.io/vsync/pen/KKMwyRO'>
-      <img src="./demo1.apng?sanitize=true" alt="Knobs"/>
-  </a>
-<br>
-<p>
-
+<center>
 
 |              | Size
 |--------------|-------------------------|
 | Minified     | 54kb
 | Brotli       | 13.5kb
 | GZIP         | 15kb
-
+</center>
 
 ## What is this:
 
@@ -279,6 +281,7 @@ var settings = {
       step: 50,
       onChange: console.log  // javascript callback on every "input" event
     },
+
     {
       cssVar: ['width', '-px'],
       label: 'Width preset',
@@ -288,6 +291,7 @@ var settings = {
       defaultValue: 150 // value for which to reset to (optional)
       isToggled: false, // this knob will not take affect by default
     },
+
     {
       cssVar: ['height', 'vh'],
       label: 'Height',
@@ -297,19 +301,21 @@ var settings = {
       max: 100,
       onChange: console.log
     },
+
     {
       cssVar: ['align'],
       label: 'Align boxes',
       type: 'radio',
       name: 'align-radio-group',
       options: [
-        { value:'left', hidden:true, label: '<svg viewBox="0 0 28 28"><path d="M28 21v2c0 0.547-0.453 1-1 1h-26c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h26c0.547 0 1 0.453 1 1zM22 15v2c0 0.547-0.453 1-1 1h-20c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h20c0.547 0 1 0.453 1 1zM26 9v2c0 0.547-0.453 1-1 1h-24c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h24c0.547 0 1 0.453 1 1zM20 3v2c0 0.547-0.453 1-1 1h-18c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h18c0.547 0 1 0.453 1 1z"></path></svg>' },
+        { value:'left', hidden:true, label: '<svg ...' },
         { value: 'center', label:'Center' },
-        { value:'right', hidden:true, label:'<svg viewBox="0 0 28 28"><path d="M28 21v2c0 0.547-0.453 1-1 1h-26c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h26c0.547 0 1 0.453 1 1zM28 15v2c0 0.547-0.453 1-1 1h-20c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h20c0.547 0 1 0.453 1 1zM28 9v2c0 0.547-0.453 1-1 1h-24c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h24c0.547 0 1 0.453 1 1zM28 3v2c0 0.547-0.453 1-1 1h-18c-0.547 0-1-0.453-1-1v-2c0-0.547 0.453-1 1-1h18c0.547 0 1 0.453 1 1z"></path></svg>' }
+        { value:'right', hidden:true, label:'<svg ...' }
       ],
       value: 'center',
       defaultValue: 'left'
     },
+
     {
       cssVar: ['radius', '%'],
       label: 'Radius of the big square here',
@@ -319,7 +325,9 @@ var settings = {
       max: 50,
       onChange: console.log
     },
+
     "Label example",
+
     {
       cssVar: ['bg'], // alias for the CSS variable
       label: 'Color',
@@ -328,6 +336,7 @@ var settings = {
       value: '#45FDA9',
       onChange: console.log
     },
+
     {
       cssVar: ['main-bg', null, document.body], // [alias for the CSS variable, units, applies on element]
       label: 'Background',
@@ -335,6 +344,7 @@ var settings = {
       value: '#FFFFFF',
       onChange: console.log
     },
+
     ["Label example", false] // group is collapsed by default
     {
       cssVar: ['hide'], // alias for the CSS variable
@@ -344,6 +354,31 @@ var settings = {
       value: 'none',
       onChange: console.log
     },
+
+    {
+      label: 'Custom with label',
+      render: `
+        <button type='button' class='specialBtn1'>1</button>
+        <button type='button' class='specialBtn2'>2</button>
+      `,
+      script(knobs, name){
+        knobs.getKnobElm(name).addEventListener("click", e => {
+          if( e.target.tagName == 'BUTTON' )
+            alert(e.target.textContent)
+        })
+      },
+    },
+
+    {
+      render: `
+        <button type='button' class='specialBtn3'>😎</button>
+      `,
+      script(knobs){
+        const elm = knobs.DOM.scope.querySelector('.specialBtn3')
+        elm.addEventListener("click", () => alert('😎'))
+      },
+      knobClass: 'custom-actions'
+    }
   ]
 }
 

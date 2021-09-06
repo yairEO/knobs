@@ -179,6 +179,9 @@ html, body{
       }
 
       &__wrap{
+        display: flex;
+        flex-flow: column;
+        gap: var(--knobs-gap);
         padding: var(--side-pad);
         transition: var(--knobs-group-transition);
       }

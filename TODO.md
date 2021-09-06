@@ -17,10 +17,10 @@
 - [x] when changing slider value & disabling & enabling - does not re-apply the slider's value
 - [x] color inputs - add knob settings for `default format` &
 - [x] color inputs - expose color-converion functions from color-picker so they could be used in a knob's `onChange` callback
-- [ ] color inputs - add `formats` knob property to enforce only certain formats
+- [x] Allow custom radio inputs (as icons for example)
 - [x] Add Label titles - when hovering a label, should show a tooltip with optional explanation
+- [ ] color inputs - add `formats` knob property to enforce only certain formats (requires "color-picker" feature support)
 - [ ] Allow customizing the in/out transition duration
-- [ ] Allow custom radio inputs (as icons for example)
 - [ ] Add custom buttons
 - [ ] Add pre-defined value point buttons for the slider, like here: https://codepen.io/thebabydino/pen/zYvEqMd
 - [ ] outline which DOM node (element) is affected by the knob (if custom target is specified)
