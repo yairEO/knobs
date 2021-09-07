@@ -1,4 +1,4 @@
-import { changeColorFormat } from '@yaireo/color-picker'
+import { changeColorFormat, CSStoHSLA } from '@yaireo/color-picker'
 
 const raf = window.requestAnimationFrame || (cb => window.setTimeout(cb, 1000 / 60))
 const is = (elm, cls) => elm.classList.contains(cls)

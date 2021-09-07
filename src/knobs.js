@@ -584,12 +584,12 @@ Knobs.prototype = {
 
     this.trigger('render');
     this.settings?.callbacks?.render()
+  },
+
+  color: {
+    format: changeColorFormat,
+    CSStoHSLA
   }
 };
 
-export const color = {
-  format: changeColorFormat,
-  CSStoHSLA
-};
-
-export default Knobs;
+export default Knobs

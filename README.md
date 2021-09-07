@@ -301,16 +301,31 @@ npm i @yaireo/Knobs
 import Knobs from '@yaireo/knobs'
 ```
 
-#### Additionaly Exported:
+#### Color manipulation methods:
 
-`changeColorFormat` & `CSStoHSLA` - See [color-picker docs](https://github.com/yairEO/color-picker#helper-methods-exported-alongside-the-default-colorpicker)
+`format` & `CSStoHSLA` are defined on Knobs' instances in `color` property, for example:
 
-
-If *Knobs* is used on a webpage as a script tag (not imported as ESM/UMD)
 ```js
-const { changeColorFormat, CSStoHSLA } = Knobs.color;
-Knobs = Knobs.default;
-```
+const myKnobs = new Knobs({
+  ...,
+  knobs: [
+    {
+      cssVar: ['bg'], // alias for the CSS variable
+      label: 'Color',
+      type: 'color',
+      value: '#45FDA9',
+      onChange(e, knobData, hsla) => {
+        console.log( myKnobs.format(knobData.value, 'rgb') )  // will print a color string in RGBA
+      }
+    }
+  ]
+})
+
+myKnobs.color.format()
+``
+
+See [color-picker docs](https://github.com/yairEO/color-picker#helper-methods-exported-alongside-the-default-colorpicker)
+
 
 ### Defining Knobs:
 
@@ -392,9 +407,10 @@ var settings = {
       label: 'Color',
       type: 'color',
       defaultFormat: 'hsla',
+      cssVarsHSLA: true,
       value: '#45FDA9',
       swatches: ['red', 'gold'],  //  swatches which can be selected inside the color picker
-      onChange: console.log
+      onChange: (e, knobData, hsla) => console.log(e, knobData, hsla, knobData.value)
     },
 
     {
@@ -402,7 +418,7 @@ var settings = {
       label: 'Background',
       type: 'color',
       value: '#FFFFFF',
-      onChange: console.log
+      onChange: (e, knobData, hsla) => console.log(e, knobData, hsla, knobData.value)
     },
 
     ["Label example", false] // group is collapsed by default

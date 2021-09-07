@@ -35,10 +35,6 @@
   <a class='testSubject'></a>
   <div class='testSubject'></div>
   <script>
-    const { changeColorFormat, CSStoHSLA } = Knobs.color;
-    Knobs = Knobs.default;  // "Knobs" is already defined on the window globally
-
-
     var settings = {
       theme: {
         styles: `
@@ -132,7 +128,7 @@
           type: 'color',
           swatches: ['red', 'gold'],
         //  value: '#45FDA9',
-          onChange: (a,b,c) => console.log(  c   )
+          onChange: (e, knobData, hsla) => console.log(e, knobData, hsla, knobData.value   )
         },
         {
           cssVar: ['main-bg', null, document.body], // [alias for the CSS variable, units, applies on element]
