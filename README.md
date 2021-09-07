@@ -1,7 +1,7 @@
 <p align="center">
 <br>
   <a href='https://codepen.io/vsync/pen/KKMwyRO'>
-      <img src="./demo1.apng?sanitize=true" alt="Knobs"/>
+      <img src="./demo.apng?sanitize=true" alt="Knobs"/>
   </a>
 <br>
 <p>
@@ -54,18 +54,19 @@ It's so easy & quick to use Knobs, about 1 minute!
 * `checkbox` input
 * `radio` inputs group
 * `select` dropdown (native)
-* Resset all (to defaults)
-* Reset individual
-* Labels - allows grouping of every knob defined after a label
+* Custom HTML-Knobs (add your own buttons or whatever)
+* Resset all knobs (to defaults)
+* Reset individual knob
+* Labels - group all the knobb defined after a certain label
 * **Expand/Collapse** knobs groups
-* Apply change live, on-the-fly, or with an <kbd>Apply</kbd> button
-* Automatically uses already-declared CSS variables as knobs values, if possible
-* Knobs are completely **isolated** within an *iframe* (unaffected by page styles)
+* Apply changes live, on-the-fly, or with an <kbd>Apply</kbd> button
+* Auto-detect CSS variables defined in knobs as their initialvalues, if possible
+* Knobs are completely **isolated** within an *iframe* (unaffected by your page styles)
 * Allows 3 states of visibility:
-  * Always visible
-  * Show on Icon click, Default open
-  * Show on Icon click, Default closed
-* `position` of the knobs on the viewport:
+  - `0` - Starts as hidden
+  - `1` - Starts as visible
+  - `2` - Always visible
+* Knobs component placement `position` (relative to window viewport):
   * `top right` (default)
   * `bottom right`
   * `top left`
@@ -154,15 +155,37 @@ So, when a unitless-variable is desired, but ultimatly it will have a unit, then
 should be written with a dash prefix, Ex.: `-px`, and it will be displayed in the label correctly but ignored when
 applying the variable.
 
-**`label`**
+**`cssVarsHSLA`** (boolean)
+
+Applies only to *color* knobs and if set to `true` will generate 4 CSS variables for the HSLA version of the color.
+
+`--main-color-h`, `--main-color-s`, `--main-color-l` & `--main-color-a`.
+
+```js
+{
+  cssVar: ['main-color'],
+  cssVarsHSLA: true,
+  label: 'Page background',
+  type: 'color',
+  defaultFormat: 'hsla',
+},
+```
+
+**`defaultFormat`** (string)
+
+Applies only to *color* knobs. Sets the default format displayed to the user and also the value which will
+be set to the input. Possible values are: `hsla`, `rgba`, `hex`.
+
+
+**`label`** (string)
 
 A text which is displayed alongside the knob
 
-**`labelTitle`**
+**`labelTitle`** (string)
 
 Optional `title` attribute for the knob's label
 
-**`value`**
+**`value`** (string, number)
 
 Acts as the initial value of the *knob*, except for `checkbox` *knobs*, in which case,
 if the knob also has `cssVar` property set, then the checkbox is *checked*, that CSS variable
@@ -191,24 +214,24 @@ prop from the *knob* decleration. The program will try to get the value using `g
 Variables which has `calc` or any other computations might result in `NaN`. In which case, a `console.warn` will be presented
 and a manually typed `value` property for the *knob* would be advised.
 
-**`isToggled`**
+**`isToggled`** (boolean)
 If this property is set to `false`, the knob will be toggled *off* by default.
 
 Will only take affect if `knobsToggle` setting is set to `true`
 
-**`options`**
+**`options`** (array)
 Used for knobs of type `select`. An Array of options to render.
 
     [20, 150, [200, '200 nice pixels'], 500]
 
 An option can be split to the actual value it represents and its textual value, as the above example shows.
 
-**`knobClass`**
+**`knobClass`** (string)
 Add your own *class* to the knob (row) element itself (for styling purposes).
 Remember that in order to add custom styles, the `theme.styles` setting should be used, because all knobs
 are encapsulated within an *iframe* so your page styles won't affect anything that's inside.
 
-**`render`**
+**`render`** (string)
 Allows to render anything you want in the knob area.
 Should return a *string* of HTML, for example:
 
@@ -220,6 +243,26 @@ Should return a *string* of HTML, for example:
   `,
   knobClass: 'custom-actions'
 }
+```
+
+**`script`** (function)
+A function to be called which has logic related to the custom HTML in the `render` property (shown above).
+The function recieves 2 arguments: The knobs instance referece and the (auto)generated knob `name` string.
+
+```js
+{
+  label: 'Custom HTML with label',
+  render: `
+    <button type='button' class='specialBtn1'>1</button>
+    <button type='button' class='specialBtn2'>2</button>
+  `,
+  script(knobs, name){
+    knobs.getKnobElm(name).addEventListener("click", e => {
+      if( e.target.tagName == 'BUTTON' )
+        alert(e.target.textContent)
+    })
+  },
+},
 ```
 </details>
 
