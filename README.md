@@ -24,28 +24,44 @@
   <br><br>
 </h3>
 
-<center>
-
-|              | Size
-|--------------|-------------------------|
-| Minified     | 54kb
-| Brotli       | 13.5kb
-| GZIP         | 15kb
-</center>
-
-## What is this:
-
+<table>
+  <tr>
+    <td >
+      <table>
+        <tr>
+          <td>Minified</td>
+          <td align="right"><strong>54kb</strong></td>
+        </tr>
+        <tr>
+          <td>Brotli</td>
+          <td align="right"><strong>13.5kb</strong></td>
+        </tr>
+        <tr>
+          <td>GZIP</td>
+          <td align="right"><strong>15kb</strong></td>
+        </tr>
+      </table>
+    </td>
+    <td>
+<h2>What is this:</h2>
+<p>
 Started as something I needed for my many Codepens - A way to provide viewers, and myself, a set
 of controllers, for manipulating the DOM instantaneously.
-
+</p>
+<p>
 Imagine certain aspects of a web page, or a specific *component*, which you would like to add the ability
 to control on-the-fly. Change the visual looks or certain javascript parameters with a move or a slider.
-
+</p>
+<p>
 CSS-variables (custom properties) are a great match for this script as they compute in real-time. Javascript is of course a benefitor because every knobs can be attached with a callback that recieves the current value, and additional data, as to what that value should be applied on.
-
-**⚠️ Supported only in modern browsers**
-
+</p>
+<p>
 It's so easy & quick to use Knobs, about 1 minute!
+</p>
+<strong>⚠️ Supported only in modern browsers</strong><br>
+    </td>
+  </tr>
+</table>
 
 ### Features:
 
