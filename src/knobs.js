@@ -316,9 +316,9 @@ Knobs.prototype = {
     if( type == 'color' && cssVarsHSLA ){
       const hsla = CSStoHSLA(changeColorFormat(value, 'HSL'))
       vars.push([`${cssVarName}-h`, hsla[0]],
-                [`${cssVarName}-s`, hsla[1]],
-                [`${cssVarName}-l`, hsla[2]],
-                [`${cssVarName}-a`, hsla[3]])
+                [`${cssVarName}-s`, hsla[1] + '%'],
+                [`${cssVarName}-l`, hsla[2] + '%'],
+                [`${cssVarName}-a`, hsla[3] + '%'])
     }
 
     // if is a refference to a single-node, place in an array.
