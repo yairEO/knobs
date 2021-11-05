@@ -322,7 +322,7 @@ const myKnobs = new Knobs({
 })
 
 myKnobs.color.format()
-``
+```
 
 See [color-picker docs](https://github.com/yairEO/color-picker#helper-methods-exported-alongside-the-default-colorpicker)
 
