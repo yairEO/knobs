@@ -286,7 +286,7 @@ The function recieves 2 arguments: The knobs instance referece and the (auto)gen
 ## Install:
 
 ```
-npm i @yaireo/Knobs
+npm i @yaireo/knobs
 ```
 
 **CDN source:**
