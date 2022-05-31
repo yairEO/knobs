@@ -5,7 +5,7 @@ const generateId = () => Math.random().toString(36).slice(-6);
 export default function(knobs, persistedData){
   return knobs.map(k => {
     if( k && k.type ){
-      k.__name = k.__name || (k.label?.replaceAll(' ','-').toLowerCase() || '') + '-' + generateId()
+      k.__name = k.__name || (k.label?.replaceAll(/[^a-zA-Z0-9 ]/g, '').replaceAll(' ','-').toLowerCase() || '') + '-' + generateId()
       k.defaultValue = k.defaultValue ?? k.value ?? this.getKnobValueFromCSSVar(k) ?? ''// value to revert to, if wished to reset
       k.defaultChecked = k.defaultChecked ?? !!k.checked
 
