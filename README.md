@@ -286,7 +286,7 @@ The function recieves 2 arguments: The knobs instance referece and the (auto)gen
 ## Install:
 
 ```
-npm i @yaireo/Knobs
+npm i @yaireo/knobs
 ```
 
 **CDN source:**
@@ -322,7 +322,7 @@ const myKnobs = new Knobs({
 })
 
 myKnobs.color.format()
-``
+```
 
 See [color-picker docs](https://github.com/yairEO/color-picker#helper-methods-exported-alongside-the-default-colorpicker)
 
