@@ -540,8 +540,7 @@ Knobs.prototype = {
     // dump all the HTML & styles into the iframe
     iframeDoc.write(this.templates.scope.call(this))
 
-    cssText = `.knobs{ ${this.getCSSVariables(theme)} }`
-    cssText += mainStyles + theme.styles
+    cssText = mainStyles + theme.styles + `.knobs{ ${this.getCSSVariables(theme)} }`
 
     iframeDoc.head.insertAdjacentHTML("beforeend", `<style>${cssText}</style>`)
 
