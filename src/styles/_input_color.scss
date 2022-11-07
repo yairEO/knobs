@@ -9,7 +9,7 @@ label[data-type="color"]{
       height: calc(var(--color-size) - 2px); // same as border
       // transition: .2s var(--in-easing);
       transform-origin: center right;
-      background: var(--background) repeating-conic-gradient(#FFFFFF44 0% 25%, transparent 0% 50%) 0/7px 7px; // checkboard pattern
+      background: var(--background) repeating-conic-gradient(#FFFFFF33 0% 25%, transparent 0% 50%) 0/6px 6px; // checkboard pattern
     }
   }
 
