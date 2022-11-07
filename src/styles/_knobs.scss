@@ -72,7 +72,7 @@ html, body{
 }
 
 .knobs {
-  --background: hsl(var(--base-color), var(--base-color-l));
+  --background: hsla(var(--base-color), var(--base-color-l), var(--base-color-a));
   --opaqueColor-15: HSL(var(--base-color), calc(var(--base-color-l) + 15%));
   --range-track-color: var(--primaryColor);
   --knobs-gap: 3px;
