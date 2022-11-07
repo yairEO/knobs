@@ -6,8 +6,9 @@ import serve           from 'rollup-plugin-serve'
 import livereload      from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs        from '@rollup/plugin-commonjs'
-import pkg             from './package.json'
+import {readFileSync}  from 'fs'
 
+const pkg = JSON.parse(readFileSync('./package.json'))
 const banner = `/*! Knobs ${pkg.version} MIT | https://github.com/yairEO/knobs */\n`;
 
 export default [
