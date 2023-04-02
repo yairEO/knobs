@@ -1,9 +1,7 @@
 import scss            from 'rollup-plugin-scss'
 import babel           from '@rollup/plugin-babel'
-import { terser }      from 'rollup-plugin-terser'
+import terser          from '@rollup/plugin-terser';
 import cleanup         from 'rollup-plugin-cleanup'
-import serve           from 'rollup-plugin-serve'
-import livereload      from 'rollup-plugin-livereload'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs        from '@rollup/plugin-commonjs'
 import {readFileSync}  from 'fs'

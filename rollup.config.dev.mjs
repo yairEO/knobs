@@ -1,6 +1,5 @@
 import scss            from 'rollup-plugin-scss'
 import babel           from '@rollup/plugin-babel'
-import { terser }      from 'rollup-plugin-terser'
 import cleanup         from 'rollup-plugin-cleanup'
 import serve           from 'rollup-plugin-serve'
 import livereload      from 'rollup-plugin-livereload'
@@ -23,7 +22,6 @@ export default [
     plugins: [
       serve(), // index.html should be in root of project
       livereload({ watch:'src', delay:1500, exts: [ 'html', 'js', 'scss', 'css' ] }),
-    //  terser(),
       babel({ babelHelpers: 'bundled' }),
       scss({ output: false, watch: 'src/styles', }),
       cleanup(),

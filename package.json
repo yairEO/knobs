@@ -46,23 +46,23 @@
         "url": "https://github.com/yaireo/knobs/issues"
     },
     "devDependencies": {
-        "@babel/core": "^7.20.2",
-        "@babel/preset-env": "^7.20.2",
-        "@rollup/plugin-babel": "^6.0.2",
-        "@rollup/plugin-commonjs": "^23.0.2",
+        "@babel/core": "^7.21.4",
+        "@babel/preset-env": "^7.21.4",
+        "@rollup/plugin-babel": "^6.0.3",
+        "@rollup/plugin-commonjs": "^24.0.1",
         "@rollup/plugin-node-resolve": "^15.0.1",
+        "@rollup/plugin-terser": "^0.4.0",
         "headr": "^0.0.4",
-        "rollup": "^3.2.5",
+        "rollup": "^3.20.2",
         "rollup-plugin-cleanup": "^3.2.1",
         "rollup-plugin-livereload": "^2.0.5",
-        "rollup-plugin-scss": "^3.0.0",
-        "rollup-plugin-serve": "^2.0.1",
-        "rollup-plugin-terser": "^7.0.2",
-        "sass": "^1.56.0"
+        "rollup-plugin-scss": "^4.0.0",
+        "rollup-plugin-serve": "^2.0.2",
+        "sass": "^1.60.0"
     },
     "dependencies": {
-        "@yaireo/color-picker": "~0.11.0",
-        "@yaireo/position": "^1.0.7",
+        "@yaireo/color-picker": "~0.12.0",
+        "@yaireo/position": "^1.1.1",
         "@yaireo/ui-range": "^2.1.15",
         "@yaireo/ui-switch": "^1.0.5"
     }
